@@ -63,10 +63,19 @@
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/></svg>
         Dashboard
       </a>
+      <a href="ptc.html" class="sidebar__link">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 10l4.553-2.069A1 1 0 0121 8.845v6.31a1 1 0 01-1.447.894L15 14M3 8a2 2 0 012-2h10a2 2 0 012 2v8a2 2 0 01-2 2H5a2 2 0 01-2-2V8z"/></svg>
+        View Ads
+        <span class="badge badge-gold" style="margin-left:auto;font-size:.62rem;">200</span>
+      </a>
+      <a href="surf.html" class="sidebar__link">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 12h18M3 6h18M3 18h18"/></svg>
+        Surf &amp; Earn
+        <span class="badge" style="margin-left:auto;font-size:.62rem;background:rgba(59,130,246,.15);color:#3b82f6;border:1px solid rgba(59,130,246,.3);">50</span>
+      </a>
       <a href="tasks.html" class="sidebar__link">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11"/></svg>
         Earn Tasks
-        <span class="badge badge-gold" style="margin-left:auto;font-size:0.65rem;">New</span>
       </a>
       <a href="referral.html" class="sidebar__link">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87M16 3.13a4 4 0 010 7.75"/></svg>
@@ -75,6 +84,10 @@
       <a href="leaderboard.html" class="sidebar__link">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
         Leaderboard
+      </a>
+      <a href="proof-of-payment.html" class="sidebar__link">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 11-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+        Proof of Payment
       </a>
 
       <span class="sidebar__label" style="margin-top:0.5rem;">Account</span>
@@ -161,16 +174,96 @@
       </div>
     </div>
 
+    <!-- ── Ways to Earn ── -->
+    <div style="margin-bottom:2rem;">
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:1rem;">
+        <h3 style="font-size:1rem;font-weight:700;">Ways to Earn</h3>
+        <span style="font-size:.78rem;color:var(--text-muted);">4 earning methods available</span>
+      </div>
+      <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:1rem;">
+
+        <!-- PTC Ads -->
+        <a href="ptc.html" style="text-decoration:none;">
+          <div style="background:var(--bg-card);border:1px solid var(--border-subtle);border-radius:var(--radius-lg);padding:1.25rem;transition:all .2s;cursor:pointer;" class="quick-action-link">
+            <div style="font-size:2rem;margin-bottom:.75rem;">📺</div>
+            <div style="font-weight:700;font-size:.95rem;color:var(--text-primary);margin-bottom:.3rem;">View Ads</div>
+            <div style="font-size:.78rem;color:var(--text-muted);line-height:1.5;margin-bottom:.85rem;">Watch 200 ads daily. ₦10–₦20 per ad. Credits instantly.</div>
+            <div style="display:flex;align-items:center;justify-content:space-between;">
+              <span style="font-family:var(--font-display);font-weight:800;font-size:1rem;color:var(--gold-500);">Up to ₦2,650/day</span>
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:16px;height:16px;color:var(--text-muted);"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+            </div>
+          </div>
+        </a>
+
+        <!-- Surf & Earn -->
+        <a href="surf.html" style="text-decoration:none;">
+          <div style="background:var(--bg-card);border:1px solid rgba(59,130,246,.25);border-radius:var(--radius-lg);padding:1.25rem;transition:all .2s;cursor:pointer;" class="quick-action-link">
+            <div style="font-size:2rem;margin-bottom:.75rem;">🌊</div>
+            <div style="font-weight:700;font-size:.95rem;color:var(--text-primary);margin-bottom:.3rem;">Surf &amp; Earn</div>
+            <div style="font-size:.78rem;color:var(--text-muted);line-height:1.5;margin-bottom:.85rem;">Browse 50 sites daily. ₦25–₦50 per site. Higher rewards.</div>
+            <div style="display:flex;align-items:center;justify-content:space-between;">
+              <span style="font-family:var(--font-display);font-weight:800;font-size:1rem;color:#3b82f6;">Up to ₦1,750/day</span>
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:16px;height:16px;color:var(--text-muted);"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+            </div>
+          </div>
+        </a>
+
+        <!-- Earn Tasks -->
+        <a href="tasks.html" style="text-decoration:none;">
+          <div style="background:var(--bg-card);border:1px solid var(--border-subtle);border-radius:var(--radius-lg);padding:1.25rem;transition:all .2s;cursor:pointer;" class="quick-action-link">
+            <div style="font-size:2rem;margin-bottom:.75rem;">✅</div>
+            <div style="font-weight:700;font-size:.95rem;color:var(--text-primary);margin-bottom:.3rem;">Complete Tasks</div>
+            <div style="font-size:.78rem;color:var(--text-muted);line-height:1.5;margin-bottom:.85rem;">Social media, surveys, reviews. ₦150–₦600 per task.</div>
+            <div style="display:flex;align-items:center;justify-content:space-between;">
+              <span style="font-family:var(--font-display);font-weight:800;font-size:1rem;color:var(--gold-500);">Up to ₦600/task</span>
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:16px;height:16px;color:var(--text-muted);"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+            </div>
+          </div>
+        </a>
+
+        <!-- Referrals -->
+        <a href="referral.html" style="text-decoration:none;">
+          <div style="background:var(--bg-card);border:1px solid var(--border-subtle);border-radius:var(--radius-lg);padding:1.25rem;transition:all .2s;cursor:pointer;" class="quick-action-link">
+            <div style="font-size:2rem;margin-bottom:.75rem;">🔗</div>
+            <div style="font-weight:700;font-size:.95rem;color:var(--text-primary);margin-bottom:.3rem;">Refer Friends</div>
+            <div style="font-size:.78rem;color:var(--text-muted);line-height:1.5;margin-bottom:.85rem;">Invite friends and earn from their activity. 3-tier system.</div>
+            <div style="display:flex;align-items:center;justify-content:space-between;">
+              <span style="font-family:var(--font-display);font-weight:800;font-size:1rem;color:var(--gold-500);">₦200–₦500/friend</span>
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:16px;height:16px;color:var(--text-muted);"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+            </div>
+          </div>
+        </a>
+
+      </div>
+    </div>
+
+    <!-- ── Quick Actions + Withdrawal Progress ── -->
     <div style="display:grid;grid-template-columns:1fr 1fr;gap:1.5rem;margin-bottom:2rem;">
       <!-- Quick actions -->
       <div class="card">
         <h3 style="margin-bottom:1.25rem;font-size:1rem;">Quick Actions</h3>
         <div style="display:flex;flex-direction:column;gap:0.75rem;">
+          <a href="ptc.html" style="display:flex;align-items:center;gap:0.75rem;padding:0.9rem;background:var(--bg-elevated);border:1px solid var(--border-subtle);border-radius:var(--radius-md);transition:all var(--transition-fast);" class="quick-action-link">
+            <span style="font-size:1.3rem;">📺</span>
+            <div>
+              <div style="font-weight:600;font-size:0.9rem;">View Ads Now</div>
+              <div style="font-size:0.75rem;color:var(--text-muted);">200 ads waiting — earn instantly</div>
+            </div>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:16px;height:16px;color:var(--text-muted);margin-left:auto;"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+          </a>
+          <a href="surf.html" style="display:flex;align-items:center;gap:0.75rem;padding:0.9rem;background:rgba(59,130,246,.05);border:1px solid rgba(59,130,246,.2);border-radius:var(--radius-md);transition:all var(--transition-fast);" class="quick-action-link">
+            <span style="font-size:1.3rem;">🌊</span>
+            <div>
+              <div style="font-weight:600;font-size:0.9rem;">Surf &amp; Earn</div>
+              <div style="font-size:0.75rem;color:var(--text-muted);">50 sites · higher rewards</div>
+            </div>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:16px;height:16px;color:var(--text-muted);margin-left:auto;"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+          </a>
           <a href="tasks.html" style="display:flex;align-items:center;gap:0.75rem;padding:0.9rem;background:var(--bg-elevated);border:1px solid var(--border-subtle);border-radius:var(--radius-md);transition:all var(--transition-fast);" class="quick-action-link">
             <span style="font-size:1.3rem;">⚡</span>
             <div>
               <div style="font-weight:600;font-size:0.9rem;">Complete a Task</div>
-              <div style="font-size:0.75rem;color:var(--text-muted);">Earn up to ₦500 per task</div>
+              <div style="font-size:0.75rem;color:var(--text-muted);">Earn up to ₦600 per task</div>
             </div>
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:16px;height:16px;color:var(--text-muted);margin-left:auto;"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
           </a>
@@ -178,15 +271,7 @@
             <span style="font-size:1.3rem;">🔗</span>
             <div>
               <div style="font-weight:600;font-size:0.9rem;">Invite Friends</div>
-              <div style="font-size:0.75rem;color:var(--text-muted);">Earn ₦200 per referral</div>
-            </div>
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:16px;height:16px;color:var(--text-muted);margin-left:auto;"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
-          </a>
-          <a href="leaderboard.html" style="display:flex;align-items:center;gap:0.75rem;padding:0.9rem;background:var(--bg-elevated);border:1px solid var(--border-subtle);border-radius:var(--radius-md);transition:all var(--transition-fast);" class="quick-action-link">
-            <span style="font-size:1.3rem;">🏆</span>
-            <div>
-              <div style="font-weight:600;font-size:0.9rem;">View Leaderboard</div>
-              <div style="font-size:0.75rem;color:var(--text-muted);">See top earners this week</div>
+              <div style="font-size:0.75rem;color:var(--text-muted);">Earn ₦200–₦500 per referral</div>
             </div>
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:16px;height:16px;color:var(--text-muted);margin-left:auto;"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
           </a>
@@ -196,7 +281,7 @@
       <!-- Withdrawal progress -->
       <div class="card card--gold">
         <h3 style="margin-bottom:0.25rem;font-size:1rem;">Withdrawal Progress</h3>
-        <p style="font-size:0.8rem;color:var(--text-muted);margin-bottom:1.5rem;">Minimum withdrawal is ₦1,000</p>
+        <p style="font-size:0.8rem;color:var(--text-muted);margin-bottom:1.5rem;">Minimum withdrawal is ₦10,000</p>
         <div style="margin-bottom:1rem;">
           <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:0.5rem;">
             <span style="font-size:0.82rem;color:var(--text-secondary);">Progress</span>
@@ -208,7 +293,7 @@
         </div>
         <div style="display:flex;justify-content:space-between;font-size:0.8rem;color:var(--text-muted);margin-bottom:1.5rem;">
           <span>Current: <strong id="progressCurrent" style="color:var(--text-primary);">₦0</strong></span>
-          <span>Goal: <strong style="color:var(--text-primary);">₦1,000</strong></span>
+          <span>Goal: <strong style="color:var(--text-primary);">₦10,000</strong></span>
         </div>
         <button class="btn btn-primary btn-block" id="withdrawBtnCard">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:16px;height:16px;"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 000 7h5a3.5 3.5 0 010 7H6"/></svg>
@@ -217,14 +302,24 @@
       </div>
     </div>
 
+    <!-- Proof of payment trust bar -->
+    <div style="background:rgba(34,197,94,.06);border:1px solid rgba(34,197,94,.2);border-radius:var(--radius-lg);padding:1.25rem 1.5rem;display:flex;align-items:center;gap:1rem;margin-bottom:1.5rem;">
+      <span style="font-size:1.5rem;">✅</span>
+      <div>
+        <strong style="font-size:0.9rem;color:var(--text-primary);">100% Legit — We Always Pay</strong>
+        <span style="font-size:0.82rem;color:var(--text-secondary);display:block;margin-top:.1rem;">Every withdrawal since launch has been paid. See real payment screenshots from real members.</span>
+      </div>
+      <a href="proof-of-payment.html" class="btn btn-secondary btn-sm" style="margin-left:auto;white-space:nowrap;flex-shrink:0;">View Proofs</a>
+    </div>
+
     <!-- Tip banner -->
     <div style="background:rgba(245,158,11,0.06);border:1px solid rgba(245,158,11,0.2);border-radius:var(--radius-lg);padding:1.25rem 1.5rem;display:flex;align-items:center;gap:1rem;">
       <span style="font-size:1.5rem;">💡</span>
       <div>
         <strong style="font-size:0.9rem;">Pro Tip:</strong>
-        <span style="font-size:0.875rem;color:var(--text-secondary);"> Share your referral link daily. Each friend you invite who completes tasks adds passive income to your wallet automatically.</span>
+        <span style="font-size:0.875rem;color:var(--text-secondary);"> View all 200 ads + 50 surf sites daily and refer friends. You can earn over ₦4,000 every single day without completing a single task.</span>
       </div>
-      <a href="referral.html" class="btn btn-secondary btn-sm" style="margin-left:auto;white-space:nowrap;">Get Link</a>
+      <a href="ptc.html" class="btn btn-secondary btn-sm" style="margin-left:auto;white-space:nowrap;">Start Now</a>
     </div>
   </main>
 </div>
