@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+  <title>Proof of Payment — Grindpoint</title>
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><text y='26' font-size='28'>✅</text></svg>"/>
+  <link rel="stylesheet" href="css/style.css"/>
+  <style>
+    body{visibility:visible!important;}
+    .proof-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:1.25rem;}
+    .proof-card{background:var(--bg-card);border:1px solid var(--border-subtle);border-radius:var(--radius-lg);overflow:hidden;transition:all .2s;}
+    .proof-card:hover{border-color:rgba(34,197,94,.3);transform:translateY(-2px);box-shadow:0 4px 20px rgba(34,197,94,.1);}
+    .proof-img{width:100%;height:180px;object-fit:cover;background:var(--bg-elevated);display:block;cursor:zoom-in;}
+    .proof-img-placeholder{width:100%;height:180px;background:var(--bg-elevated);display:flex;align-items:center;justify-content:center;font-size:3rem;}
+    .proof-body{padding:1rem 1.25rem;}
+    .proof-name{font-weight:700;font-size:.95rem;color:var(--text-primary);margin-bottom:.25rem;}
+    .proof-amount{font-family:var(--font-display);font-size:1.4rem;font-weight:800;color:var(--success);margin-bottom:.4rem;}
+    .proof-meta{font-size:.78rem;color:var(--text-muted);display:flex;align-items:center;gap:.75rem;flex-wrap:wrap;}
+    .proof-note{font-size:.82rem;color:var(--text-secondary);margin-top:.6rem;line-height:1.5;padding:.6rem .75rem;background:var(--bg-elevated);border-radius:var(--radius-md);}
+    /* Stats hero */
+    .trust-hero{background:linear-gradient(135deg,rgba(34,197,94,.1),rgba(34,197,94,.03));border:1px solid rgba(34,197,94,.2);border-radius:var(--radius-xl);padding:2rem;margin-bottom:2rem;text-align:center;}
+    .trust-stat{display:inline-flex;flex-direction:column;align-items:center;padding:1rem 2rem;gap:.25rem;}
+    .trust-stat-val{font-family:var(--font-display);font-size:1.8rem;font-weight:800;color:var(--success);}
+    .trust-stat-lbl{font-size:.78rem;color:var(--text-secondary);}
+    .divider{width:1px;height:50px;background:var(--border-subtle);display:inline-block;vertical-align:middle;margin:0 .5rem;}
+    /* Lightbox */
+    .lb-backdrop{position:fixed;inset:0;background:rgba(0,0,0,.9);z-index:500;display:none;align-items:center;justify-content:center;}
+    .lb-backdrop.open{display:flex;}
+    .lb-img{max-width:90vw;max-height:90vh;border-radius:8px;box-shadow:0 20px 60px rgba(0,0,0,.5);}
+    .lb-close{position:fixed;top:1rem;right:1.25rem;color:#fff;font-size:2rem;cursor:pointer;z-index:501;line-height:1;}
+    /* Ticker */
+    .ticker-wrap{overflow:hidden;white-space:nowrap;background:rgba(34,197,94,.06);border:1px solid rgba(34,197,94,.15);border-radius:var(--radius-full);padding:.45rem 1.25rem;margin-bottom:1.5rem;font-size:.82rem;color:var(--text-secondary);}
+    .ticker-inner{display:inline-block;animation:ticker 30s linear infinite;}
+    @keyframes ticker{0%{transform:translateX(0)}100%{transform:translateX(-50%)}}
+    /* Nav */
+    .pub-nav{background:var(--bg-card);border-bottom:1px solid var(--border-subtle);padding:.75rem 1.5rem;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:100;}
+    .filter-bar{display:flex;gap:.5rem;flex-wrap:wrap;margin-bottom:1.25rem;}
+    .fpill{padding:.38rem .85rem;border-radius:var(--radius-full);font-size:.78rem;font-weight:600;border:1px solid var(--border-default);background:transparent;color:var(--text-secondary);cursor:pointer;transition:all .15s;}
+    .fpill:hover{border-color:var(--success);color:var(--success);}
+    .fpill.active{background:linear-gradient(135deg,#22c55e,#16a34a);color:#fff;border-color:transparent;}
+  </style>
+</head>
+<body>
+
+<!-- Lightbox -->
+<div class="lb-backdrop" id="lightbox" onclick="closeLightbox()">
+  <span class="lb-close" onclick="closeLightbox()">✕</span>
+  <img class="lb-img" id="lbImg" src="" alt="Payment proof"/>
+</div>
+
+<!-- Public nav — no login required -->
+<nav class="pub-nav">
+  <a href="index.html" style="font-weight:800;font-size:1.1rem;color:var(--text-primary);text-decoration:none;">Grind<span style="color:var(--gold-500);">point</span></a>
+  <div style="display:flex;gap:.75rem;align-items:center;">
+    <a href="login.html" class="btn btn-secondary btn-sm">Login</a>
+    <a href="register.html" class="btn btn-primary btn-sm">Join Free</a>
+  </div>
+</nav>
+
+<div style="max-width:1100px;margin:0 auto;padding:2rem 1.25rem;">
+
+  <!-- Hero -->
+  <div class="trust-hero">
+    <div style="font-size:2.5rem;margin-bottom:.75rem;">✅</div>
+    <h1 style="font-size:1.75rem;font-weight:800;margin-bottom:.5rem;">We Pay. Every Time.</h1>
+    <p style="color:var(--text-secondary);max-width:520px;margin:0 auto 1.5rem;line-height:1.7;">
+      Grindpoint is <strong style="color:var(--text-primary);">100% legitimate</strong>. Below are real payment proofs from real members who have withdrawn their earnings. Every single withdrawal request since launch has been paid.
+    </p>
+    <div style="display:flex;align-items:center;justify-content:center;flex-wrap:wrap;">
+      <div class="trust-stat"><div class="trust-stat-val" id="heroTotal">₦0</div><div class="trust-stat-lbl">Total Paid Out</div></div>
+      <div class="divider"></div>
+      <div class="trust-stat"><div class="trust-stat-val" id="heroCount">0</div><div class="trust-stat-lbl">Successful Payments</div></div>
+      <div class="divider"></div>
+      <div class="trust-stat"><div class="trust-stat-val" id="heroMembers">—</div><div class="trust-stat-lbl">Members Paid</div></div>
+    </div>
+  </div>
+
+  <!-- Live ticker -->
+  <div class="ticker-wrap">
+    <span id="tickerInner" class="ticker-inner">Loading payment activity…</span>
+  </div>
+
+  <!-- Trust badges -->
+  <div style="display:flex;gap:.75rem;flex-wrap:wrap;margin-bottom:1.75rem;">
+    <div style="display:flex;align-items:center;gap:.5rem;padding:.5rem 1rem;background:rgba(34,197,94,.08);border:1px solid rgba(34,197,94,.2);border-radius:var(--radius-full);font-size:.82rem;color:var(--success);font-weight:600;">✅ 100% Payment Rate</div>
+    <div style="display:flex;align-items:center;gap:.5rem;padding:.5rem 1rem;background:rgba(59,130,246,.08);border:1px solid rgba(59,130,246,.2);border-radius:var(--radius-full);font-size:.82rem;color:#3b82f6;font-weight:600;">🏦 Bank Transfer Verified</div>
+    <div style="display:flex;align-items:center;gap:.5rem;padding:.5rem 1rem;background:rgba(245,158,11,.08);border:1px solid rgba(245,158,11,.2);border-radius:var(--radius-full);font-size:.82rem;color:var(--gold-500);font-weight:600;">⚡ Paid Since Launch</div>
+    <div style="display:flex;align-items:center;gap:.5rem;padding:.5rem 1rem;background:rgba(139,92,246,.08);border:1px solid rgba(139,92,246,.2);border-radius:var(--radius-full);font-size:.82rem;color:#8b5cf6;font-weight:600;">👥 Real Nigerian Members</div>
+  </div>
+
+  <!-- Filter -->
+  <div class="filter-bar">
+    <button class="fpill active" data-f="all">All Payments</button>
+    <button class="fpill" data-f="high">₦10,000+</button>
+    <button class="fpill" data-f="med">₦5,000–₦9,999</button>
+    <button class="fpill" data-f="recent">Most Recent</button>
+  </div>
+
+  <!-- Error banner -->
+  <div id="errorBanner" style="display:none;padding:1rem 1.25rem;background:var(--error-bg);border:1px solid rgba(239,68,68,.3);border-radius:var(--radius-md);margin-bottom:1.25rem;font-size:.85rem;color:var(--error);">
+    Could not load proofs. Please refresh the page.
+  </div>
+
+  <!-- Grid -->
+  <div class="proof-grid" id="proofGrid">
+    <div style="grid-column:1/-1;text-align:center;padding:4rem;color:var(--text-muted);">
+      <div style="font-size:2rem;margin-bottom:.75rem;">⏳</div>
+      Loading payment proofs…
+    </div>
+  </div>
+
+  <!-- Empty state (hidden initially) -->
+  <div id="emptyState" style="display:none;text-align:center;padding:4rem 2rem;">
+    <div style="font-size:3rem;margin-bottom:1rem;">📭</div>
+    <h3 style="color:var(--text-primary);margin-bottom:.5rem;">No proofs yet</h3>
+    <p style="color:var(--text-secondary);">Payment proofs will appear here as withdrawals are processed.</p>
+  </div>
+
+  <!-- CTA -->
+  <div style="margin-top:3rem;padding:2rem;background:linear-gradient(135deg,rgba(245,158,11,.1),rgba(245,158,11,.03));border:1px solid rgba(245,158,11,.2);border-radius:var(--radius-xl);text-align:center;">
+    <h2 style="font-size:1.4rem;font-weight:800;margin-bottom:.5rem;">Ready to Start Earning?</h2>
+    <p style="color:var(--text-secondary);margin-bottom:1.25rem;">Join thousands of Nigerians already earning on Grindpoint. View ads, complete tasks, refer friends — and get paid.</p>
+    <div style="display:flex;gap:.75rem;justify-content:center;flex-wrap:wrap;">
+      <a href="register.html" class="btn btn-primary" style="padding:.75rem 2rem;">🚀 Join Free Now</a>
+      <a href="tasks.html" class="btn btn-secondary" style="padding:.75rem 2rem;">See Available Tasks</a>
+    </div>
+  </div>
+
+  <p style="text-align:center;color:var(--text-muted);font-size:.78rem;margin-top:2rem;">
+    © 2025 Grindpoint · All payment proofs are genuine screenshots · <a href="contact.html" style="color:var(--text-muted);">Contact Us</a>
+  </p>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.min.js"></script>
+<script src="js/supabase-config.js"></script>
+<script>
+let _allProofs=[];
+
+function fmt(n){return'₦'+Number(n||0).toLocaleString('en-NG');}
+function fmtDate(d){return d?new Date(d).toLocaleDateString('en-NG',{day:'numeric',month:'short',year:'numeric'}):'—';}
+
+document.addEventListener('DOMContentLoaded',async()=>{
+  const sb=getSupabase();
+  try{
+    const{data,error}=await sb
+      .from('payment_proofs')
+      .select('*')
+      .order('paid_at',{ascending:false});
+
+    if(error)throw error;
+    _allProofs=data||[];
+    renderAll(_allProofs);
+    buildStats(_allProofs);
+    buildTicker(_allProofs);
+  }catch(e){
+    console.error(e);
+    document.getElementById('errorBanner').style.display='block';
+    document.getElementById('proofGrid').innerHTML='';
+    if(e.message?.includes('does not exist')){
+      document.getElementById('errorBanner').textContent='Database not set up yet. Run supabase-ptc-setup.sql in Supabase SQL Editor.';
+    }
+  }
+});
+
+function buildStats(proofs){
+  const total=proofs.reduce((s,p)=>s+(p.amount||0),0);
+  const unique=new Set(proofs.map(p=>p.user_name)).size;
+  document.getElementById('heroTotal').textContent=fmt(total);
+  document.getElementById('heroCount').textContent=proofs.length;
+  document.getElementById('heroMembers').textContent=unique;
+}
+
+function buildTicker(proofs){
+  if(!proofs.length){document.getElementById('tickerInner').textContent='No payments yet — be the first to get paid!';return;}
+  const items=proofs.slice(0,20).map(p=>`🎉 ${p.user_name} received ${fmt(p.amount)} via ${p.method||'Bank Transfer'} on ${fmtDate(p.paid_at)}`);
+  const doubled=[...items,...items].join('   ·   ');
+  const el=document.getElementById('tickerInner');
+  el.textContent=doubled;
+}
+
+function renderAll(proofs){
+  const grid=document.getElementById('proofGrid');
+  const empty=document.getElementById('emptyState');
+  if(!proofs.length){grid.innerHTML='';empty.style.display='block';return;}
+  empty.style.display='none';
+  grid.innerHTML=proofs.map(p=>`
+    <div class="proof-card">
+      ${p.proof_url
+        ?`<img src="${p.proof_url}" class="proof-img" alt="Payment proof" onclick="openLightbox('${p.proof_url}')" onerror="this.style.display='none';this.nextElementSibling.style.display='flex';"/><div class="proof-img-placeholder" style="display:none;">🖼️</div>`
+        :`<div class="proof-img-placeholder">🏦</div>`}
+      <div class="proof-body">
+        <div class="proof-amount">${fmt(p.amount)}</div>
+        <div class="proof-name">👤 ${p.user_name}</div>
+        <div class="proof-meta">
+          <span>🏦 ${p.method||'Bank Transfer'}</span>
+          <span>📅 ${fmtDate(p.paid_at)}</span>
+        </div>
+        ${p.note?`<div class="proof-note">"${p.note}"</div>`:''}
+      </div>
+    </div>`).join('');
+}
+
+function applyFilter(f){
+  let list=_allProofs;
+  if(f==='high')list=_allProofs.filter(p=>p.amount>=10000);
+  else if(f==='med')list=_allProofs.filter(p=>p.amount>=5000&&p.amount<10000);
+  else if(f==='recent')list=[..._allProofs].sort((a,b)=>new Date(b.paid_at)-new Date(a.paid_at)).slice(0,12);
+  renderAll(list);
+}
+
+document.querySelectorAll('.fpill').forEach(b=>b.addEventListener('click',()=>{
+  document.querySelectorAll('.fpill').forEach(x=>x.classList.remove('active'));
+  b.classList.add('active');applyFilter(b.dataset.f);
+}));
+
+function openLightbox(url){document.getElementById('lbImg').src=url;document.getElementById('lightbox').classList.add('open');document.body.style.overflow='hidden';}
+function closeLightbox(){document.getElementById('lightbox').classList.remove('open');document.body.style.overflow='';}
+document.addEventListener('keydown',e=>{if(e.key==='Escape')closeLightbox();});
+</script>
+</body>
+</html>

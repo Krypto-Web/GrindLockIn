@@ -1,0 +1,410 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>FAQ — Grindpoint</title>
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><text y='26' font-size='28'>⚡</text></svg>" />
+  <link rel="stylesheet" href="css/style.css" />
+  <style>
+    .legal-hero { padding: calc(var(--nav-height) + 3rem) 0 3rem; background: var(--bg-surface); border-bottom: 1px solid var(--border-subtle); position: relative; overflow: hidden; }
+    .legal-hero::before { content:''; position:absolute; inset:0; background:radial-gradient(ellipse 60% 80% at 50% -10%, rgba(245,158,11,0.07) 0%, transparent 70%); pointer-events:none; }
+    .faq-body { max-width: 820px; margin: 0 auto; padding: 3rem var(--space-6) 5rem; }
+    .faq-category-title { font-size: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.12em; color: var(--gold-500); margin: 2.5rem 0 1rem; display: flex; align-items: center; gap: 0.75rem; }
+    .faq-category-title::after { content:''; flex:1; height:1px; background:var(--border-subtle); }
+    .faq-list { background: var(--bg-card); border: 1px solid var(--border-subtle); border-radius: var(--radius-lg); overflow: hidden; margin-bottom: 0.5rem; }
+    .faq-item { border-bottom: 1px solid var(--border-subtle); }
+    .faq-item:last-child { border-bottom: none; }
+    .faq-question { display: flex; align-items: center; justify-content: space-between; padding: 1.15rem 1.5rem; cursor: pointer; gap: 1rem; transition: background 0.15s; }
+    .faq-question:hover { background: var(--bg-hover); }
+    .faq-question span { font-weight: 600; font-size: 0.9rem; color: var(--text-primary); line-height: 1.4; }
+    .faq-question svg { width: 18px; height: 18px; color: var(--text-muted); flex-shrink: 0; transition: transform 0.25s, color 0.15s; }
+    .faq-item.open .faq-question { background: rgba(245,158,11,0.04); }
+    .faq-item.open .faq-question svg { transform: rotate(180deg); color: var(--gold-500); }
+    .faq-answer { max-height: 0; overflow: hidden; transition: max-height 0.35s ease, padding 0.25s; }
+    .faq-answer-inner { padding: 0 1.5rem 1.25rem; font-size: 0.875rem; color: var(--text-secondary); line-height: 1.75; }
+    .faq-answer-inner a { color: var(--gold-500); text-decoration: underline; text-underline-offset: 3px; }
+    .faq-answer-inner code { font-family: var(--font-mono); font-size: 0.82em; background: var(--bg-hover); padding: 2px 6px; border-radius: 4px; color: var(--text-primary); }
+    .faq-item.open .faq-answer { max-height: 600px; }
+    .faq-search-wrap { position: relative; max-width: 480px; margin-bottom: 2.5rem; }
+    .faq-search-wrap svg { position: absolute; left: 0.9rem; top: 50%; transform: translateY(-50%); width: 18px; height: 18px; color: var(--text-muted); pointer-events: none; }
+    .faq-search-wrap input { padding-left: 2.75rem; }
+    .no-results { text-align: center; padding: 3rem; color: var(--text-muted); }
+  </style>
+<!-- Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-SJRSW6DNNQ"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag("js", new Date());
+  gtag("config", "G-SJRSW6DNNQ");
+</script>
+  <!-- PWA Meta Tags -->
+  <link rel="manifest" href="/manifest.json"/>
+  <meta name="theme-color" content="#f59e0b"/>
+  <meta name="mobile-web-app-capable" content="yes"/>
+  <meta name="apple-mobile-web-app-capable" content="yes"/>
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"/>
+  <meta name="apple-mobile-web-app-title" content="Grindpoint"/>
+  <link rel="apple-touch-icon" href="/icons/icon-192.png"/>
+</head>
+<body>
+
+<nav class="landing-nav">
+  <div class="navbar__inner">
+    <a href="index.html" class="navbar__logo">Grind<span class="logo-accent">point</span></a>
+    <div class="navbar__links">
+      <a href="index.html" class="nav__link">Home</a>
+      <a href="terms.html" class="nav__link">Terms</a>
+      <a href="payout-policy.html" class="nav__link">Payout</a>
+      <a href="contact.html" class="nav__link">Contact</a>
+    </div>
+    <div class="navbar__actions" id="navActions">
+      <a href="login.html" class="btn btn-secondary btn-sm">Sign In</a>
+      <a href="register.html" class="btn btn-primary btn-sm">Get Started</a>
+    </div>
+  </div>
+</nav>
+
+<div class="legal-hero">
+  <div class="container" style="position:relative;z-index:1;">
+    <div style="display:flex;align-items:center;gap:0.75rem;margin-bottom:1rem;">
+      <span class="badge badge-gold">Help Centre</span>
+    </div>
+    <h1 style="font-size:clamp(1.8rem,4vw,2.8rem);margin-bottom:0.75rem;">Frequently Asked Questions</h1>
+    <p style="color:var(--text-secondary);max-width:520px;line-height:1.7;">
+      Find answers to the most common questions about earning, withdrawals, referrals, and your account.
+    </p>
+  </div>
+</div>
+
+<div class="faq-body">
+
+  <!-- Search -->
+  <div class="faq-search-wrap">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+    <input type="text" id="faqSearch" class="form-control" placeholder="Search questions…" />
+  </div>
+
+  <div id="faqContent">
+
+    <!-- Getting Started -->
+    <div class="faq-category-title" data-category="getting-started">🚀 Getting Started</div>
+    <div class="faq-list">
+
+      <div class="faq-item" data-q="what is grindpoint how does it work">
+        <div class="faq-question" onclick="toggleFaq(this)">
+          <span>What is Grindpoint and how does it work?</span>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg>
+        </div>
+        <div class="faq-answer"><div class="faq-answer-inner">
+          Grindpoint is a Nigerian micro-task platform where you earn real Naira by completing simple online tasks — such as watching ads, following social media pages, filling surveys, rating apps, and more. Create a free account, browse available tasks, complete them, and your earnings appear in your wallet instantly. Once you hit ₦1,000, you can withdraw directly to your bank account or mobile wallet.
+        </div></div>
+      </div>
+
+      <div class="faq-item" data-q="is grindpoint free to join">
+        <div class="faq-question" onclick="toggleFaq(this)">
+          <span>Is Grindpoint free to join?</span>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg>
+        </div>
+        <div class="faq-answer"><div class="faq-answer-inner">
+          Yes, 100% free. There are no registration fees, subscription charges, or hidden costs. You never pay Grindpoint anything — we pay you. If any platform claims to be Grindpoint and asks you to pay to join, it is a scam.
+        </div></div>
+      </div>
+
+      <div class="faq-item" data-q="who can join grindpoint age requirements">
+        <div class="faq-question" onclick="toggleFaq(this)">
+          <span>Who can join Grindpoint?</span>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg>
+        </div>
+        <div class="faq-answer"><div class="faq-answer-inner">
+          Grindpoint is open to Nigerian residents who are <strong>18 years of age or older</strong>. You need a valid email address, a Nigerian phone number, and a Nigerian bank account or mobile wallet to withdraw your earnings.
+        </div></div>
+      </div>
+
+      <div class="faq-item" data-q="how do i create an account register">
+        <div class="faq-question" onclick="toggleFaq(this)">
+          <span>How do I create an account?</span>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg>
+        </div>
+        <div class="faq-answer"><div class="faq-answer-inner">
+          Click <a href="register.html">Get Started</a> on the homepage. Fill in your full name, email address, phone number, state of residence, and a password. That's it — your account is ready immediately. No email verification delays.
+        </div></div>
+      </div>
+
+    </div>
+
+    <!-- Earning & Tasks -->
+    <div class="faq-category-title" data-category="tasks">⚡ Earning &amp; Tasks</div>
+    <div class="faq-list">
+
+      <div class="faq-item" data-q="how much can i earn per task">
+        <div class="faq-question" onclick="toggleFaq(this)">
+          <span>How much can I earn per task?</span>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg>
+        </div>
+        <div class="faq-answer"><div class="faq-answer-inner">
+          Task rewards range from <strong>₦120 to ₦600</strong> depending on the type and complexity. Simpler tasks like streaming a song (₦120) pay less than premium tasks like signing up on a partner platform (₦600). New tasks with higher rewards are added regularly.
+        </div></div>
+      </div>
+
+      <div class="faq-item" data-q="task not credited reward missing wallet">
+        <div class="faq-question" onclick="toggleFaq(this)">
+          <span>My task reward wasn't added to my wallet. What should I do?</span>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg>
+        </div>
+        <div class="faq-answer"><div class="faq-answer-inner">
+          Task rewards are credited instantly after the verification countdown completes. If your wallet wasn't updated: (1) refresh your dashboard, (2) check your browser console for errors, (3) ensure your internet connection is stable. If the issue persists after refreshing, contact <a href="mailto:support@grindpoint.ng">support@grindpoint.ng</a> within 7 days with the task name and completion time.
+        </div></div>
+      </div>
+
+      <div class="faq-item" data-q="can i complete same task twice repeat">
+        <div class="faq-question" onclick="toggleFaq(this)">
+          <span>Can I complete the same task more than once?</span>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg>
+        </div>
+        <div class="faq-answer"><div class="faq-answer-inner">
+          No. Each task can only be completed once per account. Completed tasks are marked and greyed out in your task list. Attempting to complete a task again through workarounds or re-registration is a violation of our Terms and can result in account suspension.
+        </div></div>
+      </div>
+
+      <div class="faq-item" data-q="how many tasks available daily">
+        <div class="faq-question" onclick="toggleFaq(this)">
+          <span>How many tasks are available? Are new ones added?</span>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg>
+        </div>
+        <div class="faq-answer"><div class="faq-answer-inner">
+          Currently there are 12 tasks across 5 categories: Social, Video, Survey, App, and Review. We regularly add new tasks from brand partners and campaign managers. Follow our <a href="#">platform announcements</a> to be notified when new high-paying tasks drop.
+        </div></div>
+      </div>
+
+    </div>
+
+    <!-- Referrals -->
+    <div class="faq-category-title" data-category="referrals">🔗 Referrals</div>
+    <div class="faq-list">
+
+      <div class="faq-item" data-q="how does referral program work earn bonus">
+        <div class="faq-question" onclick="toggleFaq(this)">
+          <span>How does the referral program work?</span>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg>
+        </div>
+        <div class="faq-answer"><div class="faq-answer-inner">
+          Go to your <a href="referral.html">Referral page</a> and copy your unique link. Share it with friends via WhatsApp, Telegram, or social media. When a friend registers using your link, you earn ₦200 instantly — credited directly to your wallet. Refer 10+ people to become a Hustler and earn ₦300 per referral. 50+ referrals unlocks Champion status at ₦500 per referral.
+        </div></div>
+      </div>
+
+      <div class="faq-item" data-q="referral bonus not credited not paid">
+        <div class="faq-question" onclick="toggleFaq(this)">
+          <span>I referred a friend but didn't get my bonus. Why?</span>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg>
+        </div>
+        <div class="faq-answer"><div class="faq-answer-inner">
+          Referral bonuses are credited only when the referred person registers via your unique link (the URL must contain <code>?ref=YOUR_ID</code>). If your friend registered without clicking your link, unfortunately the bonus cannot be applied retroactively. Make sure to share the full link — don't just share the website homepage.
+        </div></div>
+      </div>
+
+      <div class="faq-item" data-q="can i refer myself self referral">
+        <div class="faq-question" onclick="toggleFaq(this)">
+          <span>Can I refer myself or create fake accounts to earn bonuses?</span>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg>
+        </div>
+        <div class="faq-answer"><div class="faq-answer-inner">
+          Absolutely not. Creating multiple accounts, using VPNs to fake unique users, or any other attempt to abuse the referral system is a serious violation of our <a href="terms.html">Terms &amp; Conditions</a>. It will result in permanent suspension of all involved accounts and forfeiture of all balances, with no possibility of appeal.
+        </div></div>
+      </div>
+
+    </div>
+
+    <!-- Withdrawals -->
+    <div class="faq-category-title" data-category="withdrawals">💸 Withdrawals &amp; Payments</div>
+    <div class="faq-list">
+
+      <div class="faq-item" data-q="minimum withdrawal amount how much">
+        <div class="faq-question" onclick="toggleFaq(this)">
+          <span>What is the minimum withdrawal amount?</span>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg>
+        </div>
+        <div class="faq-answer"><div class="faq-answer-inner">
+          The minimum withdrawal amount is <strong>₦1,000</strong> (one thousand Naira). You must reach this balance before you can submit a withdrawal request. There is no maximum — you can withdraw your full available balance in one request.
+        </div></div>
+      </div>
+
+      <div class="faq-item" data-q="how long does withdrawal take processing time">
+        <div class="faq-question" onclick="toggleFaq(this)">
+          <span>How long does it take to receive my withdrawal?</span>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg>
+        </div>
+        <div class="faq-answer"><div class="faq-answer-inner">
+          Withdrawals are processed within <strong>1–2 business days</strong> (Monday–Friday, 8 AM–6 PM WAT) after submission. Requests made on weekends or public holidays are processed the next business day. See our full <a href="payout-policy.html">Payout Policy</a> for details.
+        </div></div>
+      </div>
+
+      <div class="faq-item" data-q="which banks supported withdraw opay palmpay kuda">
+        <div class="faq-question" onclick="toggleFaq(this)">
+          <span>Which banks and wallets are supported?</span>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg>
+        </div>
+        <div class="faq-answer"><div class="faq-answer-inner">
+          We support all CBN-licensed Nigerian banks including GTBank, Access Bank, First Bank, UBA, Zenith Bank, FCMB, Fidelity Bank, Polaris, Sterling, Wema, Union Bank, Stanbic IBTC, Ecobank, and more. We also support mobile wallets: <strong>OPay, Palmpay, Kuda Bank, and Moniepoint</strong>.
+        </div></div>
+      </div>
+
+      <div class="faq-item" data-q="withdrawal fee charges cost">
+        <div class="faq-question" onclick="toggleFaq(this)">
+          <span>Does Grindpoint charge any withdrawal fee?</span>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg>
+        </div>
+        <div class="faq-answer"><div class="faq-answer-inner">
+          No. Grindpoint does not charge any withdrawal fee. The full amount you request is sent to your bank or wallet. Your bank or wallet provider may apply their own standard receiving/transfer fees, but those are outside our control.
+        </div></div>
+      </div>
+
+    </div>
+
+    <!-- Account -->
+    <div class="faq-category-title" data-category="account">👤 Account &amp; Security</div>
+    <div class="faq-list">
+
+      <div class="faq-item" data-q="forgot password reset login">
+        <div class="faq-question" onclick="toggleFaq(this)">
+          <span>I forgot my password. How do I reset it?</span>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg>
+        </div>
+        <div class="faq-answer"><div class="faq-answer-inner">
+          On the login page, click <a href="forgot-password.html">"Forgot password?"</a>. Enter your registered email address and we'll send you a secure reset link instantly. Check your spam/junk folder if it doesn't arrive within a few minutes. The link expires in 60 minutes.
+        </div></div>
+      </div>
+
+      <div class="faq-item" data-q="account suspended banned why">
+        <div class="faq-question" onclick="toggleFaq(this)">
+          <span>Why was my account suspended?</span>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg>
+        </div>
+        <div class="faq-answer"><div class="faq-answer-inner">
+          Accounts are suspended for violations of our <a href="terms.html">Terms &amp; Conditions</a>, including: creating multiple accounts, using automation tools to complete tasks, fraudulent referral activity, providing false information, or abusive behaviour. If you believe your suspension was in error, contact us at <a href="mailto:support@grindpoint.ng">support@grindpoint.ng</a> with the subject line "Account Suspension Appeal."
+        </div></div>
+      </div>
+
+      <div class="faq-item" data-q="delete account close account">
+        <div class="faq-question" onclick="toggleFaq(this)">
+          <span>How do I delete my account?</span>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg>
+        </div>
+        <div class="faq-answer"><div class="faq-answer-inner">
+          You can delete your account from your <a href="profile.html">Profile settings</a> page. Before deleting, make sure you've withdrawn any balance above ₦1,000 — balances below the minimum threshold at the time of deletion are forfeited. Account deletion is permanent and cannot be undone.
+        </div></div>
+      </div>
+
+    </div>
+
+  </div><!-- end faqContent -->
+
+  <!-- Still need help -->
+  <div style="margin-top:3rem;padding:2.5rem;background:linear-gradient(135deg,rgba(245,158,11,0.07),rgba(245,158,11,0.02));border:1px solid rgba(245,158,11,0.2);border-radius:var(--radius-xl);text-align:center;">
+    <div style="font-size:2.5rem;margin-bottom:1rem;">🤔</div>
+    <h3 style="margin-bottom:0.5rem;">Still have a question?</h3>
+    <p style="color:var(--text-secondary);font-size:0.875rem;margin-bottom:1.5rem;max-width:380px;margin-left:auto;margin-right:auto;line-height:1.7;">
+      Our support team is available Monday–Friday, 8 AM–6 PM WAT. We typically reply within 1–2 business days.
+    </p>
+    <a href="contact.html" class="btn btn-primary">Contact Support →</a>
+  </div>
+
+</div>
+
+<footer style="background:var(--bg-surface);border-top:1px solid var(--border-subtle);padding:2rem 0;">
+  <div class="container" style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:1rem;">
+    <a href="index.html" class="navbar__logo">Grind<span class="logo-accent">point</span></a>
+    <div style="display:flex;gap:1.5rem;flex-wrap:wrap;">
+      <a href="privacy.html" style="font-size:0.82rem;color:var(--text-muted);">Privacy Policy</a>
+      <a href="terms.html" style="font-size:0.82rem;color:var(--text-muted);">Terms</a>
+      <a href="payout-policy.html" style="font-size:0.82rem;color:var(--text-muted);">Payout Policy</a>
+      <a href="contact.html" style="font-size:0.82rem;color:var(--text-muted);">Contact</a>
+    </div>
+    <p style="font-size:0.78rem;color:var(--text-muted);">© 2025 Grindpoint Nigeria Limited</p>
+  </div>
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.min.js"></script>
+<script src="js/supabase-config.js"></script>
+<script src="js/main.js"></script>
+<script>
+  document.addEventListener("DOMContentLoaded", async () => {
+    const { session } = await getCurrentUserAndProfile();
+    if (session) {
+      document.getElementById('navActions').innerHTML = `<a href="dashboard.html" class="btn btn-primary btn-sm">Dashboard →</a>`;
+    }
+  });
+
+  function toggleFaq(questionEl) {
+    const item = questionEl.closest('.faq-item');
+    const isOpen = item.classList.contains('open');
+    document.querySelectorAll('.faq-item.open').forEach(i => i.classList.remove('open'));
+    if (!isOpen) item.classList.add('open');
+  }
+
+  // Live search
+  document.getElementById('faqSearch').addEventListener('input', (e) => {
+    const q = e.target.value.toLowerCase().trim();
+    const items = document.querySelectorAll('.faq-item');
+    const categories = document.querySelectorAll('.faq-category-title');
+    const lists = document.querySelectorAll('.faq-list');
+
+    if (!q) {
+      items.forEach(i => i.style.display = '');
+      categories.forEach(c => c.style.display = '');
+      lists.forEach(l => l.style.display = '');
+      document.getElementById('noResults')?.remove();
+      return;
+    }
+
+    let anyVisible = false;
+    items.forEach(item => {
+      const text = (item.dataset.q || '') + ' ' + item.querySelector('.faq-question span').textContent.toLowerCase();
+      const matches = text.includes(q);
+      item.style.display = matches ? '' : 'none';
+      if (matches) anyVisible = true;
+    });
+
+    // Show/hide category headers based on visible items in each list
+    lists.forEach((list, i) => {
+      const visible = [...list.querySelectorAll('.faq-item')].some(it => it.style.display !== 'none');
+      list.style.display = visible ? '' : 'none';
+      categories[i].style.display = visible ? '' : 'none';
+    });
+
+    // No results
+    document.getElementById('noResults')?.remove();
+    if (!anyVisible) {
+      const msg = document.createElement('div');
+      msg.id = 'noResults';
+      msg.className = 'no-results';
+      msg.innerHTML = `<div style="font-size:2rem;margin-bottom:0.75rem;">🔍</div><div style="font-size:0.9rem;">No results for "<strong>${q}</strong>"</div><div style="font-size:0.82rem;color:var(--text-muted);margin-top:0.4rem;">Try different keywords or <a href="contact.html" style="color:var(--gold-500);">contact support</a>.</div>`;
+      document.getElementById('faqContent').appendChild(msg);
+    }
+  });
+</script>
+
+<!-- Floating WhatsApp Button -->
+<a href="https://wa.me/2349034192652?text=Hello%20Grindpoint%20Support%2C%20I%20need%20help%20with%20my%20account." 
+   target="_blank" rel="noopener" 
+   class="whatsapp-float" 
+   aria-label="Chat with us on WhatsApp">
+  <svg viewBox="0 0 24 24" fill="currentColor">
+    <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/>
+  </svg>
+  <span class="whatsapp-float__label">Support</span>
+</a>
+
+<script>
+// Register Service Worker for PWA
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', () => {
+    navigator.serviceWorker.register('/sw.js')
+      .then(reg => console.log('[GP] SW registered:', reg.scope))
+      .catch(err => console.warn('[GP] SW registration failed:', err));
+  });
+}
+</script>
+</body>
+</html>

@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+  <title>Users — Grindpoint Admin</title>
+  <link rel="stylesheet" href="../css/style.css"/>
+  <style>.admin-sidebar .sidebar__link.active{color:var(--error);background:var(--error-bg);}.admin-sidebar .sidebar__link.active::before{background:var(--error);}</style>
+</head>
+<body style="visibility:hidden">
+<nav class="navbar" style="border-bottom-color:rgba(239,68,68,.25);">
+  <div class="navbar__inner">
+    <div style="display:flex;align-items:center;gap:1rem;">
+      <a href="../index.html" class="navbar__logo">Grind<span class="logo-accent">point</span></a>
+      <span class="admin-badge">Admin Panel</span>
+    </div>
+    <div style="display:flex;align-items:center;gap:1rem;">
+      <span id="adminName" style="font-size:.82rem;color:var(--text-secondary);">Admin</span>
+      <button onclick="signOut()" class="btn btn-secondary btn-sm">Sign Out</button>
+    </div>
+  </div>
+</nav>
+<div class="page-wrapper">
+  <aside class="sidebar admin-sidebar">
+    <nav class="sidebar__nav">
+      <span class="sidebar__label">Overview</span>
+      <a href="index.html" class="sidebar__link"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/></svg>Dashboard</a>
+      <a href="analytics.html" class="sidebar__link"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>Analytics</a>
+      <a href="fraud.html" class="sidebar__link"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>Fraud Detection</a>
+      <span class="sidebar__label">Manage</span>
+      <a href="users.html" class="sidebar__link active"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/></svg>All Users</a>
+      <a href="task-submissions.html" class="sidebar__link"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 11l3 3L22 4"/></svg>Task Submissions</a>
+      <a href="withdrawals.html" class="sidebar__link"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 000 7h5a3.5 3.5 0 010 7H6"/></svg>Withdrawals</a>
+      <a href="tasks-admin.html" class="sidebar__link"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 11l3 3L22 4"/></svg>Task Manager</a>
+      <a href="announcements.html" class="sidebar__link"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 17H2a3 3 0 000 6h20V17z"/></svg>Announcements</a>
+      <a href="settings.html" class="sidebar__link"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/></svg>Settings</a>
+    </nav>
+  </aside>
+  <main class="main-content">
+    <div class="page-header" style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:1rem;">
+      <div>
+        <h1 class="page-title">All Users</h1>
+        <p class="page-subtitle" id="userCount">Loading…</p>
+      </div>
+      <input type="text" id="searchInput" class="form-control" placeholder="Search name or email…" style="width:240px;"/>
+    </div>
+    <div class="table-wrapper">
+      <table class="data-table">
+        <thead><tr><th>User</th><th>Email</th><th>State</th><th>Balance</th><th>Tasks</th><th>Refs</th><th>Joined</th><th>Role</th><th>Actions</th></tr></thead>
+        <tbody id="usersBody"><tr><td colspan="9" style="text-align:center;padding:3rem;"><div class="skeleton" style="height:20px;width:200px;margin:0 auto;border-radius:8px;"></div></td></tr></tbody>
+      </table>
+    </div>
+  </main>
+</div>
+
+<!-- Edit modal -->
+<div class="modal" id="editModal">
+  <div class="modal__box">
+    <div class="modal__header">
+      <h3 class="modal__title">Edit User</h3>
+      <button class="modal__close" onclick="closeModal('editModal')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
+    </div>
+    <div class="modal__body" style="display:flex;flex-direction:column;gap:1rem;">
+      <input type="hidden" id="editId"/>
+      <div class="form-group"><label class="form-label">Full Name</label><input type="text" id="editName" class="form-control"/></div>
+      <div class="form-group"><label class="form-label">Balance (₦)</label><input type="number" id="editBalance" class="form-control" min="0"/><span class="form-hint">Manual adjustment — use carefully.</span></div>
+      <div class="form-group"><label class="form-label">Role</label><select id="editRole" class="form-control"><option value="user">User</option><option value="admin">Admin</option></select></div>
+      <div class="form-group"><label class="form-label">Status</label><select id="editStatus" class="form-control"><option value="active">Active</option><option value="banned">Banned</option></select></div>
+    </div>
+    <div class="modal__footer">
+      <button class="btn btn-secondary" onclick="closeModal('editModal')">Cancel</button>
+      <button class="btn btn-primary" id="saveUserBtn">Save Changes</button>
+    </div>
+  </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.min.js"></script>
+<script src="../js/supabase-config.js"></script>
+<script src="../js/main.js"></script>
+<script>
+let _users = [];
+
+document.addEventListener("DOMContentLoaded", async () => {
+  const auth = await requireAdmin();
+  if (!auth) return;
+  document.getElementById("adminName").textContent = auth.profile?.full_name || "Admin";
+  await load();
+});
+
+async function load() {
+  const sb = getSupabase();
+  const { data, error } = await sb.from("profiles").select("*").order("created_at",{ascending:false});
+  if (error) { document.getElementById("usersBody").innerHTML=`<tr><td colspan="9" style="text-align:center;padding:2rem;color:var(--error);">${error.message}</td></tr>`; return; }
+  _users = data || [];
+  document.getElementById("userCount").textContent = `${_users.length} registered users`;
+  render(_users);
+}
+
+function render(list) {
+  document.getElementById("usersBody").innerHTML = list.map(u => `
+    <tr>
+      <td><div style="display:flex;align-items:center;gap:.6rem;"><div class="user-avatar" style="width:32px;height:32px;font-size:.75rem;">${(u.full_name||"U").split(" ").map(n=>n[0]).join("").substring(0,2).toUpperCase()}</div><span style="font-weight:600;font-size:.875rem;">${u.full_name||"—"}</span></div></td>
+      <td style="font-size:.82rem;">${u.email||"—"}</td>
+      <td style="font-size:.82rem;">${u.state||"—"}</td>
+      <td><strong style="color:var(--gold-500);">${formatNaira(u.balance)}</strong></td>
+      <td>${u.tasks_completed||0}</td>
+      <td>${u.referral_count||0}</td>
+      <td style="font-size:.78rem;color:var(--text-muted);">${u.created_at?new Date(u.created_at).toLocaleDateString("en-NG"):"—"}</td>
+      <td><span class="badge ${u.role==="admin"?"badge-error":"badge-muted"}">${u.role||"user"}</span></td>
+      <td><div style="display:flex;gap:.4rem;">
+        <button class="btn btn-secondary btn-sm" onclick="openEdit('${u.id}')">Edit</button>
+        <button class="btn btn-danger btn-sm" onclick="toggleBan('${u.id}','${u.status||"active"}')">${u.status==="banned"?"Unban":"Ban"}</button>
+      </div></td>
+    </tr>`).join("") || `<tr><td colspan="9" style="text-align:center;padding:3rem;color:var(--text-muted);">No users found.</td></tr>`;
+}
+
+document.getElementById("searchInput").addEventListener("input", e => {
+  const q = e.target.value.toLowerCase();
+  render(q ? _users.filter(u => (u.full_name||"").toLowerCase().includes(q)||(u.email||"").toLowerCase().includes(q)) : _users);
+});
+
+function openEdit(id) {
+  const u = _users.find(x => x.id===id); if(!u) return;
+  document.getElementById("editId").value = u.id;
+  document.getElementById("editName").value = u.full_name||"";
+  document.getElementById("editBalance").value = u.balance||0;
+  document.getElementById("editRole").value = u.role||"user";
+  document.getElementById("editStatus").value = u.status||"active";
+  openModal("editModal");
+}
+
+document.getElementById("saveUserBtn").addEventListener("click", async () => {
+  const btn = document.getElementById("saveUserBtn");
+  const id = document.getElementById("editId").value;
+  const updates = { full_name:document.getElementById("editName").value.trim(), balance:parseFloat(document.getElementById("editBalance").value)||0, role:document.getElementById("editRole").value, status:document.getElementById("editStatus").value };
+  setButtonLoading(btn,"Saving…");
+  const { error } = await getSupabase().from("profiles").update(updates).eq("id",id);
+  clearButtonLoading(btn);
+  if (error) {
+    if (error.code==="42501" || error.message?.includes("RLS") || error.message?.includes("policy")) {
+      showToast("❌ Permission denied — run supabase-admin-rls.sql in Supabase SQL Editor.", "error", 8000);
+    } else {
+      showToast("Failed: " + error.message, "error");
+    }
+    return;
+  }
+  const i = _users.findIndex(u=>u.id===id); if(i>-1) Object.assign(_users[i],updates);
+  render(_users); closeModal("editModal"); showToast("✅ User updated successfully.","success");
+});
+
+async function toggleBan(id, current) {
+  if (!confirm(`${current==="banned"?"Unban":"Ban"} this user?`)) return;
+  const ns = current==="banned"?"active":"banned";
+  const { error } = await getSupabase().from("profiles").update({
+    status: ns,
+    updated_at: new Date().toISOString()
+  }).eq("id",id);
+  if (error) {
+    if (error.code==="42501" || error.message?.includes("RLS") || error.message?.includes("policy")) {
+      showToast("❌ Permission denied — run supabase-admin-rls.sql in Supabase SQL Editor.", "error", 8000);
+    } else {
+      showToast("Ban failed: " + error.message, "error");
+    }
+    return;
+  }
+  const i = _users.findIndex(u=>u.id===id); if(i>-1) _users[i].status=ns;
+  render(_users);
+  showToast(`✅ User ${ns==="banned"?"banned":"unbanned"} successfully.`, "success");
+}
+</script>
+</body>
+</html>
