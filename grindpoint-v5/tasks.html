@@ -1,0 +1,1018 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Earn Tasks — Grindpoint</title>
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><text y='26' font-size='28'>⚡</text></svg>" />
+  <link rel="stylesheet" href="css/style.css" />
+  <style>
+    /* ── Task card overrides ── */
+    .task-card { display:flex; flex-direction:column; background:var(--bg-card); border:1px solid var(--border-subtle); border-radius:var(--radius-lg); overflow:hidden; transition:all .25s; }
+    .task-card:hover:not(.completed) { border-color:var(--border-gold); transform:translateY(-3px); box-shadow:var(--shadow-gold); }
+    .task-card.completed { opacity:.6; }
+    .task-card.pending  { border-color:rgba(245,158,11,.4); }
+
+    .tc-top { padding:1.1rem 1.25rem .75rem; background:var(--bg-elevated); border-bottom:1px solid var(--border-subtle); display:flex; align-items:flex-start; gap:.85rem; }
+    .tc-icon { width:46px; height:46px; border-radius:var(--radius-md); display:flex; align-items:center; justify-content:center; font-size:1.4rem; flex-shrink:0; }
+    .tc-meta { flex:1; min-width:0; }
+    .tc-title { font-weight:700; font-size:.95rem; color:var(--text-primary); margin-bottom:.25rem; line-height:1.3; }
+    .tc-desc  { font-size:.8rem; color:var(--text-secondary); line-height:1.5; display:-webkit-box; -webkit-line-clamp:2; -webkit-box-orient:vertical; overflow:hidden; }
+
+    .tc-body { padding:1rem 1.25rem; flex:1; display:flex; flex-direction:column; gap:.65rem; }
+
+    .tc-steps { background:var(--bg-elevated); border-radius:var(--radius-md); padding:.85rem 1rem; }
+    .tc-steps-label { font-size:.7rem; font-weight:700; text-transform:uppercase; letter-spacing:.08em; color:var(--text-muted); margin-bottom:.6rem; }
+    .tc-step { display:flex; align-items:flex-start; gap:.6rem; font-size:.8rem; color:var(--text-secondary); margin-bottom:.35rem; line-height:1.45; }
+    .tc-step:last-child { margin-bottom:0; }
+    .tc-step-num { width:18px; height:18px; border-radius:50%; background:rgba(245,158,11,.15); color:var(--gold-500); display:flex; align-items:center; justify-content:center; font-size:.65rem; font-weight:700; flex-shrink:0; margin-top:1px; }
+
+    .tc-link-btn { display:flex; align-items:center; gap:.5rem; padding:.6rem .85rem; background:rgba(59,130,246,.08); border:1px solid rgba(59,130,246,.25); border-radius:var(--radius-md); color:#3b82f6; font-size:.8rem; font-weight:600; text-decoration:none; transition:all .15s; }
+    .tc-link-btn:hover { background:rgba(59,130,246,.15); }
+    .tc-link-btn svg { width:14px; height:14px; flex-shrink:0; }
+
+    .tc-footer { padding:.85rem 1.25rem; border-top:1px solid var(--border-subtle); display:flex; align-items:center; justify-content:space-between; gap:.75rem; }
+    .tc-reward { font-family:var(--font-display); font-size:1.15rem; font-weight:800; color:var(--gold-500); }
+    .tc-time   { font-size:.75rem; color:var(--text-muted); display:flex; align-items:center; gap:4px; }
+
+    /* Proof upload area */
+    .proof-upload { border:2px dashed var(--border-default); border-radius:var(--radius-md); padding:1.25rem; text-align:center; cursor:pointer; transition:all .2s; position:relative; }
+    .proof-upload:hover, .proof-upload.drag-over { border-color:var(--gold-500); background:rgba(245,158,11,.04); }
+    .proof-upload input[type=file] { position:absolute; inset:0; opacity:0; cursor:pointer; width:100%; height:100%; }
+    .proof-upload-icon { font-size:1.75rem; margin-bottom:.5rem; }
+    .proof-upload-text { font-size:.8rem; color:var(--text-secondary); }
+    .proof-upload-text strong { color:var(--gold-400); }
+    .proof-preview { position:relative; display:inline-block; margin-top:.75rem; }
+    .proof-preview img { max-height:120px; border-radius:var(--radius-md); border:1px solid var(--border-subtle); display:block; }
+    .proof-preview-remove { position:absolute; top:-8px; right:-8px; width:22px; height:22px; border-radius:50%; background:var(--error); color:#fff; border:none; cursor:pointer; font-size:12px; display:flex; align-items:center; justify-content:center; }
+
+    /* Status chips */
+    .status-pending  { background:rgba(245,158,11,.12); color:var(--gold-400); border:1px solid rgba(245,158,11,.3); }
+    .status-approved { background:var(--success-bg); color:var(--success); border:1px solid rgba(34,197,94,.3); }
+    .status-rejected { background:var(--error-bg); color:var(--error); border:1px solid rgba(239,68,68,.3); }
+
+    .filter-bar { display:flex; align-items:center; gap:.6rem; flex-wrap:wrap; margin-bottom:1.75rem; }
+    .filter-btn { padding:.45rem 1rem; border-radius:var(--radius-full); font-size:.8rem; font-weight:600; border:1px solid var(--border-default); background:transparent; color:var(--text-secondary); cursor:pointer; transition:all .15s; }
+    .filter-btn:hover { border-color:var(--gold-500); color:var(--gold-500); }
+    .filter-btn.active { background:var(--gold-gradient); color:#000; border-color:transparent; box-shadow:var(--shadow-gold); }
+
+    .tasks-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(310px,1fr)); gap:1.25rem; }
+  </style>
+<!-- Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-SJRSW6DNNQ"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag("js", new Date());
+  gtag("config", "G-SJRSW6DNNQ");
+</script>
+  <!-- PWA Meta Tags -->
+  <link rel="manifest" href="/manifest.json"/>
+  <meta name="theme-color" content="#f59e0b"/>
+  <meta name="mobile-web-app-capable" content="yes"/>
+  <meta name="apple-mobile-web-app-capable" content="yes"/>
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"/>
+  <meta name="apple-mobile-web-app-title" content="Grindpoint"/>
+  <link rel="apple-touch-icon" href="/icons/icon-192.png"/>
+</head>
+<body style="visibility:hidden">
+
+<nav class="navbar">
+  <div class="navbar__inner">
+    <a href="index.html" class="navbar__logo">Grind<span class="logo-accent">point</span></a>
+    <div class="navbar__actions" style="gap:.75rem;">
+      <button class="sidebar-toggle-btn" id="sidebarToggleBtn" aria-label="Open menu">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+      </button>
+      <span style="font-size:.82rem;color:var(--text-secondary);">Balance: <strong id="navBalance" style="color:var(--gold-500);">₦—</strong></span>
+    </div>
+  </div>
+</nav>
+
+<div class="page-wrapper">
+  <aside class="sidebar" id="sidebar">
+    <nav class="sidebar__nav">
+      <span class="sidebar__label">Main Menu</span>
+      <a href="dashboard.html" class="sidebar__link">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/></svg>Dashboard
+      </a>
+      <a href="tasks.html" class="sidebar__link active">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11"/></svg>Earn Tasks
+        <span class="badge badge-gold" style="margin-left:auto;font-size:.65rem;">New</span>
+      </a>
+      <a href="referral.html" class="sidebar__link">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/></svg>Referrals
+      </a>
+      <a href="leaderboard.html" class="sidebar__link">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>Leaderboard
+      </a>
+      <span class="sidebar__label">Account</span>
+      <a href="transactions.html" class="sidebar__link">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/><line x1="3" y1="6" x2="3.01" y2="6"/><line x1="3" y1="12" x2="3.01" y2="12"/><line x1="3" y1="18" x2="3.01" y2="18"/></svg>Transactions
+      </a>
+      <a href="profile.html" class="sidebar__link">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>My Profile
+      </a>
+    </nav>
+    <div class="sidebar__footer">
+      <div class="sidebar__user">
+        <div class="user-avatar" id="sidebarAvatar">--</div>
+        <div class="sidebar__user-info">
+          <div class="sidebar__user-name" id="sidebarName">Loading…</div>
+          <div class="sidebar__user-role">Member</div>
+        </div>
+        <button onclick="signOut()" class="btn btn-ghost btn-icon" title="Sign out">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:16px;height:16px;"><path d="M9 21H5a2 2 0 01-2-2V5a2 2 0 012-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+        </button>
+      </div>
+    </div>
+  </aside>
+
+  <main class="main-content">
+    <div id="taskDbError"></div>
+    <div class="page-header">
+      <div class="section-label">Earning Hub</div>
+      <h1 class="page-title">Available Tasks</h1>
+      <p class="page-subtitle">Complete a task, upload your proof screenshot, and our team reviews within 24 hours.</p>
+    </div>
+
+    <!-- Info banner -->
+    <div style="display:flex;align-items:flex-start;gap:.85rem;padding:1rem 1.25rem;background:rgba(59,130,246,.06);border:1px solid rgba(59,130,246,.2);border-radius:var(--radius-lg);margin-bottom:1.75rem;">
+      <svg viewBox="0 0 24 24" fill="none" stroke="#3b82f6" stroke-width="2" style="width:20px;height:20px;flex-shrink:0;margin-top:1px;"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+      <div style="font-size:.84rem;color:var(--text-secondary);line-height:1.6;">
+        <strong style="color:var(--text-primary);">How it works:</strong>
+        Click a task → follow the steps → open the task link → complete the action → upload a screenshot as proof → submit.
+        Our admin team reviews within <strong style="color:var(--text-primary);">24 hours</strong> and credits your wallet on approval.
+      </div>
+    </div>
+
+    <!-- Filter bar -->
+    <div class="filter-bar">
+      <button class="filter-btn active" data-filter="all">All Tasks</button>
+      <button class="filter-btn" data-filter="social">📱 Social</button>
+      <button class="filter-btn" data-filter="video">🎬 Video</button>
+      <button class="filter-btn" data-filter="survey">📊 Survey</button>
+      <button class="filter-btn" data-filter="app">📲 App</button>
+      <button class="filter-btn" data-filter="review">✍️ Review</button>
+    </div>
+
+    <div class="tasks-grid" id="tasksGrid"></div>
+  </main>
+</div>
+
+<!-- ── Task Submission Modal ── -->
+<div class="modal" id="taskModal">
+  <div class="modal__box" style="max-width:540px;">
+    <div class="modal__header">
+      <h3 class="modal__title" id="modalTitle">Task Details</h3>
+      <button class="modal__close" id="modalClose">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+      </button>
+    </div>
+    <div class="modal__body" style="display:flex;flex-direction:column;gap:1.1rem;">
+
+      <!-- Task overview strip -->
+      <div style="display:flex;align-items:center;gap:.85rem;padding:1rem;background:var(--bg-elevated);border-radius:var(--radius-md);border:1px solid var(--border-subtle);">
+        <div id="modalIcon" style="font-size:2rem;flex-shrink:0;"></div>
+        <div style="flex:1;min-width:0;">
+          <div id="modalDesc" style="font-size:.85rem;color:var(--text-secondary);line-height:1.5;"></div>
+        </div>
+        <div style="text-align:right;flex-shrink:0;">
+          <div style="font-size:.7rem;color:var(--text-muted);text-transform:uppercase;letter-spacing:.06em;">Reward</div>
+          <div id="modalReward" style="font-family:var(--font-display);font-size:1.3rem;font-weight:800;color:var(--gold-500);"></div>
+        </div>
+      </div>
+
+      <!-- Step-by-step instructions -->
+      <div>
+        <div style="font-size:.72rem;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--text-muted);margin-bottom:.65rem;">Step-by-Step Instructions</div>
+        <div id="modalSteps" style="display:flex;flex-direction:column;gap:.5rem;"></div>
+      </div>
+
+      <!-- Task link -->
+      <div id="modalLinkWrap" style="display:none;">
+        <div style="font-size:.72rem;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--text-muted);margin-bottom:.5rem;">Task Link</div>
+        <a id="modalLink" href="#" target="_blank" rel="noopener" class="tc-link-btn" style="display:inline-flex;">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+          Open Task Link
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:12px;height:12px;opacity:.6;"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+        </a>
+        <p style="font-size:.75rem;color:var(--text-muted);margin-top:.4rem;">Complete the required action on this link before uploading proof.</p>
+      </div>
+
+      <!-- Proof upload -->
+      <div>
+        <div style="font-size:.72rem;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--text-muted);margin-bottom:.5rem;">
+          Proof Screenshot <span style="color:var(--error);">*</span>
+        </div>
+        <div class="proof-upload" id="proofUpload">
+          <input type="file" id="proofFile" accept="image/*" />
+          <div class="proof-upload-icon">📸</div>
+          <div class="proof-upload-text"><strong>Click to upload</strong> or drag & drop your screenshot here</div>
+          <div class="proof-upload-text" style="margin-top:.25rem;font-size:.72rem;">PNG, JPG or WEBP · Max 5 MB</div>
+        </div>
+        <div id="proofPreviewWrap" style="display:none;margin-top:.6rem;">
+          <div class="proof-preview">
+            <img id="proofPreviewImg" src="" alt="Proof preview" />
+            <button class="proof-preview-remove" id="proofRemove" title="Remove">✕</button>
+          </div>
+          <p style="font-size:.75rem;color:var(--success);margin-top:.4rem;">✓ Screenshot selected</p>
+        </div>
+      </div>
+
+      <!-- Optional note -->
+      <div class="form-group">
+        <label class="form-label" for="submissionNote">Additional Note <span style="color:var(--text-muted);font-weight:400;">(optional)</span></label>
+        <textarea id="submissionNote" class="form-control" rows="2"
+          placeholder="Add any context, username used, or extra info for the reviewer…"
+          style="resize:vertical;font-size:.875rem;"></textarea>
+      </div>
+
+    </div>
+    <div class="modal__footer">
+      <button class="btn btn-secondary" id="modalCancel">Cancel</button>
+      <button class="btn btn-primary" id="modalSubmit" disabled>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" style="width:15px;height:15px;"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+        Submit for Review
+      </button>
+    </div>
+  </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.min.js"></script>
+<script src="js/supabase-config.js"></script>
+<script src="js/main.js"></script>
+<script>
+/* ── Task definitions ───────────────────────────────────────── */
+const TASKS = [
+  {
+    id:'task_001', category:'social', icon:'📱',
+    iconBg:'rgba(59,130,246,.12)',
+    title:'Follow Instagram Business Page',
+    desc:'Follow a Nigerian brand\'s Instagram page and stay followed for at least 7 days.',
+    reward:250, duration:'2 min',
+    link:'https://instagram.com',
+    instructions:[
+      'Open the Instagram link below',
+      'Log into your Instagram account',
+      'Click the Follow button on the page',
+      'Take a screenshot clearly showing you are following',
+      'Upload the screenshot as proof below',
+    ]
+  },
+  {
+    id:'task_002', category:'video', icon:'🎬',
+    iconBg:'rgba(239,68,68,.12)',
+    title:'Watch & Rate Ad Video',
+    desc:'Watch a 60-second product advertisement on YouTube and give it a thumbs up.',
+    reward:180, duration:'3 min',
+    link:'https://youtube.com',
+    instructions:[
+      'Open the YouTube link below',
+      'Watch the full video — do not skip',
+      'Click Like (thumbs up) on the video',
+      'Screenshot the video showing your like',
+      'Upload the screenshot below',
+    ]
+  },
+  {
+    id:'task_003', category:'survey', icon:'📊',
+    iconBg:'rgba(245,158,11,.12)',
+    title:'Complete Market Survey',
+    desc:'Answer 10 quick questions about your shopping habits. Takes about 5 minutes.',
+    reward:500, duration:'5 min',
+    link:'https://forms.google.com',
+    instructions:[
+      'Open the survey link below',
+      'Answer all 10 questions honestly',
+      'Submit the form at the end',
+      'Screenshot the "Thank you" confirmation page',
+      'Upload the screenshot below',
+    ]
+  },
+  {
+    id:'task_004', category:'social', icon:'📘',
+    iconBg:'rgba(29,78,216,.12)',
+    title:'Like & Share Facebook Post',
+    desc:'Like a Facebook post, share it to your timeline, and leave a genuine comment.',
+    reward:150, duration:'2 min',
+    link:'https://facebook.com',
+    instructions:[
+      'Open the Facebook post link below',
+      'Click Like on the post',
+      'Share it to your own timeline',
+      'Leave a genuine comment (5+ words)',
+      'Screenshot your comment on the post and upload',
+    ]
+  },
+  {
+    id:'task_005', category:'app', icon:'⭐',
+    iconBg:'rgba(234,179,8,.12)',
+    title:'Rate Mobile App on Play Store',
+    desc:'Download a free app, use it for 1 minute, then give it 5 stars on Google Play.',
+    reward:350, duration:'4 min',
+    link:'https://play.google.com',
+    instructions:[
+      'Open the Play Store link below and download the app',
+      'Open the app and use it for at least 1 minute',
+      'Return to Play Store and click Rate This App',
+      'Give 5 stars and write a short honest review (10+ words)',
+      'Screenshot your published review and upload below',
+    ]
+  },
+  {
+    id:'task_006', category:'social', icon:'📢',
+    iconBg:'rgba(139,92,246,.12)',
+    title:'Join Telegram Channel',
+    desc:'Join a Telegram channel and remain a member for at least 30 days.',
+    reward:300, duration:'1 min',
+    link:'https://t.me',
+    instructions:[
+      'Click the Telegram link below',
+      'Tap Join Channel',
+      'Do NOT leave within 30 days',
+      'Screenshot your membership (channel name visible)',
+      'Upload the screenshot below',
+    ]
+  },
+  {
+    id:'task_007', category:'review', icon:'✍️',
+    iconBg:'rgba(20,184,166,.12)',
+    title:'Write Product Review on Jumia',
+    desc:'Write an honest 50-word review for a Nigerian product on Jumia.',
+    reward:400, duration:'6 min',
+    link:'https://jumia.com.ng',
+    instructions:[
+      'Open the Jumia product link below',
+      'Scroll down and click Write a Review',
+      'Write at least 50 honest words about the product',
+      'Submit your review',
+      'Screenshot your published review showing your username',
+    ]
+  },
+  {
+    id:'task_008', category:'video', icon:'🎵',
+    iconBg:'rgba(236,72,153,.12)',
+    title:'Stream Song on Spotify',
+    desc:'Play a specified song on Spotify for at least 30 seconds.',
+    reward:120, duration:'1 min',
+    link:'https://open.spotify.com',
+    instructions:[
+      'Open Spotify (app or web)',
+      'Search for the song using the link below',
+      'Play it for at least 30 seconds',
+      'Screenshot the song playing showing your profile name',
+      'Upload the screenshot below',
+    ]
+  },
+  {
+    id:'task_009', category:'app', icon:'📲',
+    iconBg:'rgba(34,197,94,.12)',
+    title:'Sign Up on Partner Platform',
+    desc:'Create a free account on a partner fintech or e-commerce platform.',
+    reward:600, duration:'5 min',
+    link:'https://grindpoint.ng',
+    instructions:[
+      'Open the partner signup link below',
+      'Register with your real name and email',
+      'Verify your email address if required',
+      'Screenshot your completed profile/dashboard',
+      'Upload the screenshot below — reward within 10 minutes',
+    ]
+  },
+  {
+    id:'task_010', category:'survey', icon:'🗳️',
+    iconBg:'rgba(245,158,11,.12)',
+    title:'Nigerian Governance Opinion Poll',
+    desc:'Answer 5 questions about your views on Nigerian infrastructure development.',
+    reward:220, duration:'3 min',
+    link:'https://forms.google.com',
+    instructions:[
+      'Open the poll link below',
+      'Answer all 5 questions truthfully',
+      'Click Submit',
+      'Screenshot the confirmation / thank-you screen',
+      'Upload screenshot below',
+    ]
+  },
+  {
+    id:'task_011', category:'social', icon:'🐦',
+    iconBg:'rgba(29,155,240,.12)',
+    title:'Follow & Retweet on Twitter/X',
+    desc:'Follow a brand\'s X account and retweet their pinned post.',
+    reward:200, duration:'2 min',
+    link:'https://x.com',
+    instructions:[
+      'Open the Twitter/X profile link below',
+      'Click Follow',
+      'Retweet the pinned post on their profile',
+      'Do not unfollow within 14 days',
+      'Screenshot showing you follow them and the retweet',
+    ]
+  },
+  {
+    id:'task_012', category:'review', icon:'🏪',
+    iconBg:'rgba(245,158,11,.12)',
+    title:'Google Maps Business Review',
+    desc:'Leave a 5-star Google Maps review for a local Nigerian business.',
+    reward:380, duration:'4 min',
+    link:'https://maps.google.com',
+    instructions:[
+      'Open the Google Maps link below',
+      'Click Write a Review',
+      'Give the business 5 stars',
+      'Write a genuine comment (at least 15 words)',
+      'Screenshot your published review and upload below',
+    ]
+  },
+];
+
+/* ── State ─────────────────────────────────────────────────── */
+let _user = null, _profile = null;
+let _submissions = {};   // task_id → { status, submitted_at }
+let _activeTask  = null;
+let _proofBase64 = null;
+let _dbTasks     = null; // tasks loaded from DB (null = use hardcoded TASKS)
+
+// Active task list — DB tasks if available, else hardcoded fallback
+function getActiveTasks() {
+  return _dbTasks !== null ? _dbTasks : TASKS;
+}
+
+/* ── Boot ──────────────────────────────────────────────────── */
+document.addEventListener('DOMContentLoaded', async () => {
+  const result = await requireAuth();
+  if (!result) return;
+  _user = result.user; _profile = result.profile;
+
+  const name = _profile?.full_name || _user.user_metadata?.full_name || 'Grinder';
+  document.getElementById('sidebarName').textContent = name;
+  document.getElementById('sidebarAvatar').textContent =
+    name.split(' ').map(n => n[0]).join('').substring(0,2).toUpperCase();
+  document.getElementById('navBalance').textContent = formatNaira(_profile?.balance || 0);
+
+  // Load tasks from DB first, fall back to hardcoded TASKS array
+  await loadTasksFromDB();
+  await loadSubmissions();
+  renderTasks('all');
+});
+
+// Refresh submissions when user returns to tab (so approved tasks update)
+document.addEventListener('visibilitychange', async () => {
+  if (document.visibilityState === 'visible' && _user) {
+    await loadSubmissions();
+    await refreshBalance();
+    const activeFilter = document.querySelector('.filter-btn.active')?.dataset?.filter || 'all';
+    renderTasks(activeFilter);
+  }
+});
+
+async function loadTasksFromDB() {
+  const sb = getSupabase();
+  if (!sb) return;
+  try {
+    const { data, error } = await sb
+      .from('tasks')
+      .select('*')
+      .eq('is_active', true)
+      .order('sort_order', { ascending: true });
+    if (!error && data && data.length > 0) {
+      // Map DB columns to the shape TASKS array expects
+      _dbTasks = data.map(t => ({
+        id:           t.id,
+        category:     t.category     || 'social',
+        icon:         t.icon         || '⚡',
+        iconBg:       'rgba(245,158,11,.12)',
+        title:        t.title,
+        desc:         t.description  || '',
+        reward:       t.reward       || 0,
+        duration:     t.duration     || '—',
+        link:         t.link         || null,
+        instructions: Array.isArray(t.instructions) ? t.instructions : [],
+      }));
+      console.log('[Tasks] Loaded', _dbTasks.length, 'tasks from DB');
+    } else {
+      console.log('[Tasks] No DB tasks found, using hardcoded defaults');
+      _dbTasks = null; // will fall back to TASKS constant
+    }
+  } catch(e) {
+    console.warn('[Tasks] DB load failed, using defaults:', e.message);
+    _dbTasks = null;
+  }
+}
+
+async function refreshBalance() {
+  const sb = getSupabase();
+  if (!sb || !_user) return;
+  try {
+    const { data } = await sb.from('profiles').select('balance').eq('id', _user.id).maybeSingle();
+    if (data) {
+      _profile = { ..._profile, balance: data.balance };
+      document.getElementById('navBalance').textContent = formatNaira(data.balance);
+    }
+  } catch(e) {}
+}
+
+/* ── Load user's existing submissions ───────────────────────── */
+async function loadSubmissions() {
+  const sb = getSupabase();
+  if (!sb || !_user) return;
+  try {
+    const { data, error } = await sb
+      .from('task_submissions')
+      .select('task_id, status, submitted_at, admin_note')
+      .eq('user_id', _user.id);
+
+    if (error) throw error;
+
+    _submissions = {}; // reset first
+    if (data) data.forEach(r => { _submissions[r.task_id] = r; });
+
+    // Clear any previous DB error banner now that it's working
+    document.getElementById('taskDbError').innerHTML = '';
+
+  } catch (e) {
+    console.warn('[Tasks] Could not load submissions:', e.message);
+    showDbErrorBanner(e.message);
+  }
+}
+
+function showDbErrorBanner(msg) {
+  const banner = document.getElementById('taskDbError');
+  if (!banner) return;
+  const isSetupIssue = msg?.includes('does not exist') || msg?.includes('relation') || msg?.includes('policy') || msg?.includes('RLS');
+  banner.innerHTML = `
+    <div style="display:flex;align-items:flex-start;gap:.75rem;padding:1rem 1.25rem;background:var(--error-bg);border:1px solid rgba(239,68,68,.3);border-radius:var(--radius-lg);margin-bottom:1.5rem;">
+      <span style="font-size:1.3rem;flex-shrink:0;">⚠️</span>
+      <div style="font-size:.85rem;line-height:1.6;">
+        <strong style="color:var(--error);display:block;margin-bottom:2px;">Could not load task status</strong>
+        <span style="color:var(--text-secondary);">
+          ${isSetupIssue
+            ? 'The platform database is still being set up. Please try again in a moment, or contact support if this persists.'
+            : (msg || 'A connection error occurred.')}
+        </span>
+      </div>
+    </div>`;
+}
+
+/* ── Manual refresh ────────────────────────────────────────── */
+async function refreshAll() {
+  await loadSubmissions();
+  await refreshBalance();
+  const activeFilter = document.querySelector('.filter-btn.active')?.dataset?.filter || 'all';
+  renderTasks(activeFilter);
+  showToast('Status refreshed!', 'success', 2000);
+}
+
+/* ── Render task cards ──────────────────────────────────────── */
+function renderTasks(filter) {
+  const grid = document.getElementById('tasksGrid');
+  const taskSource = getActiveTasks();
+  const list = filter === 'all' ? taskSource : taskSource.filter(t => t.category === filter);
+
+  if (!list.length) {
+    grid.innerHTML = `<div class="empty-state" style="grid-column:1/-1;"><div class="empty-state__icon">🔍</div><div class="empty-state__title">No tasks in this category</div></div>`;
+    return;
+  }
+
+  // Filter out approved tasks — they're done, no need to show them
+  const displayList = list.filter(task => {
+    const sub = _submissions[task.id];
+    return sub?.status !== 'approved'; // hide completed+approved tasks
+  });
+
+  // Show completion count
+  const approvedCount = list.filter(task => _submissions[task.id]?.status === 'approved').length;
+  const pendingCount  = list.filter(task => _submissions[task.id]?.status === 'pending').length;
+
+  if (approvedCount > 0 || pendingCount > 0) {
+    const banner = document.getElementById('taskStatusBanner') || (() => {
+      const b = document.createElement('div');
+      b.id = 'taskStatusBanner';
+      document.getElementById('tasksGrid').before(b);
+      return b;
+    })();
+    banner.innerHTML = `
+      <div style="display:flex;gap:.75rem;flex-wrap:wrap;margin-bottom:1rem;">
+        ${approvedCount > 0 ? `<div style="display:flex;align-items:center;gap:.5rem;padding:.5rem 1rem;background:var(--success-bg);border:1px solid rgba(34,197,94,.3);border-radius:var(--radius-full);font-size:.82rem;color:var(--success);font-weight:600;">✓ ${approvedCount} task${approvedCount>1?'s':''} completed & paid</div>` : ''}
+        ${pendingCount > 0 ? `<div style="display:flex;align-items:center;gap:.5rem;padding:.5rem 1rem;background:rgba(245,158,11,.1);border:1px solid rgba(245,158,11,.3);border-radius:var(--radius-full);font-size:.82rem;color:var(--gold-400);font-weight:600;">⏳ ${pendingCount} task${pendingCount>1?'s':''} under review</div>` : ''}
+        <button onclick="refreshAll()" style="display:flex;align-items:center;gap:.4rem;padding:.5rem 1rem;background:var(--bg-elevated);border:1px solid var(--border-subtle);border-radius:var(--radius-full);font-size:.78rem;color:var(--text-secondary);cursor:pointer;transition:all .15s;" onmouseover="this.style.borderColor='var(--gold-500)'" onmouseout="this.style.borderColor='var(--border-subtle)'">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:13px;height:13px;"><polyline points="23 4 23 10 17 10"/><polyline points="1 20 1 14 7 14"/><path d="M3.51 9a9 9 0 0114.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0020.49 15"/></svg>
+          Refresh status
+        </button>
+      </div>`;
+  } else {
+    const banner = document.getElementById('taskStatusBanner');
+    if (banner) banner.innerHTML = '';
+  }
+
+  if (!displayList.length && list.length > 0) {
+    grid.innerHTML = `<div class="empty-state" style="grid-column:1/-1;">
+      <div class="empty-state__icon">🎉</div>
+      <div class="empty-state__title">All tasks completed!</div>
+      <div class="empty-state__desc">You've completed all available tasks in this category. Check back soon for new tasks.</div>
+    </div>`;
+    return;
+  }
+
+  grid.innerHTML = displayList.map(task => {
+    const sub = _submissions[task.id];
+    const status = sub?.status || null;
+
+    let badgeHTML = `<span class="badge badge-gold" style="font-size:.65rem;">${task.category}</span>`;
+    let footerBtn = `<button class="btn btn-primary btn-sm task-open-btn" data-id="${task.id}" style="flex-shrink:0;">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" style="width:13px;height:13px;"><polygon points="5 3 19 12 5 21 5 3"/></svg> Start Task
+    </button>`;
+
+    if (status === 'pending') {
+      badgeHTML = `<span class="badge status-pending" style="font-size:.65rem;">⏳ Pending Review</span>`;
+      footerBtn = `<div style="display:flex;flex-direction:column;gap:.3rem;flex:1;">
+        <span style="font-size:.78rem;color:var(--gold-400);font-weight:600;">⏳ Awaiting admin review…</span>
+        <span style="font-size:.72rem;color:var(--text-muted);">Usually within 24 hours</span>
+      </div>`;
+    } else if (status === 'rejected') {
+      badgeHTML = `<span class="badge status-rejected" style="font-size:.65rem;">✗ Rejected</span>`;
+      footerBtn = `<div style="display:flex;flex-direction:column;gap:.3rem;flex:1;">
+        ${sub?.admin_note ? `<span style="font-size:.72rem;color:var(--error);">Reason: ${sub.admin_note}</span>` : ''}
+        <button class="btn btn-secondary btn-sm task-open-btn" data-id="${task.id}" style="align-self:flex-start;">Resubmit Proof</button>
+      </div>`;
+    }
+
+    const stepsHTML = task.instructions.slice(0,3).map((s,i) =>
+      `<div class="tc-step"><span class="tc-step-num">${i+1}</span><span>${s}</span></div>`
+    ).join('') + (task.instructions.length > 3 ?
+      `<div class="tc-step" style="color:var(--text-muted);font-style:italic;">+${task.instructions.length-3} more steps…</div>` : '');
+
+    return `
+      <div class="task-card ${status === 'approved' ? 'completed' : status === 'pending' ? 'pending' : ''}">
+        <div class="tc-top">
+          <div class="tc-icon" style="background:${task.iconBg};">${task.icon}</div>
+          <div class="tc-meta">
+            <div class="tc-title">${task.title}</div>
+            <div class="tc-desc">${task.desc}</div>
+          </div>
+          <div>${badgeHTML}</div>
+        </div>
+        <div class="tc-body">
+          <div class="tc-steps">
+            <div class="tc-steps-label">What you need to do</div>
+            ${stepsHTML}
+          </div>
+        </div>
+        <div class="tc-footer">
+          <div>
+            <div class="tc-reward">+${formatNaira(task.reward)}</div>
+            <div class="tc-time">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:12px;height:12px;"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+              ${task.duration} &nbsp;·&nbsp; Admin reviewed
+            </div>
+          </div>
+          ${footerBtn}
+        </div>
+      </div>
+    `;
+  }).join('');
+
+  grid.querySelectorAll('.task-open-btn').forEach(btn =>
+    btn.addEventListener('click', () => openTaskModal(getActiveTasks().find(t => t.id === btn.dataset.id)))
+  );
+}
+
+/* ── Filter buttons ─────────────────────────────────────────── */
+document.querySelectorAll('.filter-btn').forEach(btn => {
+  btn.addEventListener('click', () => {
+    document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    renderTasks(btn.dataset.filter);
+  });
+});
+
+/* ── Modal ──────────────────────────────────────────────────── */
+function openTaskModal(task) {
+  _activeTask  = task;
+  _proofBase64 = null;
+
+  document.getElementById('modalTitle').textContent   = task.title;
+  document.getElementById('modalIcon').textContent    = task.icon;
+  document.getElementById('modalDesc').textContent    = task.desc;
+  document.getElementById('modalReward').textContent  = '+' + formatNaira(task.reward);
+
+  // Steps
+  document.getElementById('modalSteps').innerHTML = task.instructions.map((s,i) => `
+    <div style="display:flex;align-items:flex-start;gap:.65rem;padding:.6rem .85rem;background:var(--bg-elevated);border-radius:var(--radius-md);">
+      <span style="width:22px;height:22px;border-radius:50%;background:rgba(245,158,11,.15);color:var(--gold-500);display:flex;align-items:center;justify-content:center;font-size:.7rem;font-weight:800;flex-shrink:0;">${i+1}</span>
+      <span style="font-size:.845rem;color:var(--text-secondary);line-height:1.5;">${s}</span>
+    </div>`).join('');
+
+  // Link
+  const linkWrap = document.getElementById('modalLinkWrap');
+  const linkEl   = document.getElementById('modalLink');
+  // Always show the link section - if no link, show a clear message
+  linkWrap.style.display = '';
+  if (task.link && task.link.trim() && task.link.trim() !== '#') {
+    linkEl.href = task.link;
+    linkEl.style.pointerEvents = '';
+    linkEl.style.opacity = '';
+    linkEl.innerHTML = `
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:14px;height:14px;"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+      Open Task Link &rarr;`;
+  } else {
+    // No link set by admin yet
+    linkEl.removeAttribute('href');
+    linkEl.style.pointerEvents = 'none';
+    linkEl.style.opacity = '0.5';
+    linkEl.innerHTML = `
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:14px;height:14px;"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+      Link coming soon — check back later`;
+  }
+
+  // Reset proof
+  document.getElementById('proofFile').value = '';
+  document.getElementById('proofPreviewWrap').style.display = 'none';
+  document.getElementById('proofUpload').style.display = '';
+  document.getElementById('submissionNote').value = '';
+  document.getElementById('modalSubmit').disabled = true;
+
+  // Show the modal directly (avoids conflict with main.js openModal)
+  const modal = document.getElementById('taskModal');
+  modal.classList.add('modal--open');
+  document.body.style.overflow = 'hidden';
+}
+
+document.getElementById('modalClose').addEventListener('click', () => {
+  document.getElementById('taskModal').classList.remove('modal--open');
+  document.body.style.overflow = '';
+});
+document.getElementById('modalCancel').addEventListener('click', () => {
+  document.getElementById('taskModal').classList.remove('modal--open');
+  document.body.style.overflow = '';
+});
+// Close on backdrop click
+document.getElementById('taskModal').addEventListener('click', (e) => {
+  if (e.target === document.getElementById('taskModal')) {
+    document.getElementById('taskModal').classList.remove('modal--open');
+    document.body.style.overflow = '';
+  }
+});
+
+/* ── Proof file handling ────────────────────────────────────── */
+document.getElementById('proofFile').addEventListener('change', handleProofFile);
+
+// Drag & drop
+const uploadArea = document.getElementById('proofUpload');
+uploadArea.addEventListener('dragover',  e => { e.preventDefault(); uploadArea.classList.add('drag-over'); });
+uploadArea.addEventListener('dragleave', () => uploadArea.classList.remove('drag-over'));
+uploadArea.addEventListener('drop', e => {
+  e.preventDefault();
+  uploadArea.classList.remove('drag-over');
+  const file = e.dataTransfer.files[0];
+  if (file) processProofFile(file);
+});
+
+function handleProofFile(e) {
+  const file = e.target.files[0];
+  if (file) processProofFile(file);
+}
+
+function processProofFile(file) {
+  if (!file.type.startsWith('image/')) {
+    showToast('Please upload an image file (PNG, JPG, WEBP).', 'warning'); return;
+  }
+  if (file.size > 5 * 1024 * 1024) {
+    showToast('Image too large. Max 5 MB. Try a screenshot crop.', 'warning'); return;
+  }
+
+  _proofBase64 = null; // reset while loading
+  document.getElementById('modalSubmit').disabled = true;
+
+  const reader = new FileReader();
+
+  reader.onload  = function(e) {
+    _proofBase64 = e.target.result;
+    if (!_proofBase64 || !_proofBase64.startsWith('data:')) {
+      showToast('Could not read file. Try a different image.', 'error'); return;
+    }
+    document.getElementById('proofPreviewImg').src = _proofBase64;
+    document.getElementById('proofPreviewWrap').style.display = '';
+    document.getElementById('proofUpload').style.display = 'none';
+    document.getElementById('modalSubmit').disabled = false;
+    showToast('Screenshot ready ✓', 'success', 2000);
+  };
+
+  reader.onerror = function() {
+    showToast('Failed to read the file. Please try a different image.', 'error');
+    _proofBase64 = null;
+  };
+
+  reader.readAsDataURL(file);
+}
+
+document.getElementById('proofRemove').addEventListener('click', () => {
+  _proofBase64 = null;
+  document.getElementById('proofFile').value = '';
+  document.getElementById('proofPreviewWrap').style.display = 'none';
+  document.getElementById('proofUpload').style.display = '';
+  document.getElementById('modalSubmit').disabled = true;
+});
+
+/* ── Submit task for admin review ───────────────────────────── */
+document.getElementById('modalSubmit').addEventListener('click', async () => {
+  if (!_activeTask) {
+    showToast('No task selected. Close this and click Start Task again.', 'warning'); return;
+  }
+  if (!_proofBase64 || !_proofBase64.startsWith('data:')) {
+    // Check if file was selected but FileReader hasn't finished yet
+    const fileInput = document.getElementById('proofFile');
+    if (fileInput.files && fileInput.files[0]) {
+      showToast('Screenshot is still loading — please wait a moment and try again.', 'warning');
+    } else {
+      showToast('Please upload a screenshot of the completed task first.', 'warning');
+    }
+    return;
+  }
+  if (!_user) {
+    showToast('Your session expired. Please refresh the page and log in again.', 'error'); return;
+  }
+
+  const btn  = document.getElementById('modalSubmit');
+  const note = document.getElementById('submissionNote').value.trim();
+  const sb   = getSupabase();
+  if (!sb) { showToast('Connection error. Please refresh the page.', 'error'); return; }
+
+  setButtonLoading(btn, 'Submitting…');
+
+  try {
+    // ── Step 1: Upload screenshot to Supabase Storage ─────────
+    let proofUrl = null;
+
+    try {
+      // Convert base64 data URL to Blob reliably (works on all browsers incl. mobile)
+      const base64Data = _proofBase64.split(',')[1];
+      const mimeType   = _proofBase64.split(',')[0].split(':')[1].split(';')[0] || 'image/jpeg';
+      const byteChars  = atob(base64Data);
+      const byteArr    = new Uint8Array(byteChars.length);
+      for (let i = 0; i < byteChars.length; i++) byteArr[i] = byteChars.charCodeAt(i);
+      const blob = new Blob([byteArr], { type: mimeType });
+
+      // Validate size — Supabase free tier storage limit per file is 50MB, but keep small
+      if (blob.size > 4 * 1024 * 1024) {
+        showToast('Screenshot is too large (max 4MB). Please compress it and try again.', 'warning');
+        clearButtonLoading(btn);
+        return;
+      }
+
+      const ext      = mimeType.split('/')[1]?.replace('jpeg','jpg') || 'jpg';
+      const filePath = `${_user.id}/${_activeTask.id}_${Date.now()}.${ext}`;
+
+      const { data: uploadData, error: uploadErr } = await sb.storage
+        .from('task-proofs')
+        .upload(filePath, blob, { contentType: mimeType, upsert: true });
+
+      if (!uploadErr && uploadData) {
+        const { data: urlData } = sb.storage.from('task-proofs').getPublicUrl(filePath);
+        proofUrl = urlData?.publicUrl || null;
+        console.log('[Tasks] Screenshot uploaded to Storage:', proofUrl);
+      } else {
+        // Storage bucket not set up yet — compress base64 for inline storage
+        console.warn('[Tasks] Storage bucket unavailable:', uploadErr?.message);
+        // Store a compressed thumbnail instead of full base64 to avoid DB size limits
+        proofUrl = await compressBase64(mimeType);
+        if (!proofUrl) proofUrl = _proofBase64.substring(0, 50000) + '...'; // hard truncate as last resort
+      }
+    } catch (storageErr) {
+      console.warn('[Tasks] Storage error:', storageErr.message);
+      proofUrl = null; // submit without proof URL rather than fail entirely
+    }
+
+    // ── Step 2: Insert submission into DB ─────────────────────
+    const submission = {
+      user_id:      _user.id,
+      task_id:      _activeTask.id,
+      task_title:   _activeTask.title,
+      reward:       _activeTask.reward,
+      proof_url:    proofUrl,
+      note:         note || null,
+      status:       'pending',
+      submitted_at: new Date().toISOString(),
+    };
+
+    const { error: subErr } = await sb.from('task_submissions').insert(submission);
+
+    if (subErr) {
+      if (subErr.code === '42501' || subErr.message?.includes('RLS') || subErr.message?.includes('policy')) {
+        throw new Error('Permission denied. Ensure you are logged in and the database RLS policies are set correctly.');
+      } else if (subErr.code === '23505') {
+        throw new Error('You have already submitted this task. Check your task status below.');
+      } else if (subErr.message?.includes('does not exist') || subErr.message?.includes('relation')) {
+        throw new Error('Task submissions table not found. Please run supabase-fix.sql in your Supabase SQL Editor.');
+      } else {
+        throw new Error(subErr.message || 'Database error during submission.');
+      }
+    }
+
+    // ── Step 3: Update local state & UI ──────────────────────
+    _submissions[_activeTask.id] = {
+      status:       'pending',
+      submitted_at: new Date().toISOString(),
+      admin_note:   null,
+    };
+
+    // Close modal
+    document.getElementById('taskModal').classList.remove('modal--open');
+    document.body.style.overflow = '';
+
+    showToast(
+      `✅ Task submitted for review! We'll credit +₦${_activeTask.reward.toLocaleString()} within 24 hours on approval.`,
+      'success', 7000
+    );
+
+    const activeFilter = document.querySelector('.filter-btn.active')?.dataset?.filter || 'all';
+    renderTasks(activeFilter);
+
+  } catch (err) {
+    console.error('[Tasks] Submission error:', err);
+    showToast(err.message || 'Submission failed. Please check your connection and try again.', 'error', 7000);
+  } finally {
+    clearButtonLoading(btn);
+  }
+});
+
+// ── Compress image to smaller base64 for inline DB storage fallback ──────────
+async function compressBase64(mimeType) {
+  return new Promise(resolve => {
+    try {
+      const img = new Image();
+      img.onload = () => {
+        const canvas  = document.createElement('canvas');
+        const maxDim  = 800;
+        const ratio   = Math.min(maxDim / img.width, maxDim / img.height, 1);
+        canvas.width  = Math.floor(img.width  * ratio);
+        canvas.height = Math.floor(img.height * ratio);
+        const ctx = canvas.getContext('2d');
+        ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+        resolve(canvas.toDataURL('image/jpeg', 0.7)); // 70% quality JPEG
+      };
+      img.onerror = () => resolve(null);
+      img.src = _proofBase64;
+    } catch(e) {
+      resolve(null);
+    }
+  });
+}
+</script>
+
+<!-- Mobile bottom navigation -->
+<div class="mobile-bottom-nav">
+  <nav>
+    <a href="dashboard.html" class="mbn-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/></svg>Home</a>
+        <a href="tasks.html" class="mbn-item active"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11"/></svg>Tasks</a>
+        <a href="referral.html" class="mbn-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/></svg>Refer</a>
+        <a href="leaderboard.html" class="mbn-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>Leaders</a>
+        <a href="profile.html" class="mbn-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>Profile</a>
+  </nav>
+</div>
+
+<!-- Sidebar overlay (mobile) -->
+<div class="sidebar-overlay" id="sidebarOverlay"></div>
+<script>
+// ── Mobile sidebar toggle ─────────────────────────────────
+(function() {
+  const btn     = document.getElementById('sidebarToggleBtn');
+  const sidebar = document.getElementById('sidebar');
+  const overlay = document.getElementById('sidebarOverlay');
+  if (!btn || !sidebar) return;
+
+  function open()  { sidebar.classList.add('sidebar--open');    overlay && overlay.classList.add('active');    document.body.style.overflow='hidden'; }
+  function close() { sidebar.classList.remove('sidebar--open'); overlay && overlay.classList.remove('active'); document.body.style.overflow=''; }
+
+  btn.addEventListener('click', () => sidebar.classList.contains('sidebar--open') ? close() : open());
+  if (overlay) overlay.addEventListener('click', close);
+
+  // Close on nav link click (mobile UX)
+  sidebar.querySelectorAll('a').forEach(a => a.addEventListener('click', close));
+})();
+</script>
+
+<!-- Floating WhatsApp Button -->
+<a href="https://wa.me/2349034192652?text=Hello%20Grindpoint%20Support%2C%20I%20need%20help%20with%20my%20account." 
+   target="_blank" rel="noopener" 
+   class="whatsapp-float" 
+   aria-label="Chat with us on WhatsApp">
+  <svg viewBox="0 0 24 24" fill="currentColor">
+    <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/>
+  </svg>
+  <span class="whatsapp-float__label">Support</span>
+</a>
+
+<script>
+// Register Service Worker for PWA
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', () => {
+    navigator.serviceWorker.register('/sw.js')
+      .then(reg => console.log('[GP] SW registered:', reg.scope))
+      .catch(err => console.warn('[GP] SW registration failed:', err));
+  });
+}
+</script>
+</body>
+</html>

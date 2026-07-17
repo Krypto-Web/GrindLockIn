@@ -1,0 +1,363 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Contact Support — Grindpoint</title>
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><text y='26' font-size='28'>⚡</text></svg>" />
+  <link rel="stylesheet" href="css/style.css" />
+  <style>
+    .contact-hero { padding: calc(var(--nav-height) + 3rem) 0 3rem; background: var(--bg-surface); border-bottom: 1px solid var(--border-subtle); position: relative; overflow: hidden; }
+    .contact-hero::before { content: ''; position: absolute; inset: 0; background: radial-gradient(ellipse 60% 80% at 50% -10%, rgba(245,158,11,0.07) 0%, transparent 70%); pointer-events: none; }
+    .contact-grid { display: grid; grid-template-columns: 1fr 1.6fr; gap: 2.5rem; align-items: start; max-width: 1000px; margin: 0 auto; padding: 3rem var(--space-6) 5rem; }
+    .contact-channel { display: flex; align-items: flex-start; gap: 1rem; padding: 1.25rem; background: var(--bg-card); border: 1px solid var(--border-subtle); border-radius: var(--radius-lg); transition: border-color 0.2s, transform 0.2s; }
+    .contact-channel:hover { border-color: var(--border-gold); transform: translateY(-2px); }
+    .contact-channel-icon { width: 44px; height: 44px; border-radius: var(--radius-md); background: rgba(245,158,11,0.1); display: flex; align-items: center; justify-content: center; font-size: 1.2rem; flex-shrink: 0; }
+    .contact-channel h4 { font-size: 0.9rem; margin-bottom: 0.25rem; }
+    .contact-channel p { font-size: 0.82rem; color: var(--text-muted); margin: 0; }
+    .contact-channel a { color: var(--gold-500); font-size: 0.85rem; font-weight: 600; }
+    .faq-item { border-bottom: 1px solid var(--border-subtle); }
+    .faq-item:last-child { border-bottom: none; }
+    .faq-question { display: flex; align-items: center; justify-content: space-between; padding: 1.1rem 0; cursor: pointer; gap: 1rem; }
+    .faq-question span { font-weight: 600; font-size: 0.9rem; color: var(--text-primary); }
+    .faq-question svg { width: 18px; height: 18px; color: var(--text-muted); flex-shrink: 0; transition: transform 0.25s; }
+    .faq-item.open .faq-question svg { transform: rotate(180deg); color: var(--gold-500); }
+    .faq-answer { font-size: 0.875rem; color: var(--text-secondary); line-height: 1.7; max-height: 0; overflow: hidden; transition: max-height 0.35s ease, padding 0.25s; padding-bottom: 0; }
+    .faq-item.open .faq-answer { max-height: 400px; padding-bottom: 1.1rem; }
+    @media (max-width: 768px) { .contact-grid { grid-template-columns: 1fr; } }
+  </style>
+<!-- Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-SJRSW6DNNQ"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag("js", new Date());
+  gtag("config", "G-SJRSW6DNNQ");
+</script>
+  <!-- PWA Meta Tags -->
+  <link rel="manifest" href="/manifest.json"/>
+  <meta name="theme-color" content="#f59e0b"/>
+  <meta name="mobile-web-app-capable" content="yes"/>
+  <meta name="apple-mobile-web-app-capable" content="yes"/>
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"/>
+  <meta name="apple-mobile-web-app-title" content="Grindpoint"/>
+  <link rel="apple-touch-icon" href="/icons/icon-192.png"/>
+</head>
+<body>
+
+<nav class="landing-nav">
+  <div class="navbar__inner">
+    <a href="index.html" class="navbar__logo">Grind<span class="logo-accent">point</span></a>
+    <div class="navbar__links">
+      <a href="index.html" class="nav__link">Home</a>
+      <a href="terms.html" class="nav__link">Terms</a>
+      <a href="privacy.html" class="nav__link">Privacy</a>
+      <a href="payout-policy.html" class="nav__link">Payout Policy</a>
+    </div>
+    <div class="navbar__actions" id="navActions">
+      <a href="login.html" class="btn btn-secondary btn-sm">Sign In</a>
+      <a href="register.html" class="btn btn-primary btn-sm">Get Started</a>
+    </div>
+  </div>
+</nav>
+
+<div class="contact-hero">
+  <div class="container" style="position:relative;z-index:1;">
+    <div style="display:flex;align-items:center;gap:0.75rem;margin-bottom:1rem;">
+      <span class="badge badge-gold">Support</span>
+      <span style="font-size:0.8rem;color:var(--text-muted);">Response within 1–2 business days</span>
+    </div>
+    <h1 style="font-size:clamp(1.8rem,4vw,2.8rem);margin-bottom:0.75rem;">Contact Us</h1>
+    <p style="color:var(--text-secondary);max-width:520px;line-height:1.7;">
+      Have a question, withdrawal issue, or feedback? We're here to help. Choose the best way to reach us below.
+    </p>
+  </div>
+</div>
+
+<div class="contact-grid">
+
+  <!-- Left: Contact channels + FAQ -->
+  <div style="display:flex;flex-direction:column;gap:1rem;">
+
+    <h3 style="font-size:1rem;margin-bottom:0.25rem;">Get in Touch</h3>
+
+    <div class="contact-channel">
+      <div class="contact-channel-icon">📧</div>
+      <div>
+        <h4>Email Support</h4>
+        <p>For general queries, account issues, and disputes</p>
+        <a href="mailto:support@grindpoint.ng">support@grindpoint.ng</a>
+      </div>
+    </div>
+
+    <div class="contact-channel">
+      <div class="contact-channel-icon">💸</div>
+      <div>
+        <h4>Payout Issues</h4>
+        <p>Withdrawal delays, failed payments, payout disputes</p>
+        <a href="mailto:payments@grindpoint.ng">payments@grindpoint.ng</a>
+      </div>
+    </div>
+
+    <div class="contact-channel">
+      <div class="contact-channel-icon">🔒</div>
+      <div>
+        <h4>Privacy &amp; Data</h4>
+        <p>Data deletion, NDPR requests, privacy complaints</p>
+        <a href="mailto:privacy@grindpoint.ng">privacy@grindpoint.ng</a>
+      </div>
+    </div>
+
+    <div class="contact-channel">
+      <div class="contact-channel-icon">⚖️</div>
+      <div>
+        <h4>Legal Matters</h4>
+        <p>Legal notices, Terms enquiries, compliance</p>
+        <a href="mailto:legal@grindpoint.ng">legal@grindpoint.ng</a>
+      </div>
+    </div>
+
+    <div class="contact-channel">
+      <div class="contact-channel-icon">📢</div>
+      <div>
+        <h4>WhatsApp Community</h4>
+        <p>Join our earner community for tips and updates</p>
+        <a href="https://wa.me/2348000000000" target="_blank">Chat on WhatsApp →</a>
+      </div>
+    </div>
+
+    <!-- Hours -->
+    <div style="background:var(--bg-elevated);border:1px solid var(--border-subtle);border-radius:var(--radius-lg);padding:1.25rem;margin-top:0.5rem;">
+      <div style="font-size:0.78rem;font-weight:700;text-transform:uppercase;letter-spacing:0.08em;color:var(--text-muted);margin-bottom:0.75rem;">Support Hours (WAT)</div>
+      <div style="display:flex;flex-direction:column;gap:0.4rem;font-size:0.85rem;">
+        <div style="display:flex;justify-content:space-between;">
+          <span style="color:var(--text-secondary);">Monday – Friday</span>
+          <span style="font-weight:600;">8:00 AM – 6:00 PM</span>
+        </div>
+        <div style="display:flex;justify-content:space-between;">
+          <span style="color:var(--text-secondary);">Saturday</span>
+          <span style="font-weight:600;">10:00 AM – 2:00 PM</span>
+        </div>
+        <div style="display:flex;justify-content:space-between;">
+          <span style="color:var(--text-secondary);">Sunday &amp; Public Holidays</span>
+          <span style="color:var(--text-muted);">Closed</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Right: Contact form + FAQ -->
+  <div style="display:flex;flex-direction:column;gap:2rem;">
+
+    <!-- Contact Form -->
+    <div class="card">
+      <h3 style="font-size:1rem;margin-bottom:1.25rem;">Send Us a Message</h3>
+      <form id="contactForm" novalidate style="display:flex;flex-direction:column;gap:1rem;">
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:1rem;">
+          <div class="form-group">
+            <label class="form-label" for="contactName">Full Name</label>
+            <input type="text" id="contactName" class="form-control" placeholder="Your name" required />
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="contactEmail">Email Address</label>
+            <input type="email" id="contactEmail" class="form-control" placeholder="you@email.com" required />
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="form-label" for="contactSubject">Subject</label>
+          <select id="contactSubject" class="form-control" required>
+            <option value="" disabled selected>Select a topic</option>
+            <option value="withdrawal">Withdrawal / Payout Issue</option>
+            <option value="account">Account Problem</option>
+            <option value="task">Task Not Credited</option>
+            <option value="referral">Referral Bonus Issue</option>
+            <option value="bug">Report a Bug</option>
+            <option value="privacy">Privacy / Data Request</option>
+            <option value="feedback">General Feedback</option>
+            <option value="other">Other</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label class="form-label" for="contactMessage">Message</label>
+          <textarea id="contactMessage" class="form-control" rows="5"
+            placeholder="Please describe your issue in detail. Include your registered email, relevant dates, and any screenshots if applicable."
+            style="resize:vertical;" required></textarea>
+        </div>
+        <div style="display:flex;align-items:flex-start;gap:0.75rem;">
+          <input type="checkbox" id="contactConsent" style="margin-top:3px;accent-color:var(--gold-500);cursor:pointer;" required />
+          <label for="contactConsent" style="font-size:0.82rem;color:var(--text-secondary);cursor:pointer;line-height:1.5;">
+            I agree that Grindpoint may use my contact details to respond to this enquiry, in accordance with the <a href="privacy.html">Privacy Policy</a>.
+          </label>
+        </div>
+        <button type="submit" class="btn btn-primary" id="contactSubmitBtn">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" style="width:15px;height:15px;"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+          Send Message
+        </button>
+      </form>
+
+      <!-- Success state (hidden) -->
+      <div id="contactSuccess" style="display:none;text-align:center;padding:2rem 1rem;">
+        <div style="font-size:3rem;margin-bottom:1rem;">✅</div>
+        <h3 style="margin-bottom:0.5rem;">Message Sent!</h3>
+        <p style="color:var(--text-secondary);font-size:0.875rem;line-height:1.7;">
+          Thanks for reaching out. We've received your message and will respond to <strong id="sentToEmail" style="color:var(--gold-400);"></strong> within 1–2 business days.
+        </p>
+        <button class="btn btn-secondary btn-sm" style="margin-top:1.25rem;" onclick="resetContactForm()">Send Another Message</button>
+      </div>
+    </div>
+
+    <!-- FAQ -->
+    <div class="card" style="padding:1.5rem;">
+      <h3 style="font-size:1rem;margin-bottom:1.25rem;">Frequently Asked Questions</h3>
+      <div id="faqList">
+
+        <div class="faq-item">
+          <div class="faq-question" onclick="toggleFaq(this)">
+            <span>Why hasn't my withdrawal been processed yet?</span>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg>
+          </div>
+          <div class="faq-answer">Withdrawals are processed within 1–2 business days. If it's been over 2 business days, please email <a href="mailto:payments@grindpoint.ng">payments@grindpoint.ng</a> with your withdrawal details. Ensure you submitted the request on a business day and that your account details were correct.</div>
+        </div>
+
+        <div class="faq-item">
+          <div class="faq-question" onclick="toggleFaq(this)">
+            <span>A task reward wasn't added to my wallet. What do I do?</span>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg>
+          </div>
+          <div class="faq-answer">Task rewards are credited instantly upon completion. If yours wasn't credited, try refreshing your dashboard. If the issue persists, email support with the task name and completion time. Claims must be made within 7 days of the task date.</div>
+        </div>
+
+        <div class="faq-item">
+          <div class="faq-question" onclick="toggleFaq(this)">
+            <span>My referral bonus wasn't credited. Why?</span>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg>
+          </div>
+          <div class="faq-answer">Referral bonuses are credited when the referred person registers using your link. The link must include your unique <code style="font-family:var(--font-mono);font-size:0.8em;background:var(--bg-hover);padding:2px 5px;border-radius:4px;">?ref=YOUR_ID</code> parameter. If someone registered but forgot to use your link, unfortunately the bonus cannot be manually applied.</div>
+        </div>
+
+        <div class="faq-item">
+          <div class="faq-question" onclick="toggleFaq(this)">
+            <span>Can I change my registered email address?</span>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg>
+          </div>
+          <div class="faq-answer">Your email address is tied to your authentication account and cannot be changed through the platform settings. If you urgently need to change your email, contact our support team with proof of identity and we will assess on a case-by-case basis.</div>
+        </div>
+
+        <div class="faq-item">
+          <div class="faq-question" onclick="toggleFaq(this)">
+            <span>My account was suspended. How do I appeal?</span>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg>
+          </div>
+          <div class="faq-answer">If you believe your account was suspended in error, email <a href="mailto:support@grindpoint.ng">support@grindpoint.ng</a> with the subject line "Account Suspension Appeal." Include your registered email and a clear explanation. We review all appeals within 3–5 business days. Note: accounts suspended for confirmed fraud or multi-accounting are not eligible for appeal.</div>
+        </div>
+
+        <div class="faq-item">
+          <div class="faq-question" onclick="toggleFaq(this)">
+            <span>Is Grindpoint available outside Nigeria?</span>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg>
+          </div>
+          <div class="faq-answer">Grindpoint is currently designed exclusively for Nigerian users. Payouts are in Nigerian Naira to Nigerian bank accounts and mobile wallets only. We plan to expand to other African countries in the future — follow our announcements for updates.</div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</div>
+
+<footer style="background:var(--bg-surface);border-top:1px solid var(--border-subtle);padding:2rem 0;">
+  <div class="container" style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:1rem;">
+    <a href="index.html" class="navbar__logo">Grind<span class="logo-accent">point</span></a>
+    <div style="display:flex;gap:1.5rem;flex-wrap:wrap;">
+      <a href="privacy.html" style="font-size:0.82rem;color:var(--text-muted);">Privacy Policy</a>
+      <a href="terms.html" style="font-size:0.82rem;color:var(--text-muted);">Terms</a>
+      <a href="payout-policy.html" style="font-size:0.82rem;color:var(--text-muted);">Payout Policy</a>
+      <a href="contact.html" style="font-size:0.82rem;color:var(--gold-500);">Contact</a>
+    </div>
+    <p style="font-size:0.78rem;color:var(--text-muted);">© 2025 Grindpoint Nigeria Limited</p>
+  </div>
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.min.js"></script>
+<script src="js/supabase-config.js"></script>
+<script src="js/main.js"></script>
+<script>
+  // Update nav if logged in
+  document.addEventListener("DOMContentLoaded", async () => {
+    const { session } = await getCurrentUserAndProfile();
+    if (session) {
+      document.getElementById('navActions').innerHTML = `<a href="dashboard.html" class="btn btn-primary btn-sm">Dashboard →</a>`;
+    }
+  });
+
+  // FAQ accordion
+  function toggleFaq(questionEl) {
+    const item = questionEl.closest('.faq-item');
+    const isOpen = item.classList.contains('open');
+    // Close all
+    document.querySelectorAll('.faq-item.open').forEach(i => i.classList.remove('open'));
+    // Open clicked if it was closed
+    if (!isOpen) item.classList.add('open');
+  }
+
+  // Contact form
+  document.getElementById('contactForm').addEventListener('submit', async (e) => {
+    e.preventDefault();
+    clearAllFieldErrors(e.target);
+
+    const name = document.getElementById('contactName').value.trim();
+    const email = document.getElementById('contactEmail').value.trim();
+    const subject = document.getElementById('contactSubject').value;
+    const message = document.getElementById('contactMessage').value.trim();
+    const consent = document.getElementById('contactConsent').checked;
+    const btn = document.getElementById('contactSubmitBtn');
+
+    let valid = true;
+    if (!name) { showFieldError('contactName', 'Please enter your name.'); valid = false; }
+    if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) { showFieldError('contactEmail', 'Enter a valid email address.'); valid = false; }
+    if (!subject) { showFieldError('contactSubject', 'Please select a subject.'); valid = false; }
+    if (!message || message.length < 20) { showFieldError('contactMessage', 'Please provide more detail (at least 20 characters).'); valid = false; }
+    if (!consent) { showToast('Please tick the consent checkbox to proceed.', 'warning'); valid = false; }
+    if (!valid) return;
+
+    setButtonLoading(btn, 'Sending…');
+
+    // Simulate API call (replace with actual email service / Supabase edge function)
+    await new Promise(r => setTimeout(r, 1200));
+
+    clearButtonLoading(btn);
+    document.getElementById('contactForm').style.display = 'none';
+    document.getElementById('sentToEmail').textContent = email;
+    document.getElementById('contactSuccess').style.display = 'block';
+    showToast('Message sent successfully!', 'success');
+  });
+
+  function resetContactForm() {
+    document.getElementById('contactForm').reset();
+    document.getElementById('contactForm').style.display = 'flex';
+    document.getElementById('contactSuccess').style.display = 'none';
+  }
+</script>
+
+<!-- Floating WhatsApp Button -->
+<a href="https://wa.me/2349034192652?text=Hello%20Grindpoint%20Support%2C%20I%20need%20help%20with%20my%20account." 
+   target="_blank" rel="noopener" 
+   class="whatsapp-float" 
+   aria-label="Chat with us on WhatsApp">
+  <svg viewBox="0 0 24 24" fill="currentColor">
+    <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/>
+  </svg>
+  <span class="whatsapp-float__label">Support</span>
+</a>
+
+<script>
+// Register Service Worker for PWA
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', () => {
+    navigator.serviceWorker.register('/sw.js')
+      .then(reg => console.log('[GP] SW registered:', reg.scope))
+      .catch(err => console.warn('[GP] SW registration failed:', err));
+  });
+}
+</script>
+</body>
+</html>

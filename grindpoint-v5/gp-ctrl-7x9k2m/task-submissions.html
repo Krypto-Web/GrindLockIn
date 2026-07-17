@@ -1,0 +1,307 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+  <title>Task Submissions — Grindpoint Admin</title>
+  <link rel="stylesheet" href="../css/style.css"/>
+  <style>
+    .admin-sidebar .sidebar__link.active{color:var(--error);background:var(--error-bg);}
+    .admin-sidebar .sidebar__link.active::before{background:var(--error);}
+    .proof-img{width:60px;height:60px;object-fit:cover;border-radius:8px;border:1px solid var(--border-subtle);cursor:zoom-in;}
+  </style>
+</head>
+<body style="visibility:hidden">
+<nav class="navbar" style="border-bottom-color:rgba(239,68,68,.25);">
+  <div class="navbar__inner">
+    <div style="display:flex;align-items:center;gap:1rem;">
+      <a href="../index.html" class="navbar__logo">Grind<span class="logo-accent">point</span></a>
+      <span class="admin-badge">Admin Panel</span>
+    </div>
+    <div style="display:flex;align-items:center;gap:1rem;">
+      <span id="adminName" style="font-size:.82rem;color:var(--text-secondary);">Admin</span>
+      <button onclick="signOut()" class="btn btn-secondary btn-sm">Sign Out</button>
+    </div>
+  </div>
+</nav>
+<div class="page-wrapper">
+  <aside class="sidebar admin-sidebar">
+    <nav class="sidebar__nav">
+      <span class="sidebar__label">Overview</span>
+      <a href="index.html" class="sidebar__link"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/></svg>Dashboard</a>
+      <span class="sidebar__label">Manage</span>
+      <a href="users.html" class="sidebar__link"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/></svg>All Users</a>
+      <a href="task-submissions.html" class="sidebar__link active"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 11l3 3L22 4"/></svg>Task Submissions</a>
+      <a href="withdrawals.html" class="sidebar__link"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 000 7h5a3.5 3.5 0 010 7H6"/></svg>Withdrawals</a>
+      <a href="tasks-admin.html" class="sidebar__link"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 11l3 3L22 4"/></svg>Task Manager</a>
+      <a href="announcements.html" class="sidebar__link"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 17H2a3 3 0 000 6h20V17z"/></svg>Announcements</a>
+      <a href="settings.html" class="sidebar__link"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/></svg>Settings</a>
+    </nav>
+  </aside>
+  <main class="main-content">
+    <div class="page-header" style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:1rem;">
+      <div>
+        <h1 class="page-title">Task Submissions</h1>
+        <p class="page-subtitle" id="subSummary">Loading…</p>
+      </div>
+      <div style="display:flex;gap:.75rem;align-items:center;">
+        <select id="statusFilter" class="form-control" style="width:150px;">
+          <option value="pending" selected>⏳ Pending</option>
+          <option value="approved">✅ Approved</option>
+          <option value="rejected">❌ Rejected</option>
+          <option value="all">All</option>
+        </select>
+        <button class="btn btn-secondary btn-sm" onclick="load()">↻ Refresh</button>
+      </div>
+    </div>
+
+    <div class="stats-grid mb-6" id="kpis" style="grid-template-columns:repeat(3,1fr);"></div>
+
+    <div class="table-wrapper">
+      <table class="data-table">
+        <thead>
+          <tr><th>User</th><th>Task</th><th>Reward</th><th>Proof</th><th>Note</th><th>Date</th><th>Status</th><th style="width:160px;">Actions</th></tr>
+        </thead>
+        <tbody id="tbody">
+          <tr><td colspan="8" style="text-align:center;padding:3rem;color:var(--text-muted);">Loading…</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </main>
+</div>
+
+<!-- Proof lightbox -->
+<div class="modal" id="proofModal">
+  <div class="modal__box" style="max-width:700px;">
+    <div class="modal__header">
+      <h3 class="modal__title">Proof Screenshot</h3>
+      <button class="modal__close" onclick="closeModal('proofModal')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
+    </div>
+    <div class="modal__body" style="text-align:center;">
+      <img id="proofImg" src="" alt="Proof" style="max-width:100%;border-radius:8px;"/>
+      <p id="proofNote" style="margin-top:.75rem;font-size:.85rem;color:var(--text-secondary);"></p>
+    </div>
+  </div>
+</div>
+
+<!-- Reject modal -->
+<div class="modal" id="rejectModal">
+  <div class="modal__box" style="max-width:420px;">
+    <div class="modal__header">
+      <h3 class="modal__title" style="color:var(--error);">Reject Submission</h3>
+      <button class="modal__close" onclick="closeModal('rejectModal')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
+    </div>
+    <div class="modal__body">
+      <div class="form-group">
+        <label class="form-label">Reason <span style="color:var(--error);">*</span></label>
+        <select id="rejectReason" class="form-control" style="margin-bottom:.75rem;">
+          <option value="">Select reason…</option>
+          <option value="Screenshot unclear or incomplete">Screenshot unclear or incomplete</option>
+          <option value="Task not actually completed">Task not actually completed</option>
+          <option value="Wrong screenshot uploaded">Wrong screenshot uploaded</option>
+          <option value="Account not followed/joined as required">Account not followed/joined as required</option>
+          <option value="Duplicate submission">Duplicate submission</option>
+        </select>
+        <textarea id="rejectNote" class="form-control" rows="2" placeholder="Extra detail (optional)…" style="resize:vertical;"></textarea>
+      </div>
+    </div>
+    <div class="modal__footer">
+      <button class="btn btn-secondary" onclick="closeModal('rejectModal')">Cancel</button>
+      <button class="btn btn-danger" id="confirmRejectBtn">Confirm Reject</button>
+    </div>
+  </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.min.js"></script>
+<script src="../js/supabase-config.js"></script>
+<script src="../js/main.js"></script>
+<script>
+/* ── State — source of truth, never reset until full reload ── */
+let _rows    = [];   // ALL submissions from DB
+let _rejectId = null;
+
+document.addEventListener('DOMContentLoaded', async () => {
+  const auth = await requireAdmin();
+  if (!auth) return;
+  document.getElementById('adminName').textContent = auth.profile?.full_name || 'Admin';
+  await load();
+});
+
+/* ── Load all submissions fresh from DB ── */
+async function load() {
+  const sb = getSupabase();
+  document.getElementById('tbody').innerHTML =
+    '<tr><td colspan="8" style="text-align:center;padding:2rem;color:var(--text-muted);">Loading…</td></tr>';
+
+  const { data, error } = await sb
+    .from('task_submissions')
+    .select('*, profiles(full_name, email)')
+    .order('submitted_at', { ascending: false });
+
+  if (error) {
+    const msg = error.code === '42501' || error.message?.includes('RLS')
+      ? 'Permission denied — run supabase-emergency-fix.sql in Supabase SQL Editor'
+      : error.message;
+    document.getElementById('tbody').innerHTML =
+      `<tr><td colspan="8" style="text-align:center;padding:2rem;color:var(--error);">
+        ❌ ${msg}
+      </td></tr>`;
+    document.getElementById('subSummary').textContent = 'Error loading submissions';
+    document.getElementById('kpis').innerHTML = '';
+    return;
+  }
+
+  _rows = data || [];
+  refreshUI();
+}
+
+function refreshUI() {
+  const filter = document.getElementById('statusFilter').value;
+  const pending  = _rows.filter(r => r.status === 'pending').length;
+  const approved = _rows.filter(r => r.status === 'approved').length;
+  const rejected = _rows.filter(r => r.status === 'rejected').length;
+  const paidOut  = _rows.filter(r => r.status === 'approved').reduce((s,r) => s+(r.reward||0), 0);
+
+  document.getElementById('subSummary').textContent =
+    `${_rows.length} total · ${pending} pending review`;
+
+  document.getElementById('kpis').innerHTML = `
+    <div class="stat-card" style="${pending>0?'border-color:rgba(239,68,68,.3);':''}">
+      <div class="stat-card__label">Pending Review</div>
+      <div class="stat-card__value" style="${pending>0?'color:var(--error);':''}">${pending}</div>
+      <div class="stat-card__sub">Need action</div>
+    </div>
+    <div class="stat-card stat-card--gold">
+      <div class="stat-card__label">Approved</div>
+      <div class="stat-card__value">${approved}</div>
+      <div class="stat-card__sub">${formatNaira(paidOut)} paid</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-card__label">Rejected</div>
+      <div class="stat-card__value">${rejected}</div>
+      <div class="stat-card__sub">All time</div>
+    </div>`;
+
+  const list = filter === 'all' ? _rows : _rows.filter(r => r.status === filter);
+  const bm   = { pending:'badge-gold', approved:'badge-success', rejected:'badge-error' };
+
+  if (!list.length) {
+    document.getElementById('tbody').innerHTML =
+      `<tr><td colspan="8" style="text-align:center;padding:3rem;color:var(--text-muted);">No submissions found.</td></tr>`;
+    return;
+  }
+
+  document.getElementById('tbody').innerHTML = list.map(r => `
+    <tr id="row-${r.id}">
+      <td>
+        <div style="font-weight:600;font-size:.875rem;">${r.profiles?.full_name || 'Unknown'}</div>
+        <div style="font-size:.73rem;color:var(--text-muted);">${r.profiles?.email || '—'}</div>
+      </td>
+      <td style="font-size:.85rem;max-width:150px;font-weight:600;">${r.task_title || r.task_id}</td>
+      <td><strong style="color:var(--gold-500);">${formatNaira(r.reward)}</strong></td>
+      <td>
+        ${r.proof_url
+          ? `<img src="${r.proof_url}" class="proof-img" onclick="viewProof('${r.id}')" title="Click to enlarge" onerror="this.style.display='none'"/>`
+          : '<span style="font-size:.78rem;color:var(--text-muted);">No image</span>'}
+      </td>
+      <td style="font-size:.8rem;color:var(--text-secondary);max-width:120px;">${r.note || '—'}</td>
+      <td style="font-size:.78rem;color:var(--text-muted);">${r.submitted_at ? new Date(r.submitted_at).toLocaleDateString('en-NG') : '—'}</td>
+      <td>
+        <span class="badge ${bm[r.status] || 'badge-muted'}">${r.status}</span>
+        ${r.admin_note ? `<div style="font-size:.7rem;color:var(--text-muted);margin-top:3px;">${r.admin_note}</div>` : ''}
+      </td>
+      <td>
+        ${r.status === 'pending' ? `
+          <div style="display:flex;gap:.4rem;flex-wrap:wrap;">
+            <button class="btn btn-sm" style="background:var(--success-bg);color:var(--success);border:1px solid rgba(34,197,94,.3);"
+              onclick="approve('${r.id}')">✓ Approve</button>
+            <button class="btn btn-danger btn-sm" onclick="openReject('${r.id}')">✗ Reject</button>
+          </div>` : '<span style="font-size:.78rem;color:var(--text-muted);">—</span>'}
+      </td>
+    </tr>`).join('');
+}
+
+document.getElementById('statusFilter').addEventListener('change', refreshUI);
+
+function viewProof(id) {
+  const r = _rows.find(x => x.id === id); if (!r) return;
+  document.getElementById('proofImg').src     = r.proof_url;
+  document.getElementById('proofNote').textContent = r.note ? `Note: "${r.note}"` : '';
+  openModal('proofModal');
+}
+initModalCloseOnBackdrop('proofModal');
+
+function openReject(id) {
+  _rejectId = id;
+  document.getElementById('rejectReason').value = '';
+  document.getElementById('rejectNote').value   = '';
+  openModal('rejectModal');
+}
+initModalCloseOnBackdrop('rejectModal');
+
+document.getElementById('confirmRejectBtn').addEventListener('click', async () => {
+  const reason = document.getElementById('rejectReason').value;
+  if (!reason) { showToast('Please select a reason.', 'warning'); return; }
+  const note = reason + (document.getElementById('rejectNote').value.trim() ? ': ' + document.getElementById('rejectNote').value.trim() : '');
+  await process(_rejectId, 'rejected', note);
+  closeModal('rejectModal');
+});
+
+async function approve(id) {
+  if (!confirm('Approve this task and credit the reward to the user\'s wallet?')) return;
+  await process(id, 'approved', null);
+}
+
+async function process(id, status, adminNote) {
+  const sb  = getSupabase();
+  const row = _rows.find(r => r.id === id);
+  if (!row) return;
+
+  /* Step 1 — update the submission row */
+  const { error: subErr } = await sb.from('task_submissions').update({
+    status,
+    admin_note:  adminNote || null,
+    reviewed_at: new Date().toISOString(),
+  }).eq('id', id);
+
+  if (subErr) {
+    const msg = subErr.code === '42501' || subErr.message?.includes('RLS')
+      ? '❌ Permission denied — run supabase-emergency-fix.sql in Supabase SQL Editor'
+      : '❌ ' + subErr.message;
+    showToast(msg, 'error', 8000);
+    return;
+  }
+
+  /* Step 2 — if approved, credit wallet */
+  if (status === 'approved') {
+    const { data: profile } = await sb.from('profiles').select('balance,tasks_completed').eq('id', row.user_id).maybeSingle();
+    if (profile) {
+      const { error: walletErr } = await sb.from('profiles').update({
+        balance:         (profile.balance || 0) + (row.reward || 0),
+        tasks_completed: (profile.tasks_completed || 0) + 1,
+        updated_at:      new Date().toISOString(),
+      }).eq('id', row.user_id);
+      if (walletErr) {
+        showToast('Submission approved but wallet credit failed: ' + walletErr.message, 'warning');
+      }
+    }
+  }
+
+  /* Step 3 — update local _rows array IN PLACE so it never reverts */
+  const idx = _rows.findIndex(r => r.id === id);
+  if (idx > -1) {
+    _rows[idx] = { ..._rows[idx], status, admin_note: adminNote, reviewed_at: new Date().toISOString() };
+  }
+
+  refreshUI(); /* re-render from updated local array — NO DB re-fetch, so no revert */
+
+  showToast(
+    status === 'approved'
+      ? `✅ Approved! ${formatNaira(row.reward)} credited to user's wallet.`
+      : '❌ Submission rejected.',
+    status === 'approved' ? 'success' : 'info'
+  );
+}
+</script>
+</body>
+</html>

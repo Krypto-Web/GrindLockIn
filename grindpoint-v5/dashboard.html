@@ -1,0 +1,627 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Dashboard — Grindpoint</title>
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><text y='26' font-size='28'>⚡</text></svg>" />
+  <link rel="stylesheet" href="css/style.css" />
+<!-- Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-SJRSW6DNNQ"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag("js", new Date());
+  gtag("config", "G-SJRSW6DNNQ");
+</script>
+  <!-- PWA Meta Tags -->
+  <link rel="manifest" href="/manifest.json"/>
+  <meta name="theme-color" content="#f59e0b"/>
+  <meta name="mobile-web-app-capable" content="yes"/>
+  <meta name="apple-mobile-web-app-capable" content="yes"/>
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"/>
+  <meta name="apple-mobile-web-app-title" content="Grindpoint"/>
+  <link rel="apple-touch-icon" href="/icons/icon-192.png"/>
+
+<style>
+.pwa-banner{display:none;position:fixed;bottom:1.25rem;left:50%;transform:translateX(-50%);z-index:997;background:var(--bg-card);border:1px solid var(--border-gold);border-radius:var(--radius-xl);padding:1rem 1.25rem;box-shadow:var(--shadow-lg),var(--shadow-gold);max-width:360px;width:calc(100% - 2rem);animation:slideUp .4s cubic-bezier(.16,1,.3,1);}
+.pwa-banner.show{display:flex;}
+.pwa-banner__icon{font-size:1.75rem;flex-shrink:0;}
+.pwa-banner__text{flex:1;margin:0 .75rem;}
+.pwa-banner__text strong{font-size:.9rem;color:var(--text-primary);display:block;margin-bottom:2px;}
+.pwa-banner__text span{font-size:.78rem;color:var(--text-muted);}
+.pwa-banner__close{color:var(--text-muted);cursor:pointer;padding:4px;font-size:1.1rem;flex-shrink:0;background:none;border:none;}
+</style>
+</head>
+<body style="visibility:hidden">
+
+<!-- ─── Navbar ─── -->
+<nav class="navbar">
+  <div class="navbar__inner">
+    <a href="index.html" class="navbar__logo">Grind<span class="logo-accent">point</span></a>
+    <div class="navbar__actions" style="gap:.75rem;"
+      ><button class="sidebar-toggle-btn" id="sidebarToggleBtn" aria-label="Open menu">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+      </button style="gap:1rem;">
+      <div style="display:flex;align-items:center;gap:0.5rem;">
+        <div class="status-dot"></div>
+        <span style="font-size:0.78rem;color:var(--text-muted);">Live</span>
+      </div>
+      <button class="btn btn-ghost btn-sm" id="sidebarToggle" style="display:none;">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:20px;height:20px;"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+      </button>
+    </div>
+  </div>
+</nav>
+
+<div class="page-wrapper">
+  <!-- ─── Sidebar ─── -->
+  <aside class="sidebar" id="sidebar">
+    <nav class="sidebar__nav">
+      <span class="sidebar__label">Main Menu</span>
+      <a href="dashboard.html" class="sidebar__link active">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/></svg>
+        Dashboard
+      </a>
+      <a href="tasks.html" class="sidebar__link">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11"/></svg>
+        Earn Tasks
+        <span class="badge badge-gold" style="margin-left:auto;font-size:0.65rem;">New</span>
+      </a>
+      <a href="referral.html" class="sidebar__link">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87M16 3.13a4 4 0 010 7.75"/></svg>
+        Referrals
+      </a>
+      <a href="leaderboard.html" class="sidebar__link">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+        Leaderboard
+      </a>
+
+      <span class="sidebar__label" style="margin-top:0.5rem;">Account</span>
+      <a href="transactions.html" class="sidebar__link">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/><line x1="3" y1="6" x2="3.01" y2="6"/><line x1="3" y1="12" x2="3.01" y2="12"/><line x1="3" y1="18" x2="3.01" y2="18"/></svg>
+        Transactions
+      </a>
+      <a href="#" class="sidebar__link" id="withdrawBtn">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 000 7h5a3.5 3.5 0 010 7H6"/></svg>
+        Withdraw Funds
+      </a>
+      <a href="profile.html" class="sidebar__link">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+        My Profile
+      </a>
+    </nav>
+
+    <div class="sidebar__footer">
+      <div class="sidebar__user" id="sidebarUser">
+        <div class="user-avatar" id="sidebarAvatar">--</div>
+        <div class="sidebar__user-info">
+          <div class="sidebar__user-name" id="sidebarName">Loading…</div>
+          <div class="sidebar__user-role">Member</div>
+        </div>
+        <button onclick="signOut()" class="btn btn-ghost btn-icon" title="Sign out">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:16px;height:16px;"><path d="M9 21H5a2 2 0 01-2-2V5a2 2 0 012-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+        </button>
+      </div>
+    </div>
+  </aside>
+
+  <!-- ─── Main Content ─── -->
+  <main class="main-content">
+    <div class="page-header" style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:1rem;">
+      <div>
+        <p style="color:var(--text-muted);font-size:0.85rem;margin-bottom:4px;" id="greeting">Good morning 👋</p>
+        <h1 class="page-title" id="welcomeName">Dashboard</h1>
+      </div>
+      <div style="display:flex;gap:0.75rem;">
+        <a href="tasks.html" class="btn btn-primary">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" style="width:16px;height:16px;"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg>
+          Earn Now
+        </a>
+        <button class="btn btn-secondary" id="withdrawBtnTop">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" style="width:16px;height:16px;"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 000 7h5a3.5 3.5 0 010 7H6"/></svg>
+          Withdraw
+        </button>
+      </div>
+    </div>
+
+    <!-- Stats Grid -->
+    <div class="stats-grid mb-6" id="statsGrid">
+      <div class="stat-card stat-card--gold">
+        <div class="stat-card__icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 000 7h5a3.5 3.5 0 010 7H6"/></svg>
+        </div>
+        <div class="stat-card__label">Wallet Balance</div>
+        <div class="stat-card__value" id="walletBalance">₦0.00</div>
+        <div class="stat-card__sub">Available for withdrawal</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-card__icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11"/></svg>
+        </div>
+        <div class="stat-card__label">Tasks Completed</div>
+        <div class="stat-card__value" id="tasksCompleted">0</div>
+        <div class="stat-card__sub">Total tasks done</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-card__icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87M16 3.13a4 4 0 010 7.75"/></svg>
+        </div>
+        <div class="stat-card__label">Referrals</div>
+        <div class="stat-card__value" id="referralCount">0</div>
+        <div class="stat-card__sub">Friends invited</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-card__icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+        </div>
+        <div class="stat-card__label">Global Rank</div>
+        <div class="stat-card__value" id="globalRank">#—</div>
+        <div class="stat-card__sub">By total balance</div>
+      </div>
+    </div>
+
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:1.5rem;margin-bottom:2rem;">
+      <!-- Quick actions -->
+      <div class="card">
+        <h3 style="margin-bottom:1.25rem;font-size:1rem;">Quick Actions</h3>
+        <div style="display:flex;flex-direction:column;gap:0.75rem;">
+          <a href="tasks.html" style="display:flex;align-items:center;gap:0.75rem;padding:0.9rem;background:var(--bg-elevated);border:1px solid var(--border-subtle);border-radius:var(--radius-md);transition:all var(--transition-fast);" class="quick-action-link">
+            <span style="font-size:1.3rem;">⚡</span>
+            <div>
+              <div style="font-weight:600;font-size:0.9rem;">Complete a Task</div>
+              <div style="font-size:0.75rem;color:var(--text-muted);">Earn up to ₦500 per task</div>
+            </div>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:16px;height:16px;color:var(--text-muted);margin-left:auto;"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+          </a>
+          <a href="referral.html" style="display:flex;align-items:center;gap:0.75rem;padding:0.9rem;background:var(--bg-elevated);border:1px solid var(--border-subtle);border-radius:var(--radius-md);transition:all var(--transition-fast);" class="quick-action-link">
+            <span style="font-size:1.3rem;">🔗</span>
+            <div>
+              <div style="font-weight:600;font-size:0.9rem;">Invite Friends</div>
+              <div style="font-size:0.75rem;color:var(--text-muted);">Earn ₦200 per referral</div>
+            </div>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:16px;height:16px;color:var(--text-muted);margin-left:auto;"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+          </a>
+          <a href="leaderboard.html" style="display:flex;align-items:center;gap:0.75rem;padding:0.9rem;background:var(--bg-elevated);border:1px solid var(--border-subtle);border-radius:var(--radius-md);transition:all var(--transition-fast);" class="quick-action-link">
+            <span style="font-size:1.3rem;">🏆</span>
+            <div>
+              <div style="font-weight:600;font-size:0.9rem;">View Leaderboard</div>
+              <div style="font-size:0.75rem;color:var(--text-muted);">See top earners this week</div>
+            </div>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:16px;height:16px;color:var(--text-muted);margin-left:auto;"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+          </a>
+        </div>
+      </div>
+
+      <!-- Withdrawal progress -->
+      <div class="card card--gold">
+        <h3 style="margin-bottom:0.25rem;font-size:1rem;">Withdrawal Progress</h3>
+        <p style="font-size:0.8rem;color:var(--text-muted);margin-bottom:1.5rem;">Minimum withdrawal is ₦1,000</p>
+        <div style="margin-bottom:1rem;">
+          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:0.5rem;">
+            <span style="font-size:0.82rem;color:var(--text-secondary);">Progress</span>
+            <span style="font-size:0.82rem;font-weight:600;color:var(--gold-500);" id="progressPct">0%</span>
+          </div>
+          <div class="progress-bar">
+            <div class="progress-fill" id="progressFill" style="width:0%;"></div>
+          </div>
+        </div>
+        <div style="display:flex;justify-content:space-between;font-size:0.8rem;color:var(--text-muted);margin-bottom:1.5rem;">
+          <span>Current: <strong id="progressCurrent" style="color:var(--text-primary);">₦0</strong></span>
+          <span>Goal: <strong style="color:var(--text-primary);">₦1,000</strong></span>
+        </div>
+        <button class="btn btn-primary btn-block" id="withdrawBtnCard">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:16px;height:16px;"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 000 7h5a3.5 3.5 0 010 7H6"/></svg>
+          Withdraw Funds
+        </button>
+      </div>
+    </div>
+
+    <!-- Tip banner -->
+    <div style="background:rgba(245,158,11,0.06);border:1px solid rgba(245,158,11,0.2);border-radius:var(--radius-lg);padding:1.25rem 1.5rem;display:flex;align-items:center;gap:1rem;">
+      <span style="font-size:1.5rem;">💡</span>
+      <div>
+        <strong style="font-size:0.9rem;">Pro Tip:</strong>
+        <span style="font-size:0.875rem;color:var(--text-secondary);"> Share your referral link daily. Each friend you invite who completes tasks adds passive income to your wallet automatically.</span>
+      </div>
+      <a href="referral.html" class="btn btn-secondary btn-sm" style="margin-left:auto;white-space:nowrap;">Get Link</a>
+    </div>
+  </main>
+</div>
+
+<!-- ─── Withdraw Modal ─── -->
+<div class="modal" id="withdrawModal">
+  <div class="modal__box">
+    <div class="modal__header">
+      <h3 class="modal__title">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:18px;height:18px;display:inline;vertical-align:middle;margin-right:6px;color:var(--gold-500);"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 000 7h5a3.5 3.5 0 010 7H6"/></svg>
+        Withdraw Funds
+      </h3>
+      <button class="modal__close" onclick="closeModal('withdrawModal')">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+      </button>
+    </div>
+    <div class="modal__body">
+      <!-- Balance display -->
+      <div style="text-align:center;padding:1.25rem;background:var(--bg-elevated);border-radius:var(--radius-md);border:1px solid var(--border-subtle);margin-bottom:1.5rem;">
+        <div style="font-size:0.75rem;color:var(--text-muted);text-transform:uppercase;letter-spacing:0.08em;font-weight:600;">Available Balance</div>
+        <div style="font-family:var(--font-display);font-size:2rem;font-weight:800;color:var(--gold-500);margin-top:4px;" id="modalBalance">₦0.00</div>
+      </div>
+
+      <!-- Method tabs -->
+      <div style="margin-bottom:1.5rem;">
+        <label class="form-label" style="margin-bottom:0.75rem;display:block;">Withdrawal Method</label>
+        <div class="tab-group">
+          <button class="tab-btn active" data-tab="bank">🏦 Bank Transfer</button>
+          <button class="tab-btn" data-tab="opay">OPay / Palmpay</button>
+          <button class="tab-btn" data-tab="kuda">Kuda Bank</button>
+        </div>
+      </div>
+
+      <!-- Bank tab -->
+      <div class="tab-content active" id="tab-bank">
+        <div style="display:flex;flex-direction:column;gap:1rem;">
+          <div class="form-group">
+            <label class="form-label" for="bankName">Bank Name</label>
+            <select id="bankName" class="form-control">
+              <option value="" disabled selected>Select your bank</option>
+              <option>Access Bank</option><option>First Bank</option><option>GTBank</option>
+              <option>UBA</option><option>Zenith Bank</option><option>FCMB</option>
+              <option>Fidelity Bank</option><option>Polaris Bank</option><option>Sterling Bank</option>
+              <option>Wema Bank</option><option>Union Bank</option><option>Heritage Bank</option>
+              <option>Stanbic IBTC</option><option>Ecobank</option><option>Citibank</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="accountNumber">Account Number</label>
+            <input type="text" id="accountNumber" class="form-control" placeholder="10-digit account number" maxlength="10" inputmode="numeric" />
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="accountName">Account Name</label>
+            <input type="text" id="accountName" class="form-control" placeholder="As it appears on your account" />
+          </div>
+        </div>
+      </div>
+
+      <!-- OPay tab -->
+      <div class="tab-content" id="tab-opay">
+        <div style="display:flex;flex-direction:column;gap:1rem;">
+          <div class="form-group">
+            <label class="form-label" for="mobileWallet">Wallet Provider</label>
+            <select id="mobileWallet" class="form-control">
+              <option value="" disabled selected>Select provider</option>
+              <option>OPay</option><option>Palmpay</option><option>Moniepoint</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="mobilePhone">Registered Phone Number</label>
+            <input type="tel" id="mobilePhone" class="form-control" placeholder="080XXXXXXXX" />
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="mobileName">Account Name</label>
+            <input type="text" id="mobileName" class="form-control" placeholder="Name on wallet" />
+          </div>
+        </div>
+      </div>
+
+      <!-- Kuda tab -->
+      <div class="tab-content" id="tab-kuda">
+        <div style="display:flex;flex-direction:column;gap:1rem;">
+          <div class="form-group">
+            <label class="form-label" for="kudaNumber">Kuda Account Number</label>
+            <input type="text" id="kudaNumber" class="form-control" placeholder="10-digit Kuda account number" maxlength="10" inputmode="numeric" />
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="kudaName">Account Name</label>
+            <input type="text" id="kudaName" class="form-control" placeholder="Name on Kuda account" />
+          </div>
+        </div>
+      </div>
+
+      <!-- Amount -->
+      <div class="form-group" style="margin-top:1.25rem;">
+        <label class="form-label" for="withdrawAmount">Withdrawal Amount (₦)</label>
+        <input type="number" id="withdrawAmount" class="form-control" placeholder="Minimum ₦1,000" min="1000" step="100" />
+        <span class="form-hint">Minimum: ₦1,000 · Maximum: your available balance</span>
+      </div>
+    </div>
+    <div class="modal__footer">
+      <button class="btn btn-secondary" onclick="closeModal('withdrawModal')">Cancel</button>
+      <button class="btn btn-primary" id="confirmWithdrawBtn">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:15px;height:15px;"><path d="M22 11.08V12a10 10 0 11-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+        Submit Request
+      </button>
+    </div>
+  </div>
+</div>
+
+<style>
+  .quick-action-link:hover {
+    border-color: var(--border-gold) !important;
+    background: var(--bg-hover) !important;
+  }
+</style>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.min.js"></script>
+<script src="js/supabase-config.js"></script>
+<script src="js/main.js"></script>
+<script>
+let _currentProfile = null;
+
+(async () => {
+  const result = await requireAuth();
+  if (!result) return;
+  document.body.style.visibility = "";   // reveal page only after auth confirmed
+  const { user, profile } = result;
+  _currentProfile = profile;
+
+  // Greeting
+  const hour = new Date().getHours();
+  const greet = hour < 12 ? 'Good morning' : hour < 18 ? 'Good afternoon' : 'Good evening';
+  document.getElementById('greeting').textContent = `${greet} 👋`;
+
+  const name = profile?.full_name || user.user_metadata?.full_name || 'Grinder';
+  const firstName = name.split(' ')[0];
+  document.getElementById('welcomeName').textContent = firstName;
+  document.getElementById('sidebarName').textContent = name;
+
+  // Avatar
+  const initials = name.split(' ').map(n => n[0]).join('').substring(0, 2).toUpperCase();
+  document.getElementById('sidebarAvatar').textContent = initials;
+
+  // Balance
+  const balance = profile?.balance || 0;
+  document.getElementById('walletBalance').textContent = formatNaira(balance);
+  document.getElementById('modalBalance').textContent = formatNaira(balance);
+  document.getElementById('tasksCompleted').textContent = profile?.tasks_completed || 0;
+  document.getElementById('referralCount').textContent = profile?.referral_count || 0;
+
+  // Progress bar
+  const pct = Math.min((balance / 1000) * 100, 100);
+  document.getElementById('progressFill').style.width = pct + '%';
+  document.getElementById('progressPct').textContent = Math.round(pct) + '%';
+  document.getElementById('progressCurrent').textContent = formatNaira(balance);
+
+  // Rank (simple — query position)
+  try {
+    const client = getSupabase();
+    const { data } = await client.from('profiles').select('id').order('balance', { ascending: false });
+    if (data) {
+      const rank = data.findIndex(p => p.id === user.id) + 1;
+      document.getElementById('globalRank').textContent = rank > 0 ? `#${rank}` : '#—';
+    }
+  } catch (e) { console.warn('Rank query failed:', e.message); }
+})();
+
+// Sidebar mobile toggle
+const sidebarToggle = document.getElementById('sidebarToggle');
+if (window.innerWidth <= 768) sidebarToggle.style.display = 'flex';
+sidebarToggle.addEventListener('click', () => {
+  document.getElementById('sidebar').classList.toggle('sidebar--open');
+});
+
+// Modal triggers
+['withdrawBtn', 'withdrawBtnTop', 'withdrawBtnCard'].forEach(id => {
+  const el = document.getElementById(id);
+  if (el) el.addEventListener('click', (e) => { e.preventDefault(); openModal('withdrawModal'); });
+});
+initModalCloseOnBackdrop('withdrawModal');
+
+// Withdrawal method tabs
+document.querySelectorAll('.tab-btn').forEach(btn => {
+  btn.addEventListener('click', () => {
+    document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+    document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+    btn.classList.add('active');
+    document.getElementById('tab-' + btn.dataset.tab).classList.add('active');
+  });
+});
+
+// Submit withdrawal
+document.getElementById('confirmWithdrawBtn').addEventListener('click', async () => {
+  const amount  = parseFloat(document.getElementById('withdrawAmount').value);
+  const balance = _currentProfile?.balance || 0;
+  const btn     = document.getElementById('confirmWithdrawBtn');
+
+  // ── Validation ───────────────────────────────────────────
+  if (!amount || amount < 1000) {
+    showToast('Minimum withdrawal amount is ₦1,000.', 'warning'); return;
+  }
+  if (amount > balance) {
+    showToast('Insufficient balance. Your current balance is ' + formatNaira(balance), 'error'); return;
+  }
+
+  // Collect payment details from the active tab
+  const activeTab = document.querySelector('.tab-btn.active')?.dataset?.tab || 'bank';
+  let paymentDetails = {};
+
+  if (activeTab === 'bank') {
+    const bankName     = document.getElementById('bankName').value;
+    const accountNum   = document.getElementById('accountNumber').value.trim();
+    const accountName  = document.getElementById('accountName').value.trim();
+    if (!bankName)    { showToast('Please select your bank.', 'warning'); return; }
+    if (!accountNum || accountNum.length !== 10) { showToast('Enter a valid 10-digit account number.', 'warning'); return; }
+    if (!accountName) { showToast('Please enter your account name.', 'warning'); return; }
+    paymentDetails = { method:'bank_transfer', bank_name:bankName, account_number:accountNum, account_name:accountName };
+  } else if (activeTab === 'opay') {
+    const wallet   = document.getElementById('mobileWallet').value;
+    const phone    = document.getElementById('mobilePhone').value.trim();
+    const mName    = document.getElementById('mobileName').value.trim();
+    if (!wallet)   { showToast('Please select your wallet provider.', 'warning'); return; }
+    if (!phone || phone.length < 10) { showToast('Enter a valid phone number.', 'warning'); return; }
+    if (!mName)    { showToast('Please enter the account name.', 'warning'); return; }
+    paymentDetails = { method:'mobile_wallet', bank_name:wallet, account_number:phone, account_name:mName };
+  } else if (activeTab === 'kuda') {
+    const kudaNum  = document.getElementById('kudaNumber').value.trim();
+    const kudaName = document.getElementById('kudaName').value.trim();
+    if (!kudaNum || kudaNum.length !== 10) { showToast('Enter a valid 10-digit Kuda account number.', 'warning'); return; }
+    if (!kudaName) { showToast('Please enter your Kuda account name.', 'warning'); return; }
+    paymentDetails = { method:'kuda', bank_name:'Kuda Bank', account_number:kudaNum, account_name:kudaName };
+  }
+
+  const client = getSupabase();
+  if (!client) return;
+
+  setButtonLoading(btn, 'Submitting…');
+
+  try {
+    // 1 ── Deduct balance from wallet FIRST (optimistic, before request insert)
+    const newBalance = balance - amount;
+    const { error: balErr } = await client
+      .from('profiles')
+      .update({ balance: newBalance, updated_at: new Date().toISOString() })
+      .eq('id', _currentProfile.id);
+
+    if (balErr) throw new Error('Could not update balance: ' + balErr.message);
+
+    // 2 ── Insert withdrawal request
+    const { error: reqErr } = await client.from('withdrawal_requests').insert({
+      user_id:        _currentProfile.id,
+      amount,
+      method:         paymentDetails.method,
+      bank_name:      paymentDetails.bank_name,
+      account_number: paymentDetails.account_number,
+      account_name:   paymentDetails.account_name,
+      status:         'pending',
+      created_at:     new Date().toISOString(),
+    });
+
+    if (reqErr) {
+      // If insert fails, refund the deducted balance
+      await client.from('profiles').update({ balance }).eq('id', _currentProfile.id);
+      throw new Error('Could not submit request: ' + reqErr.message);
+    }
+
+    // 3 ── Update local state & UI
+    _currentProfile.balance = newBalance;
+
+    document.getElementById('walletBalance').textContent = formatNaira(newBalance);
+    document.getElementById('modalBalance').textContent  = formatNaira(newBalance);
+    const pct = Math.min((newBalance / 1000) * 100, 100);
+    document.getElementById('progressFill').style.width  = pct + '%';
+    document.getElementById('progressPct').textContent   = Math.round(pct) + '%';
+    document.getElementById('progressCurrent').textContent = formatNaira(newBalance);
+
+    closeModal('withdrawModal');
+    showToast(
+      `✅ Withdrawal of ${formatNaira(amount)} submitted! Your balance has been updated. Processing in 1–2 business days.`,
+      'success', 7000
+    );
+
+    // Reset form fields
+    document.getElementById('withdrawAmount').value = '';
+    document.getElementById('bankName').value = '';
+    document.getElementById('accountNumber').value = '';
+    document.getElementById('accountName').value = '';
+
+  } catch (err) {
+    console.error('[Dashboard] Withdrawal error:', err);
+    showToast(err.message || 'Could not submit request. Please try again.', 'error');
+  } finally {
+    clearButtonLoading(btn);
+  }
+});
+</script>
+
+<!-- Mobile bottom navigation -->
+<div class="mobile-bottom-nav">
+  <nav>
+    <a href="dashboard.html" class="mbn-item active"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/></svg>Home</a>
+        <a href="tasks.html" class="mbn-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11"/></svg>Tasks</a>
+        <a href="referral.html" class="mbn-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/></svg>Refer</a>
+        <a href="leaderboard.html" class="mbn-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>Leaders</a>
+        <a href="profile.html" class="mbn-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>Profile</a>
+  </nav>
+</div>
+
+<!-- Sidebar overlay (mobile) -->
+<div class="sidebar-overlay" id="sidebarOverlay"></div>
+<script>
+// ── Mobile sidebar toggle ─────────────────────────────────
+(function() {
+  const btn     = document.getElementById('sidebarToggleBtn');
+  const sidebar = document.getElementById('sidebar');
+  const overlay = document.getElementById('sidebarOverlay');
+  if (!btn || !sidebar) return;
+
+  function open()  { sidebar.classList.add('sidebar--open');    overlay && overlay.classList.add('active');    document.body.style.overflow='hidden'; }
+  function close() { sidebar.classList.remove('sidebar--open'); overlay && overlay.classList.remove('active'); document.body.style.overflow=''; }
+
+  btn.addEventListener('click', () => sidebar.classList.contains('sidebar--open') ? close() : open());
+  if (overlay) overlay.addEventListener('click', close);
+
+  // Close on nav link click (mobile UX)
+  sidebar.querySelectorAll('a').forEach(a => a.addEventListener('click', close));
+})();
+</script>
+
+<!-- Floating WhatsApp Button -->
+<a href="https://wa.me/2349034192652?text=Hello%20Grindpoint%20Support%2C%20I%20need%20help%20with%20my%20account." 
+   target="_blank" rel="noopener" 
+   class="whatsapp-float" 
+   aria-label="Chat with us on WhatsApp">
+  <svg viewBox="0 0 24 24" fill="currentColor">
+    <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/>
+  </svg>
+  <span class="whatsapp-float__label">Support</span>
+</a>
+
+<script>
+// Register Service Worker for PWA
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', () => {
+    navigator.serviceWorker.register('/sw.js')
+      .then(reg => console.log('[GP] SW registered:', reg.scope))
+      .catch(err => console.warn('[GP] SW registration failed:', err));
+  });
+}
+</script>
+
+<!-- PWA Install Banner -->
+<div class="pwa-banner" id="pwaBanner">
+  <div class="pwa-banner__icon">⚡</div>
+  <div class="pwa-banner__text">
+    <strong>Install Grindpoint App</strong>
+    <span>Add to home screen for faster access</span>
+  </div>
+  <button class="btn btn-primary btn-sm" id="pwaInstallBtn" style="flex-shrink:0;font-size:.78rem;padding:.45rem .9rem;">Install</button>
+  <button class="pwa-banner__close" id="pwaDismiss">✕</button>
+</div>
+<script>
+// PWA Install Prompt
+let _deferredPrompt = null;
+window.addEventListener('beforeinstallprompt', e => {
+  e.preventDefault();
+  _deferredPrompt = e;
+  // Show banner after 3 seconds if not dismissed before
+  const dismissed = localStorage.getItem('gp_pwa_dismissed');
+  if (!dismissed) {
+    setTimeout(() => {
+      const banner = document.getElementById('pwaBanner');
+      if (banner) banner.classList.add('show');
+    }, 3000);
+  }
+});
+
+document.getElementById('pwaInstallBtn')?.addEventListener('click', async () => {
+  if (!_deferredPrompt) return;
+  _deferredPrompt.prompt();
+  const { outcome } = await _deferredPrompt.userChoice;
+  if (outcome === 'accepted') {
+    document.getElementById('pwaBanner')?.classList.remove('show');
+  }
+  _deferredPrompt = null;
+});
+
+document.getElementById('pwaDismiss')?.addEventListener('click', () => {
+  document.getElementById('pwaBanner')?.classList.remove('show');
+  localStorage.setItem('gp_pwa_dismissed', '1');
+});
+
+window.addEventListener('appinstalled', () => {
+  document.getElementById('pwaBanner')?.classList.remove('show');
+  console.log('[GP] PWA installed successfully');
+});
+</script>
+</body>
+</html>

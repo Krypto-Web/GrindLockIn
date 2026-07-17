@@ -1,0 +1,290 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+  <title>Leaderboard — Grindpoint</title>
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><text y='26' font-size='28'>⚡</text></svg>"/>
+  <link rel="stylesheet" href="css/style.css"/>
+<!-- Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-SJRSW6DNNQ"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag("js", new Date());
+  gtag("config", "G-SJRSW6DNNQ");
+</script>
+  <!-- PWA Meta Tags -->
+  <link rel="manifest" href="/manifest.json"/>
+  <meta name="theme-color" content="#f59e0b"/>
+  <meta name="mobile-web-app-capable" content="yes"/>
+  <meta name="apple-mobile-web-app-capable" content="yes"/>
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"/>
+  <meta name="apple-mobile-web-app-title" content="Grindpoint"/>
+  <link rel="apple-touch-icon" href="/icons/icon-192.png"/>
+</head>
+<body style="visibility:hidden">
+
+<nav class="navbar">
+  <div class="navbar__inner">
+    <a href="index.html" class="navbar__logo">Grind<span class="logo-accent">point</span></a>
+    <div class="navbar__links" id="navLinks">
+      <a href="index.html"        class="nav__link">Home</a>
+      <a href="tasks.html"        class="nav__link">Tasks</a>
+      <a href="leaderboard.html"  class="nav__link nav__link--active">Leaderboard</a>
+    </div>
+    <div class="navbar__actions" id="navActions">
+      <a href="login.html"    class="btn btn-secondary btn-sm">Sign In</a>
+      <a href="register.html" class="btn btn-primary btn-sm">Join Free</a>
+    </div>
+  </div>
+</nav>
+
+<!-- ── Authenticated layout (sidebar) ── -->
+<div class="page-wrapper" id="authWrapper" style="display:none;">
+  <aside class="sidebar">
+    <nav class="sidebar__nav">
+      <span class="sidebar__label">Main Menu</span>
+      <a href="dashboard.html"  class="sidebar__link"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/></svg>Dashboard</a>
+      <a href="tasks.html"      class="sidebar__link"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11"/></svg>Earn Tasks</a>
+      <a href="referral.html"   class="sidebar__link"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/></svg>Referrals</a>
+      <a href="leaderboard.html" class="sidebar__link active"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>Leaderboard</a>
+      <span class="sidebar__label">Account</span>
+      <a href="transactions.html" class="sidebar__link"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/><line x1="3" y1="6" x2="3.01" y2="6"/><line x1="3" y1="12" x2="3.01" y2="12"/><line x1="3" y1="18" x2="3.01" y2="18"/></svg>Transactions</a>
+      <a href="profile.html"    class="sidebar__link"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>My Profile</a>
+    </nav>
+    <div class="sidebar__footer">
+      <div class="sidebar__user">
+        <div class="user-avatar" id="sidebarAvatar">--</div>
+        <div class="sidebar__user-info">
+          <div class="sidebar__user-name" id="sidebarName">Loading…</div>
+          <div class="sidebar__user-role">Member</div>
+        </div>
+        <button onclick="signOut()" class="btn btn-ghost btn-icon" title="Sign out">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:16px;height:16px;"><path d="M9 21H5a2 2 0 01-2-2V5a2 2 0 012-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+        </button>
+      </div>
+    </div>
+  </aside>
+  <main class="main-content">
+    <div class="page-header">
+      <div class="section-label">Rankings</div>
+      <h1 class="page-title">🏆 Leaderboard</h1>
+      <p class="page-subtitle">Top earners on Grindpoint this month. Top 3 win monthly bonus prizes!</p>
+    </div>
+    <!-- Prize pool banner -->
+    <div style="background:linear-gradient(135deg,rgba(245,158,11,.1),rgba(245,158,11,.03));border:1px solid rgba(245,158,11,.25);border-radius:var(--radius-lg);padding:1.25rem 1.5rem;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:1rem;margin-bottom:2rem;">
+      <div style="display:flex;align-items:center;gap:.75rem;">
+        <span style="font-size:1.5rem;">🏆</span>
+        <div>
+          <div style="font-weight:700;">Monthly Prize Pool</div>
+          <div style="font-size:.82rem;color:var(--text-secondary);">Top 3 earners split ₦50,000 at month-end. Keep grinding!</div>
+        </div>
+      </div>
+      <span class="badge badge-gold">Auto-distributed</span>
+    </div>
+    <div id="authLeaderboard"><div class="skeleton" style="height:400px;border-radius:var(--radius-lg);"></div></div>
+  </main>
+</div>
+
+<!-- ── Public layout (no sidebar) ── -->
+<div id="publicWrapper" style="display:none;padding-top:var(--nav-height);">
+  <div class="container section">
+    <div class="text-center mb-6">
+      <div class="section-label" style="justify-content:center;">Live Rankings</div>
+      <h2>🏆 Top Earners This Month</h2>
+      <p style="color:var(--text-secondary);margin-top:.75rem;">Real-time leaderboard updated every hour. Join Grindpoint to compete!</p>
+    </div>
+    <div id="publicLeaderboard"><div class="skeleton" style="height:400px;border-radius:var(--radius-lg);"></div></div>
+    <div style="text-align:center;margin-top:3rem;">
+      <p style="color:var(--text-secondary);margin-bottom:1.5rem;">Want to see your name here?</p>
+      <a href="register.html" class="btn btn-primary btn-lg">Join Grindpoint Free →</a>
+    </div>
+  </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.min.js"></script>
+<script src="js/supabase-config.js"></script>
+<script src="js/main.js"></script>
+<script>
+const SAMPLE_DATA = [
+  {full_name:"Chioma Obi",       state:"Lagos",       balance:84200, tasks_completed:312, referral_count:28},
+  {full_name:"Emeka Nwachukwu",  state:"Anambra",     balance:71500, tasks_completed:289, referral_count:15},
+  {full_name:"Fatima Aliyu",     state:"Kano",        balance:65800, tasks_completed:241, referral_count:22},
+  {full_name:"Biodun Adeyemi",   state:"Oyo",         balance:58900, tasks_completed:198, referral_count:9},
+  {full_name:"Amara Eze",        state:"Rivers",      balance:49200, tasks_completed:176, referral_count:17},
+  {full_name:"Tunde Ogundimu",   state:"Ogun",        balance:41700, tasks_completed:154, referral_count:6},
+  {full_name:"Ngozi Okeke",      state:"Imo",         balance:38500, tasks_completed:142, referral_count:11},
+  {full_name:"Hassan Bello",     state:"Kaduna",      balance:32100, tasks_completed:118, referral_count:4},
+  {full_name:"Blessing Effiong", state:"Akwa Ibom",   balance:27800, tasks_completed:96,  referral_count:8},
+  {full_name:"Sola Adewale",     state:"FCT — Abuja", balance:22400, tasks_completed:81,  referral_count:5},
+];
+
+function initials(name) {
+  return (name||"U").split(" ").map(n=>n[0]).join("").substring(0,2).toUpperCase();
+}
+
+function buildHTML(data, myId) {
+  const top3 = data.slice(0,3);
+  const rest  = data.slice(3);
+
+  // Podium order: 2nd, 1st, 3rd
+  const podiumOrder = top3.length === 3 ? [top3[1], top3[0], top3[2]] : top3;
+  const podiumRanks = [2, 1, 3];
+
+  let html = "";
+
+  if (top3.length >= 3) {
+    html += `<div class="podium" style="margin-bottom:2.5rem;">
+      ${podiumOrder.map((u,i) => {
+        const rank = podiumRanks[i];
+        const isMe = u.id && u.id === myId;
+        return `<div class="podium-item rank-${rank}">
+          ${rank===1 ? '<div style="font-size:1.5rem;text-align:center;margin-bottom:4px;">👑</div>' : '<div style="height:28px;"></div>'}
+          <div style="text-align:center;">
+            <div class="podium-avatar rank-${rank}" style="${isMe?'box-shadow:var(--gold-glow);':''}">${initials(u.full_name)}</div>
+            <div style="font-size:.8rem;font-weight:700;margin-top:6px;">${(u.full_name||"User").split(" ")[0]}${isMe?" (You)":""}</div>
+            <div style="font-size:.72rem;color:var(--text-muted);">${u.state||""}</div>
+            <div style="font-size:.85rem;font-weight:700;color:var(--gold-500);margin-top:3px;">${formatNaira(u.balance)}</div>
+          </div>
+          <div class="podium-block">${rank}</div>
+        </div>`;
+      }).join("")}
+    </div>`;
+  }
+
+  html += `<div class="table-wrapper">
+    <table class="data-table">
+      <thead><tr><th>Rank</th><th>Earner</th><th>State</th><th>Tasks</th><th>Referrals</th><th>Earned</th></tr></thead>
+      <tbody>
+        ${data.map((u,i) => {
+          const rank = i+1;
+          const isMe = u.id && u.id === myId;
+          return `<tr style="${isMe?'background:rgba(245,158,11,.06);':''}">
+            <td>
+              <div class="rank-cell">
+                <div class="rank-number ${rank<=3?'rank-'+rank:''}">${rank}</div>
+                ${rank===1?"👑":rank===2?"🥈":rank===3?"🥉":""}
+              </div>
+            </td>
+            <td>
+              <div style="display:flex;align-items:center;gap:.75rem;">
+                <div class="user-avatar" style="width:34px;height:34px;font-size:.8rem;${isMe?'background:var(--gold-gradient);color:#000;':''}">${initials(u.full_name)}</div>
+                <div>
+                  <div style="font-weight:600;font-size:.88rem;">${u.full_name||"Anonymous"}${isMe?' <span style="color:var(--gold-500);font-size:.75rem;">(You)</span>':''}</div>
+                </div>
+              </div>
+            </td>
+            <td style="font-size:.85rem;">${u.state||"—"}</td>
+            <td><span style="font-weight:600;">${u.tasks_completed||0}</span></td>
+            <td><span style="font-weight:600;">${u.referral_count||0}</span></td>
+            <td><strong style="color:var(--gold-500);font-family:var(--font-display);">${formatNaira(u.balance)}</strong></td>
+          </tr>`;
+        }).join("")}
+      </tbody>
+    </table>
+  </div>`;
+
+  return html;
+}
+
+async function loadBoard(containerId, myId) {
+  const sb = getSupabase();
+  let data = SAMPLE_DATA;
+  try {
+    const { data: rows, error } = await sb
+      .from("profiles")
+      .select("id,full_name,state,balance,tasks_completed,referral_count")
+      .order("balance",{ascending:false})
+      .limit(10);
+    if (!error && rows && rows.length > 0) data = rows;
+  } catch(e) { console.warn("Leaderboard DB fallback:", e.message); }
+  document.getElementById(containerId).innerHTML = buildHTML(data, myId);
+}
+
+// ── Boot — wrapped in DOMContentLoaded so SDK is ready ──
+document.addEventListener("DOMContentLoaded", async () => {
+  const session = await getSession();
+  document.body.style.visibility = "";
+
+  if (session) {
+    const profile = await getProfile(session.user.id);
+    const name    = profile?.full_name || session.user.user_metadata?.full_name || "Grinder";
+
+    // Show authenticated view
+    document.getElementById("authWrapper").style.display  = "flex";
+    document.getElementById("publicWrapper").style.display = "none";
+
+    document.getElementById("sidebarName").textContent   = name;
+    document.getElementById("sidebarAvatar").textContent = initials(name);
+    document.getElementById("navActions").innerHTML      =
+      `<span style="font-size:.82rem;color:var(--text-secondary);">Balance: <strong style="color:var(--gold-500);">${formatNaira(profile?.balance||0)}</strong></span>`;
+
+    await loadBoard("authLeaderboard", session.user.id);
+  } else {
+    // Public view
+    document.getElementById("authWrapper").style.display  = "none";
+    document.getElementById("publicWrapper").style.display = "block";
+    document.getElementById("navActions").innerHTML =
+      `<a href="login.html" class="btn btn-secondary btn-sm">Sign In</a>
+       <a href="register.html" class="btn btn-primary btn-sm">Join Free</a>`;
+    await loadBoard("publicLeaderboard", null);
+  }
+});
+</script>
+
+<!-- Mobile bottom navigation -->
+<div class="mobile-bottom-nav">
+  <nav>
+    <a href="dashboard.html" class="mbn-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/></svg>Home</a>
+        <a href="tasks.html" class="mbn-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11"/></svg>Tasks</a>
+        <a href="referral.html" class="mbn-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/></svg>Refer</a>
+        <a href="leaderboard.html" class="mbn-item active"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>Leaders</a>
+        <a href="profile.html" class="mbn-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>Profile</a>
+  </nav>
+</div>
+
+<!-- Sidebar overlay (mobile) -->
+<div class="sidebar-overlay" id="sidebarOverlay"></div>
+<script>
+// ── Mobile sidebar toggle ─────────────────────────────────
+(function() {
+  const btn     = document.getElementById('sidebarToggleBtn');
+  const sidebar = document.getElementById('sidebar');
+  const overlay = document.getElementById('sidebarOverlay');
+  if (!btn || !sidebar) return;
+
+  function open()  { sidebar.classList.add('sidebar--open');    overlay && overlay.classList.add('active');    document.body.style.overflow='hidden'; }
+  function close() { sidebar.classList.remove('sidebar--open'); overlay && overlay.classList.remove('active'); document.body.style.overflow=''; }
+
+  btn.addEventListener('click', () => sidebar.classList.contains('sidebar--open') ? close() : open());
+  if (overlay) overlay.addEventListener('click', close);
+
+  // Close on nav link click (mobile UX)
+  sidebar.querySelectorAll('a').forEach(a => a.addEventListener('click', close));
+})();
+</script>
+
+<!-- Floating WhatsApp Button -->
+<a href="https://wa.me/2349034192652?text=Hello%20Grindpoint%20Support%2C%20I%20need%20help%20with%20my%20account." 
+   target="_blank" rel="noopener" 
+   class="whatsapp-float" 
+   aria-label="Chat with us on WhatsApp">
+  <svg viewBox="0 0 24 24" fill="currentColor">
+    <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/>
+  </svg>
+  <span class="whatsapp-float__label">Support</span>
+</a>
+
+<script>
+// Register Service Worker for PWA
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', () => {
+    navigator.serviceWorker.register('/sw.js')
+      .then(reg => console.log('[GP] SW registered:', reg.scope))
+      .catch(err => console.warn('[GP] SW registration failed:', err));
+  });
+}
+</script>
+</body>
+</html>
