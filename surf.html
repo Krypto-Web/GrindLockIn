@@ -328,7 +328,7 @@ function startSurf(siteId){
   if(_active){showToast('Finish your current surf session first.','warning');return;}
   const site=SURF_SITES.find(s=>s.id===siteId);
   if(!site||_viewed.has(site.id))return;
-  window.open('https://www.facebook.com','_blank','noopener,noreferrer');
+  window.open('https://omg10.com/4/11169333','_blank','noopener,noreferrer');
   _active={siteId,required:site.timer*1000,reward:site.reward};
   _totalHidden=0;_hiddenSince=null;
   document.querySelectorAll('.sbtn').forEach(b=>{b.disabled=true;});
