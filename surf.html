@@ -337,7 +337,7 @@ function startSurf(siteId){
   const minutes=site.timer>=60?`${site.timer/60} minute${site.timer/60===1?'':'s'}`:`${site.timer} seconds`;
   if(foot)foot.innerHTML=`<div class="waiting-surf">🌊 Stay on Website for ${minutes} then come back!</div>`;
   if(card)card.classList.add('is-active');
-  showToast(`Facebook opened! Browse for ${minutes}, then return here to claim ${formatNaira(site.reward)}.`,'success',7000);
+  showToast(`Ads opened! Browse for ${minutes}, then return here to claim ${formatNaira(site.reward)}.`,'success',7000);
 }
 
 async function claimSurf(siteId,reward){
