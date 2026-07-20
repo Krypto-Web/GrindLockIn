@@ -81,7 +81,7 @@
     <div class="page-header">
       <div class="section-label">Passive Earnings</div>
       <h1 class="page-title">View Ads &amp; Earn</h1>
-      <p class="page-subtitle">Click an ad, it opens on Facebook. Stay on the page until the timer completes, then come back and claim your reward. Resets every midnight.</p>
+      <p class="page-subtitle">Click an ad, it opens on our Ad partner. Stay on the page until the timer completes, then come back and claim your reward. Resets every midnight.</p>
     </div>
 
     <!-- Daily bonus -->
@@ -116,7 +116,7 @@
     <!-- Info box -->
     <div style="display:flex;align-items:flex-start;gap:.75rem;padding:1rem 1.25rem;background:rgba(59,130,246,.06);border:1px solid rgba(59,130,246,.2);border-radius:var(--radius-lg);margin-bottom:1.5rem;font-size:.84rem;color:var(--text-secondary);line-height:1.6;">
       <svg viewBox="0 0 24 24" fill="none" stroke="#3b82f6" stroke-width="2" style="width:20px;height:20px;flex-shrink:0;margin-top:1px;"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
-      <div><strong style="color:var(--text-primary);">How it works:</strong> Click <strong>View Ad</strong> → Facebook opens in a new tab → Stay there for the full timer → Come back to Grindpoint → Click <strong>Claim Reward</strong>. If you return before the timer ends, the ad will be cancelled.</div>
+      <div><strong style="color:var(--text-primary);">How it works:</strong> Click <strong>View Ad</strong> → Websites opens in a new tab → Stay there for the full timer → Come back to Grindpoint → Click <strong>Claim Reward</strong>. If you return before the timer ends, the ad will be cancelled.</div>
     </div>
 
     <!-- Filters -->
@@ -380,7 +380,7 @@ document.addEventListener('visibilitychange',()=>{
         enableClaim(_active.adId,_active.reward);
       } else {
         const remaining=Math.ceil((required-spent)/1000);
-        showToast(`⏰ You came back too early! Go back to Facebook and stay for ${remaining} more second${remaining===1?'':'s'}.`,'warning',5000);
+        showToast(`⏰ You came back too early! Go back to the website and stay for ${remaining} more second${remaining===1?'':'s'}.`,'warning',5000);
         /* Cancel this ad attempt — reset active */
         const prevId=_active.adId;
         _active=null;
@@ -490,7 +490,7 @@ function buildCard(ad){
       ${done
         ?`<div style="display:flex;align-items:center;gap:.5rem;color:var(--success);font-size:.82rem;font-weight:600;"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" style="width:16px;height:16px;"><polyline points="20 6 9 17 4 12"/></svg>Viewed today — ${formatNaira(ad.reward)} earned</div>`
         :isAct
-        ?`<div class="waiting-overlay">⏳ Stay on Facebook for ${ad.timer}s then come back to claim your reward</div>`
+        ?`<div class="waiting-overlay">⏳ Stay on the website for ${ad.timer}s then come back to claim your reward</div>`
         :`<button class="btn btn-primary btn-block vbtn" data-id="${ad.id}"${_active?' disabled':''}><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:14px;height:14px;"><polygon points="5 3 19 12 5 21 5 3"/></svg> View Ad — Earn ${formatNaira(ad.reward)}</button>`}
     </div>
   </div>`;
@@ -526,7 +526,7 @@ function startAd(adId){
   if(!ad||_viewed.has(ad.id))return;
 
   /* Open Facebook in new tab */
-  window.open('https://www.facebook.com','_blank','noopener,noreferrer');
+  window.open('https://omg10.com/4/11169333','_blank','noopener,noreferrer');
 
   /* Set active state */
   _active={adId,required:ad.timer*1000,reward:ad.reward};
@@ -542,7 +542,7 @@ function startAd(adId){
   if(foot)foot.innerHTML=`<div class="waiting-overlay">⏳ Stay on Facebook for ${ad.timer}s then come back to claim your reward</div>`;
   if(card)card.classList.add('is-active');
 
-  showToast(`Ad opened on Facebook! Stay there for ${ad.timer} seconds, then come back here.`,'success',6000);
+  showToast(`Ad opened on Website! Stay there for ${ad.timer} seconds, then come back here.`,'success',6000);
 }
 
 async function claimAd(adId,reward){
