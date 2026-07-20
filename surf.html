@@ -79,7 +79,7 @@
     <div class="page-header">
       <div class="section-label" style="color:#3b82f6;">Surf &amp; Earn</div>
       <h1 class="page-title">Browse Websites &amp; Earn</h1>
-      <p class="page-subtitle">Different from ads — here you browse real websites for longer. Higher rewards, longer surf time. Opens on Facebook. Resets every midnight.</p>
+      <p class="page-subtitle">Different from ads — here you browse real websites for longer. Higher rewards, longer surf time. Opens on Ad partners. Resets every midnight.</p>
     </div>
 
     <!-- Difference explainer -->
@@ -116,7 +116,7 @@
     <!-- Info -->
     <div style="display:flex;align-items:flex-start;gap:.75rem;padding:1rem 1.25rem;background:rgba(59,130,246,.06);border:1px solid rgba(59,130,246,.2);border-radius:var(--radius-lg);margin-bottom:1.5rem;font-size:.84rem;color:var(--text-secondary);line-height:1.6;">
       <svg viewBox="0 0 24 24" fill="none" stroke="#3b82f6" stroke-width="2" style="width:20px;height:20px;flex-shrink:0;margin-top:1px;"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
-      <div><strong style="color:var(--text-primary);">How surf works:</strong> Click <strong>Start Surfing</strong> → Facebook opens → Browse for the required time → Come back and click <strong>Claim Reward</strong>. Returning too early cancels the session.</div>
+      <div><strong style="color:var(--text-primary);">How surf works:</strong> Click <strong>Start Surfing</strong> → Websites opens → Browse for the required time → Come back and click <strong>Claim Reward</strong>. Returning too early cancels the session.</div>
     </div>
 
     <!-- Filters -->
@@ -221,7 +221,7 @@ document.addEventListener('visibilitychange',()=>{
         enableClaim(_active.siteId,_active.reward);
       } else {
         const rem=Math.ceil((required-_totalHidden)/1000);
-        showToast(`⏰ Too early! Go back to Facebook and stay for ${rem} more second${rem===1?'':'s'}.`,'warning',5000);
+        showToast(`⏰ Too early! Go back to the website and stay for ${rem} more second${rem===1?'':'s'}.`,'warning',5000);
         const prevId=_active.siteId;
         _active=null;_totalHidden=0;
         refreshCard(prevId);
@@ -295,7 +295,7 @@ function renderGrid(filter){
         ${done
           ?`<div style="display:flex;align-items:center;gap:.5rem;color:var(--success);font-size:.82rem;font-weight:600;"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" style="width:16px;height:16px;"><polyline points="20 6 9 17 4 12"/></svg>Surfed today — ${formatNaira(site.reward)} earned</div>`
           :isAct
-          ?`<div class="waiting-surf">🌊 Stay on Facebook for ${minutes} then come back to claim!</div>`
+          ?`<div class="waiting-surf">🌊 Stay on Website for ${minutes} then come back to claim!</div>`
           :`<button class="btn-surf sbtn" data-id="${site.id}"${_active?' disabled':''}><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:15px;height:15px;"><path d="M3 12h18M3 6h18M3 18h18"/></svg> Start Surfing — Earn ${formatNaira(site.reward)}</button>`}
       </div>
     </div>`;
@@ -328,16 +328,16 @@ function startSurf(siteId){
   if(_active){showToast('Finish your current surf session first.','warning');return;}
   const site=SURF_SITES.find(s=>s.id===siteId);
   if(!site||_viewed.has(site.id))return;
-  window.open('https://www.facebook.com','_blank','noopener,noreferrer');
+  window.open('https://omg10.com/4/11169333','_blank','noopener,noreferrer');
   _active={siteId,required:site.timer*1000,reward:site.reward};
   _totalHidden=0;_hiddenSince=null;
   document.querySelectorAll('.sbtn').forEach(b=>{b.disabled=true;});
   const foot=document.getElementById(`sfoot-${siteId}`);
   const card=document.getElementById(`scard-${siteId}`);
   const minutes=site.timer>=60?`${site.timer/60} minute${site.timer/60===1?'':'s'}`:`${site.timer} seconds`;
-  if(foot)foot.innerHTML=`<div class="waiting-surf">🌊 Stay on Facebook for ${minutes} then come back!</div>`;
+  if(foot)foot.innerHTML=`<div class="waiting-surf">🌊 Stay on Website for ${minutes} then come back!</div>`;
   if(card)card.classList.add('is-active');
-  showToast(`Facebook opened! Browse for ${minutes}, then return here to claim ${formatNaira(site.reward)}.`,'success',7000);
+  showToast(`Website opened! Browse for ${minutes}, then return here to claim ${formatNaira(site.reward)}.`,'success',7000);
 }
 
 async function claimSurf(siteId,reward){
