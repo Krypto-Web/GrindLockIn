@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+  <title>Admin Dashboard — Grindpoint</title>
+  <link rel="stylesheet" href="../css/style.css"/>
+  <style>
+    .admin-sidebar .sidebar__link.active{color:var(--error);background:var(--error-bg);}
+    .admin-sidebar .sidebar__link.active::before{background:var(--error);}
+  </style>
+</head>
+<body style="visibility:hidden">
+
+<nav class="navbar" style="border-bottom-color:rgba(239,68,68,.25);">
+  <div class="navbar__inner">
+    <div style="display:flex;align-items:center;gap:1rem;">
+      <a href="../index.html" class="navbar__logo">Grind<span class="logo-accent">point</span></a>
+      <span class="admin-badge">Admin Panel</span>
+    </div>
+    <div style="display:flex;align-items:center;gap:1rem;">
+      <span style="font-size:.82rem;color:var(--text-secondary);" id="adminName">Admin</span>
+      <button onclick="signOut()" class="btn btn-secondary btn-sm">Sign Out</button>
+    </div>
+  </div>
+</nav>
+
+<div class="page-wrapper">
+  <aside class="sidebar admin-sidebar">
+    <nav class="sidebar__nav">
+      <span class="sidebar__label">Overview</span>
+      <a href="index.html" class="sidebar__link active">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/></svg>
+        Dashboard
+      </a>
+      <a href="analytics.html" class="sidebar__link"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>Analytics</a>
+      <a href="fraud.html" class="sidebar__link"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>Fraud Detection</a>
+      <span class="sidebar__label">Manage</span>
+      <a href="users.html" class="sidebar__link">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/></svg>
+        All Users
+      </a>
+      <a href="task-submissions.html" class="sidebar__link">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11"/></svg>
+        Task Submissions
+        <span class="badge badge-error" id="subBadge" style="margin-left:auto;font-size:.65rem;">0</span>
+      </a>
+      <a href="withdrawals.html" class="sidebar__link">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 000 7h5a3.5 3.5 0 010 7H6"/></svg>
+        Withdrawals
+        <span class="badge badge-error" id="wdBadge" style="margin-left:auto;font-size:.65rem;">0</span>
+      </a>
+      <a href="tasks-admin.html" class="sidebar__link">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 11l3 3L22 4"/></svg>
+        Task Manager
+      </a>
+      <a href="announcements.html" class="sidebar__link">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 17H2a3 3 0 000 6h20V17z"/><path d="M22 17V3l-4 4H2v10h20z"/></svg>
+        Announcements
+      </a>
+            <a href="payment-proofs.html" class="sidebar__link"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 11-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>Payment Proofs</a>
+      <a href="blog-admin.html" class="sidebar__link"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 20h9M16.5 3.5a2.121 2.121 0 013 3L7 19l-4 1 1-4L16.5 3.5z"/></svg>Blog Manager</a>
+      <span class="sidebar__label">System</span>
+      <a href="settings.html" class="sidebar__link">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 010 2.83 2 2 0 01-2.83 0l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-2 2 2 2 0 01-2-2v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 01-2.83 0 2 2 0 010-2.83l.06-.06A1.65 1.65 0 004.68 15a1.65 1.65 0 00-1.51-1H3a2 2 0 01-2-2 2 2 0 012-2h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 010-2.83 2 2 0 012.83 0l.06.06A1.65 1.65 0 009 4.68a1.65 1.65 0 001-1.51V3a2 2 0 012-2 2 2 0 012 2v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 012.83 0 2 2 0 010 2.83l-.06.06A1.65 1.65 0 0019.4 9a1.65 1.65 0 001.51 1H21a2 2 0 012 2 2 2 0 01-2 2h-.09a1.65 1.65 0 00-1.51 1z"/></svg>
+        Settings
+      </a>
+      <a href="../index.html" class="sidebar__link" target="_blank">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+        View Live Site
+      </a>
+    </nav>
+  </aside>
+
+  <main class="main-content">
+    <div class="page-header" style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:1rem;">
+      <div>
+        <h1 class="page-title">Admin Dashboard</h1>
+        <p class="page-subtitle" id="adminDate">—</p>
+      </div>
+      <button class="btn btn-secondary btn-sm" onclick="loadStats()">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:15px;height:15px;"><polyline points="23 4 23 10 17 10"/><polyline points="1 20 1 14 7 14"/><path d="M3.51 9a9 9 0 0114.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0020.49 15"/></svg>
+        Refresh
+      </button>
+    </div>
+
+    <div class="stats-grid mb-6" id="kpiGrid">
+      <div class="stat-card skeleton" style="height:130px;"></div>
+      <div class="stat-card skeleton" style="height:130px;"></div>
+      <div class="stat-card skeleton" style="height:130px;"></div>
+      <div class="stat-card skeleton" style="height:130px;"></div>
+    </div>
+
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:1.5rem;margin-bottom:2rem;">
+      <div class="card">
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:1.25rem;">
+          <h3 style="font-size:1rem;">Recent Registrations</h3>
+          <a href="users.html" class="btn btn-ghost btn-sm" style="font-size:.78rem;">View All →</a>
+        </div>
+        <div id="recentUsers"><div class="skeleton" style="height:44px;border-radius:8px;margin-bottom:8px;"></div><div class="skeleton" style="height:44px;border-radius:8px;margin-bottom:8px;"></div><div class="skeleton" style="height:44px;border-radius:8px;"></div></div>
+      </div>
+      <div class="card">
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:1.25rem;">
+          <h3 style="font-size:1rem;">Pending Withdrawals</h3>
+          <a href="withdrawals.html" class="btn btn-ghost btn-sm" style="font-size:.78rem;">Manage →</a>
+        </div>
+        <div id="pendingWd"><div class="skeleton" style="height:44px;border-radius:8px;margin-bottom:8px;"></div><div class="skeleton" style="height:44px;border-radius:8px;"></div></div>
+      </div>
+    </div>
+
+    <div class="card">
+      <h3 style="font-size:1rem;margin-bottom:1.25rem;">Quick Actions</h3>
+      <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(190px,1fr));gap:.75rem;">
+        <a href="users.html" class="quick-admin-card"><span style="font-size:1.3rem;">👥</span><div><strong>Manage Users</strong><p>Edit, ban, credit balance</p></div></a>
+        <a href="task-submissions.html" class="quick-admin-card"><span style="font-size:1.3rem;">✅</span><div><strong>Review Tasks</strong><p>Approve/reject proofs</p></div></a>
+        <a href="withdrawals.html" class="quick-admin-card"><span style="font-size:1.3rem;">💸</span><div><strong>Withdrawals</strong><p>Process payout requests</p></div></a>
+        <a href="announcements.html" class="quick-admin-card"><span style="font-size:1.3rem;">📢</span><div><strong>Announcements</strong><p>Post platform updates</p></div></a>
+        <a href="settings.html" class="quick-admin-card"><span style="font-size:1.3rem;">⚙️</span><div><strong>Settings</strong><p>Platform configuration</p></div></a>
+      </div>
+    </div>
+  </main>
+</div>
+
+<style>
+  .quick-admin-card{display:flex;align-items:center;gap:.75rem;padding:1rem;background:var(--bg-elevated);border:1px solid var(--border-subtle);border-radius:var(--radius-md);transition:all .2s;text-decoration:none;}
+  .quick-admin-card:hover{border-color:var(--border-gold);background:var(--bg-hover);}
+  .quick-admin-card strong{display:block;font-size:.875rem;color:var(--text-primary);}
+  .quick-admin-card p{font-size:.75rem;color:var(--text-muted);margin:0;}
+</style>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.min.js"></script>
+<script src="../js/supabase-config.js"></script>
+<script src="../js/main.js"></script>
+<script>
+document.addEventListener("DOMContentLoaded", async () => {
+  const auth = await requireAdmin();
+  if (!auth) return;
+
+  document.getElementById("adminName").textContent = auth.profile?.full_name || "Admin";
+  document.getElementById("adminDate").textContent = new Date().toLocaleDateString("en-NG",{weekday:"long",year:"numeric",month:"long",day:"numeric"});
+
+  await loadStats();
+});
+
+async function loadStats() {
+  const sb = getSupabase();
+  if (!sb) return;
+  try {
+    const [{ data: users }, { data: wds }, { data: subs }] = await Promise.all([
+      sb.from("profiles").select("id,full_name,balance,tasks_completed,created_at").order("created_at",{ascending:false}),
+      sb.from("withdrawal_requests").select("amount,status").eq("status","pending"),
+      sb.from("task_submissions").select("id,status").eq("status","pending"),
+    ]);
+
+    const U = users || [], W = wds || [], S = subs || [];
+    const totalBal  = U.reduce((s,u) => s+(u.balance||0), 0);
+    const totalTask = U.reduce((s,u) => s+(u.tasks_completed||0), 0);
+
+    document.getElementById("subBadge").textContent = S.length;
+    document.getElementById("wdBadge").textContent  = W.length;
+
+    document.getElementById("kpiGrid").innerHTML = `
+      <div class="stat-card stat-card--gold">
+        <div class="stat-card__label">Total Users</div>
+        <div class="stat-card__value">${U.length.toLocaleString()}</div>
+        <div class="stat-card__sub">Registered accounts</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-card__label">Wallet Funds</div>
+        <div class="stat-card__value">${formatNaira(totalBal)}</div>
+        <div class="stat-card__sub">Across all wallets</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-card__label">Tasks Completed</div>
+        <div class="stat-card__value">${totalTask.toLocaleString()}</div>
+        <div class="stat-card__sub">Platform-wide</div>
+      </div>
+      <div class="stat-card" style="${W.length>0?'border-color:rgba(239,68,68,.3);':''}">
+        <div class="stat-card__label">Pending Withdrawals</div>
+        <div class="stat-card__value" style="${W.length>0?'color:var(--error);':''}">${W.length}</div>
+        <div class="stat-card__sub">${formatNaira(W.reduce((s,w)=>s+(w.amount||0),0))} pending</div>
+      </div>`;
+
+    document.getElementById("recentUsers").innerHTML = U.slice(0,5).map(u=>`
+      <div style="display:flex;align-items:center;justify-content:space-between;padding:.6rem .75rem;background:var(--bg-elevated);border-radius:var(--radius-md);margin-bottom:.5rem;">
+        <span style="font-size:.85rem;font-weight:500;">${u.full_name||'Unknown'}</span>
+        <span style="font-size:.78rem;color:var(--gold-500);font-weight:600;">${formatNaira(u.balance)}</span>
+      </div>`).join('') || '<p style="color:var(--text-muted);font-size:.85rem;text-align:center;padding:1rem;">No users yet.</p>';
+
+    document.getElementById("pendingWd").innerHTML = W.length ? W.slice(0,4).map(w=>`
+      <div style="display:flex;align-items:center;justify-content:space-between;padding:.6rem .75rem;background:var(--error-bg);border:1px solid rgba(239,68,68,.2);border-radius:var(--radius-md);margin-bottom:.5rem;">
+        <span style="font-size:.85rem;font-weight:600;color:var(--error);">${formatNaira(w.amount)}</span>
+        <span class="badge badge-error">Pending</span>
+      </div>`).join('') : '<div style="text-align:center;padding:1.5rem;"><p style="font-size:.85rem;color:var(--text-muted);">✅ No pending withdrawals</p></div>';
+
+  } catch(err) {
+    console.error("[Admin]", err);
+    document.getElementById("kpiGrid").innerHTML = `<div class="card" style="grid-column:1/-1;text-align:center;padding:2rem;color:var(--text-muted);">Could not load stats: ${err.message}</div>`;
+  }
+}
+</script>
+</body>
+</html>

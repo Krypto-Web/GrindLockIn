@@ -1,0 +1,299 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+  <title>All Users — Grindpoint Admin</title>
+  <link rel="stylesheet" href="../css/style.css"/>
+  <style>
+    .admin-sidebar .sidebar__link.active{color:var(--error);background:var(--error-bg);}
+    .admin-sidebar .sidebar__link.active::before{background:var(--error);}
+    .status-active{color:var(--success);}
+    .status-banned{color:var(--error);}
+    .status-warned{color:var(--gold-500);}
+  </style>
+</head>
+<body style="visibility:hidden">
+<nav class="navbar" style="border-bottom-color:rgba(239,68,68,.25);">
+  <div class="navbar__inner">
+    <div style="display:flex;align-items:center;gap:1rem;">
+      <a href="../index" class="navbar__logo">Grind<span class="logo-accent">point</span></a>
+      <span class="admin-badge">Admin Panel</span>
+    </div>
+    <div style="display:flex;align-items:center;gap:1rem;">
+      <span id="adminName" style="font-size:.82rem;color:var(--text-secondary);">Admin</span>
+      <button onclick="signOut()" class="btn btn-secondary btn-sm">Sign Out</button>
+    </div>
+  </div>
+</nav>
+<div class="page-wrapper">
+  <aside class="sidebar admin-sidebar">
+    <nav class="sidebar__nav">
+      <span class="sidebar__label">Overview</span>
+      <a href="index.html" class="sidebar__link"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/></svg>Dashboard</a>
+      <a href="analytics.html" class="sidebar__link"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>Analytics</a>
+      <a href="fraud.html" class="sidebar__link"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>Fraud Detection</a>
+      <span class="sidebar__label">Manage</span>
+      <a href="users.html" class="sidebar__link active"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/></svg>All Users</a>
+      <a href="task-submissions.html" class="sidebar__link"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 11l3 3L22 4"/></svg>Task Submissions</a>
+      <a href="withdrawals.html" class="sidebar__link"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 000 7h5a3.5 3.5 0 010 7H6"/></svg>Withdrawals</a>
+      <a href="tasks-admin.html" class="sidebar__link"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 11l3 3L22 4"/></svg>Task Manager</a>
+      <a href="announcements.html" class="sidebar__link"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 17H2a3 3 0 000 6h20V17z"/></svg>Announcements</a>
+      <a href="payment-proofs.html" class="sidebar__link"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 11-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>Payment Proofs</a>
+      <a href="blog-admin.html" class="sidebar__link"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 20h9M16.5 3.5a2.121 2.121 0 013 3L7 19l-4 1 1-4L16.5 3.5z"/></svg>Blog Manager</a>
+      <span class="sidebar__label">System</span>
+      <a href="settings.html" class="sidebar__link"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/></svg>Settings</a>
+    </nav>
+  </aside>
+
+  <main class="main-content">
+    <div class="page-header" style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:1rem;">
+      <div>
+        <h1 class="page-title">All Users</h1>
+        <p class="page-subtitle" id="userCount">Loading…</p>
+      </div>
+      <div style="display:flex;gap:.75rem;">
+        <input type="text" id="searchInput" class="form-control" placeholder="Search name or email…" style="width:220px;"/>
+        <select id="statusFilter" class="form-control" style="width:130px;">
+          <option value="all">All Status</option>
+          <option value="active">Active</option>
+          <option value="warned">Warned</option>
+          <option value="banned">Banned</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="table-wrapper">
+      <table class="data-table">
+        <thead>
+          <tr><th>User</th><th>Balance</th><th>Tasks</th><th>Referrals</th><th>Joined</th><th>Status</th><th style="width:180px;">Actions</th></tr>
+        </thead>
+        <tbody id="tbody">
+          <tr><td colspan="7" style="text-align:center;padding:3rem;color:var(--text-muted);">Loading…</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </main>
+</div>
+
+<!-- Warn modal -->
+<div class="modal" id="warnModal">
+  <div class="modal__box" style="max-width:460px;">
+    <div class="modal__header">
+      <h3 class="modal__title" style="color:var(--gold-500);">Send Warning</h3>
+      <button class="modal__close" onclick="closeModal('warnModal')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
+    </div>
+    <div class="modal__body">
+      <p style="color:var(--text-secondary);margin-bottom:1rem;">Send a formal warning to <strong id="warnUserName" style="color:var(--text-primary);"></strong>. Their account status will be marked as <strong style="color:var(--gold-500);">Warned</strong> and they will see a warning banner when they log in.</p>
+      <div class="form-group">
+        <label class="form-label">Warning Reason <span style="color:var(--error);">*</span></label>
+        <select id="warnReason" class="form-control" style="margin-bottom:.75rem;">
+          <option value="">Select reason…</option>
+          <option value="Submitting fake task proof">Submitting fake task proof</option>
+          <option value="Multiple accounts detected">Multiple accounts detected</option>
+          <option value="Suspicious withdrawal activity">Suspicious withdrawal activity</option>
+          <option value="Abusive behaviour toward platform">Abusive behaviour toward platform</option>
+          <option value="Referral fraud detected">Referral fraud detected</option>
+          <option value="Other violation">Other violation</option>
+        </select>
+        <textarea id="warnNote" class="form-control" rows="2" placeholder="Additional details (optional)…" style="resize:vertical;"></textarea>
+      </div>
+    </div>
+    <div class="modal__footer">
+      <button class="btn btn-secondary" onclick="closeModal('warnModal')">Cancel</button>
+      <button class="btn" style="background:rgba(245,158,11,.15);color:var(--gold-500);border:1px solid rgba(245,158,11,.3);" id="confirmWarnBtn">Send Warning</button>
+    </div>
+  </div>
+</div>
+
+<!-- Ban confirm modal -->
+<div class="modal" id="banModal">
+  <div class="modal__box" style="max-width:420px;">
+    <div class="modal__header">
+      <h3 class="modal__title" id="banModalTitle" style="color:var(--error);">Ban User</h3>
+      <button class="modal__close" onclick="closeModal('banModal')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
+    </div>
+    <div class="modal__body">
+      <p id="banModalDesc" style="color:var(--text-secondary);line-height:1.7;"></p>
+    </div>
+    <div class="modal__footer">
+      <button class="btn btn-secondary" onclick="closeModal('banModal')">Cancel</button>
+      <button class="btn btn-danger" id="confirmBanBtn">Confirm</button>
+    </div>
+  </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.min.js"></script>
+<script src="../js/supabase-config.js"></script>
+<script src="../js/main.js"></script>
+<script>
+let _users=[], _warnId=null, _banId=null;
+
+document.addEventListener('DOMContentLoaded',async()=>{
+  const auth=await requireAdmin();
+  if(!auth)return;
+  document.getElementById('adminName').textContent=auth.profile?.full_name||'Admin';
+  await load();
+});
+
+async function load(){
+  const sb=getSupabase();
+  const{data,error}=await sb.from('profiles')
+    .select('id,full_name,email,balance,tasks_completed,referral_count,status,warn_reason,role,created_at')
+    .order('created_at',{ascending:false});
+  if(error){
+    document.getElementById('tbody').innerHTML=`<tr><td colspan="7" style="text-align:center;padding:2rem;color:var(--error);">${error.message}</td></tr>`;
+    return;
+  }
+  _users=data||[];
+  render(_users);
+}
+
+function fmtDate(d){return d?new Date(d).toLocaleDateString('en-NG',{day:'numeric',month:'short',year:'numeric'}):'—';}
+
+function render(list){
+  const total=_users.length;
+  const active=_users.filter(u=>u.status==='active'||!u.status).length;
+  const banned=_users.filter(u=>u.status==='banned').length;
+  const warned=_users.filter(u=>u.status==='warned').length;
+  document.getElementById('userCount').textContent=
+    `${total} total · ${active} active · ${warned} warned · ${banned} banned`;
+
+  if(!list.length){
+    document.getElementById('tbody').innerHTML=
+      '<tr><td colspan="7" style="text-align:center;padding:3rem;color:var(--text-muted);">No users found.</td></tr>';
+    return;
+  }
+
+  document.getElementById('tbody').innerHTML=list.map(u=>{
+    const status=u.status||'active';
+    const statusColor={active:'var(--success)',warned:'var(--gold-500)',banned:'var(--error)'}[status]||'var(--text-muted)';
+    const statusLabel={active:'Active',warned:'Warned',banned:'Banned'}[status]||status;
+    return `<tr id="urow-${u.id}">
+      <td>
+        <div style="font-weight:600;font-size:.875rem;">${u.full_name||'—'}</div>
+        <div style="font-size:.73rem;color:var(--text-muted);">${u.email||'—'}</div>
+        ${u.role==='admin'?'<span class="badge badge-error" style="font-size:.6rem;margin-top:2px;">Admin</span>':''}
+      </td>
+      <td style="font-weight:600;color:var(--gold-500);">${formatNaira(u.balance||0)}</td>
+      <td style="font-size:.85rem;">${u.tasks_completed||0}</td>
+      <td style="font-size:.85rem;">${u.referral_count||0}</td>
+      <td style="font-size:.78rem;color:var(--text-muted);">${fmtDate(u.created_at)}</td>
+      <td>
+        <span style="font-size:.8rem;font-weight:700;color:${statusColor};">${statusLabel}</span>
+        ${u.warn_reason?`<div style="font-size:.7rem;color:var(--text-muted);margin-top:2px;">${u.warn_reason}</div>`:''}
+      </td>
+      <td>
+        <div style="display:flex;gap:.4rem;flex-wrap:wrap;">
+          ${status!=='warned'&&status!=='banned'?`<button class="btn btn-sm" style="background:rgba(245,158,11,.12);color:var(--gold-500);border:1px solid rgba(245,158,11,.3);" onclick="openWarn('${u.id}','${(u.full_name||'').replace(/'/g,"\\'")}')">Warn</button>`:''}
+          ${status==='warned'?`<button class="btn btn-sm" style="background:var(--bg-elevated);color:var(--text-secondary);border:1px solid var(--border-subtle);" onclick="clearWarn('${u.id}')">Clear</button>`:''}
+          <button class="btn btn-sm ${status==='banned'?'':'btn-danger'}" 
+            style="${status==='banned'?'background:var(--success-bg);color:var(--success);border:1px solid rgba(34,197,94,.3);':''}"
+            onclick="openBan('${u.id}','${status}','${(u.full_name||'').replace(/'/g,"\\'")}')">
+            ${status==='banned'?'Unban':'Ban'}
+          </button>
+        </div>
+      </td>
+    </tr>`;
+  }).join('');
+}
+
+/* ── Search + filter ── */
+function applyFilters(){
+  const q=document.getElementById('searchInput').value.trim().toLowerCase();
+  const s=document.getElementById('statusFilter').value;
+  let list=_users;
+  if(q)list=list.filter(u=>(u.full_name||'').toLowerCase().includes(q)||(u.email||'').toLowerCase().includes(q));
+  if(s!=='all')list=list.filter(u=>(u.status||'active')===s);
+  render(list);
+}
+document.getElementById('searchInput').addEventListener('input',applyFilters);
+document.getElementById('statusFilter').addEventListener('change',applyFilters);
+
+/* ── Warn ── */
+function openWarn(id,name){
+  _warnId=id;
+  document.getElementById('warnUserName').textContent=name;
+  document.getElementById('warnReason').value='';
+  document.getElementById('warnNote').value='';
+  openModal('warnModal');
+}
+
+document.getElementById('confirmWarnBtn').addEventListener('click',async()=>{
+  const reason=document.getElementById('warnReason').value;
+  if(!reason){showToast('Please select a reason.','warning');return;}
+  const note=document.getElementById('warnNote').value.trim();
+  const fullReason=note?`${reason}: ${note}`:reason;
+  const btn=document.getElementById('confirmWarnBtn');
+  setButtonLoading(btn,'Sending…');
+
+  const{error}=await getSupabase().from('profiles').update({
+    status:'warned',
+    warn_reason:fullReason,
+    updated_at:new Date().toISOString(),
+  }).eq('id',_warnId);
+
+  clearButtonLoading(btn);
+  if(error){showToast('Error: '+error.message,'error');return;}
+
+  const i=_users.findIndex(u=>u.id===_warnId);
+  if(i>-1){_users[i].status='warned';_users[i].warn_reason=fullReason;}
+  closeModal('warnModal');
+  applyFilters();
+  showToast('Warning sent. User will see a notice when they log in.','success');
+});
+
+async function clearWarn(id){
+  const{error}=await getSupabase().from('profiles').update({
+    status:'active',warn_reason:null,updated_at:new Date().toISOString()
+  }).eq('id',id);
+  if(error){showToast('Error: '+error.message,'error');return;}
+  const i=_users.findIndex(u=>u.id===id);
+  if(i>-1){_users[i].status='active';_users[i].warn_reason=null;}
+  applyFilters();
+  showToast('Warning cleared. Account is active again.','success');
+}
+
+/* ── Ban ── */
+function openBan(id,currentStatus,name){
+  _banId=id;
+  const isBanned=currentStatus==='banned';
+  document.getElementById('banModalTitle').textContent=isBanned?'Unban User':'Ban User';
+  document.getElementById('banModalTitle').style.color=isBanned?'var(--success)':'var(--error)';
+  document.getElementById('banModalDesc').textContent=isBanned
+    ?`Restore access for ${name}? They will be able to log in again immediately.`
+    ?`Permanently suspend ${name}'s account? They will be blocked from logging in and shown a suspension message.`:''
+    :`Permanently suspend ${name}'s account? They will be blocked from logging in and shown a suspension message.`;
+  document.getElementById('confirmBanBtn').textContent=isBanned?'Yes, Unban':'Yes, Ban';
+  document.getElementById('confirmBanBtn').className=`btn ${isBanned?'':'btn-danger'}`;
+  if(isBanned){document.getElementById('confirmBanBtn').style.cssText='background:var(--success-bg);color:var(--success);border:1px solid rgba(34,197,94,.3);';}
+  else{document.getElementById('confirmBanBtn').style.cssText='';}
+  openModal('banModal');
+}
+
+document.getElementById('confirmBanBtn').addEventListener('click',async()=>{
+  const btn=document.getElementById('confirmBanBtn');
+  const user=_users.find(u=>u.id===_banId);
+  const newStatus=user?.status==='banned'?'active':'banned';
+  setButtonLoading(btn,'Processing…');
+
+  const{error}=await getSupabase().from('profiles').update({
+    status:newStatus,
+    warn_reason:newStatus==='banned'?'Account suspended by admin':null,
+    updated_at:new Date().toISOString(),
+  }).eq('id',_banId);
+
+  clearButtonLoading(btn);
+  if(error){showToast('Error: '+error.message,'error');return;}
+  const i=_users.findIndex(u=>u.id===_banId);
+  if(i>-1){_users[i].status=newStatus;}
+  closeModal('banModal');
+  applyFilters();
+  showToast(newStatus==='banned'?'User banned. They can no longer log in.':'User unbanned. Account restored.','success');
+});
+
+initModalCloseOnBackdrop('warnModal');
+initModalCloseOnBackdrop('banModal');
+</script>
+</body>
+</html>

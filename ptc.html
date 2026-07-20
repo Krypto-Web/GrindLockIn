@@ -1,0 +1,589 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+  <title>View Ads & Earn — Grindpoint</title>
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><text y='26' font-size='28'>⚡</text></svg>"/>
+  <link rel="stylesheet" href="css/style.css"/>
+  <style>
+    .ptc-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:1rem;}
+    .ptc-card{background:var(--bg-card);border:1px solid var(--border-subtle);border-radius:var(--radius-lg);overflow:hidden;display:flex;flex-direction:column;transition:all .2s;}
+    .ptc-card:hover:not(.viewed):not(.is-active){border-color:var(--border-gold);transform:translateY(-2px);box-shadow:var(--shadow-gold);}
+    .ptc-card.viewed{opacity:.5;}
+    .ptc-card.is-active{border-color:var(--gold-500);box-shadow:0 0 0 2px rgba(245,158,11,.2);}
+    .ptc-head{display:flex;align-items:center;gap:.75rem;padding:.9rem 1rem;border-bottom:1px solid var(--border-subtle);}
+    .ptc-icon{width:42px;height:42px;border-radius:var(--radius-md);display:flex;align-items:center;justify-content:center;font-size:1.3rem;flex-shrink:0;}
+    .ptc-name{font-weight:700;font-size:.875rem;color:var(--text-primary);}
+    .ptc-desc{font-size:.72rem;color:var(--text-muted);line-height:1.4;margin-top:1px;}
+    .ptc-body{padding:.75rem 1rem;flex:1;display:flex;align-items:center;justify-content:space-between;gap:.75rem;}
+    .ptc-reward{font-family:var(--font-display);font-size:1.1rem;font-weight:800;color:var(--gold-500);}
+    .ptc-timer-info{font-size:.73rem;color:var(--text-muted);}
+    .ptc-foot{padding:.75rem 1rem;border-top:1px solid var(--border-subtle);}
+    .timer-wrap{position:relative;width:54px;height:54px;flex-shrink:0;}
+    .timer-ring{transform:rotate(-90deg);}
+    .timer-ring-bg{fill:none;stroke:var(--bg-hover);stroke-width:5;}
+    .timer-ring-fill{fill:none;stroke:var(--gold-500);stroke-width:5;stroke-linecap:round;}
+    .timer-num{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-size:.85rem;font-weight:800;color:var(--gold-500);}
+    .ptc-stats{display:grid;grid-template-columns:repeat(3,1fr);gap:.75rem;margin-bottom:1.75rem;}
+    @media(max-width:600px){.ptc-stats{grid-template-columns:1fr 1fr;}}
+    .filter-bar{display:flex;gap:.5rem;flex-wrap:wrap;margin-bottom:1.25rem;}
+    .fpill{padding:.38rem .85rem;border-radius:var(--radius-full);font-size:.78rem;font-weight:600;border:1px solid var(--border-default);background:transparent;color:var(--text-secondary);cursor:pointer;transition:all .15s;}
+    .fpill:hover{border-color:var(--gold-500);color:var(--gold-500);}
+    .fpill.active{background:var(--gold-gradient);color:#000;border-color:transparent;}
+    .bonus-banner{display:flex;align-items:center;gap:1rem;padding:1rem 1.25rem;background:linear-gradient(135deg,rgba(245,158,11,.12),rgba(245,158,11,.04));border:1px solid rgba(245,158,11,.3);border-radius:var(--radius-lg);margin-bottom:1.75rem;}
+    /* Waiting overlay on card */
+    .waiting-overlay{background:rgba(245,158,11,.06);border:1px dashed var(--gold-500);border-radius:var(--radius-md);padding:.75rem;text-align:center;font-size:.8rem;color:var(--gold-400);}
+  </style>
+</head>
+<body style="visibility:hidden">
+
+<nav class="navbar">
+  <div class="navbar__inner">
+    <a href="index" class="navbar__logo">Grind<span class="logo-accent">point</span></a>
+    <div class="navbar__actions" style="gap:.75rem;">
+      <button class="sidebar-toggle-btn" id="sidebarToggleBtn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg></button>
+      <span style="font-size:.82rem;color:var(--text-secondary);">Balance: <strong id="navBalance" style="color:var(--gold-500);">₦—</strong></span>
+    </div>
+  </div>
+</nav>
+
+<div class="page-wrapper">
+  <aside class="sidebar" id="sidebar">
+    <nav class="sidebar__nav">
+      <span class="sidebar__label">Main Menu</span>
+      <a href="dashboard" class="sidebar__link"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/></svg>Dashboard</a>
+      <a href="ptc" class="sidebar__link active"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 10l4.553-2.069A1 1 0 0121 8.845v6.31a1 1 0 01-1.447.894L15 14M3 8a2 2 0 012-2h10a2 2 0 012 2v8a2 2 0 01-2 2H5a2 2 0 01-2-2V8z"/></svg>View Ads <span class="badge badge-gold" style="margin-left:auto;font-size:.62rem;">200</span></a>
+      <a href="surf" class="sidebar__link"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 12h18M3 6h18M3 18h18"/></svg>Surf &amp; Earn</a>
+      <a href="tasks" class="sidebar__link"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11"/></svg>Earn Tasks</a>
+      <a href="referral" class="sidebar__link"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/></svg>Referrals</a>
+      <a href="leaderboard" class="sidebar__link"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>Leaderboard</a>
+      <a href="proof-of-payment" class="sidebar__link"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 11-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>Proof of Payment</a>
+      <span class="sidebar__label">Account</span>
+      <a href="transactions" class="sidebar__link"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/></svg>Transactions</a>
+      <a href="profile" class="sidebar__link"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>My Profile</a>
+    </nav>
+    <div class="sidebar__footer">
+      <div class="sidebar__user">
+        <div class="user-avatar" id="sidebarAvatar">--</div>
+        <div class="sidebar__user-info">
+          <div class="sidebar__user-name" id="sidebarName">Loading…</div>
+          <div class="sidebar__user-role">Member</div>
+        </div>
+        <button onclick="signOut()" class="btn btn-ghost btn-icon" title="Sign out">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:16px;height:16px;"><path d="M9 21H5a2 2 0 01-2-2V5a2 2 0 012-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+        </button>
+      </div>
+    </div>
+  </aside>
+
+  <main class="main-content">
+    <div class="page-header">
+      <div class="section-label">Passive Earnings</div>
+      <h1 class="page-title">View Ads &amp; Earn</h1>
+      <p class="page-subtitle">Click an ad, it opens on Facebook. Stay on the page until the timer completes, then come back and claim your reward. Resets every midnight.</p>
+    </div>
+
+    <!-- Daily bonus -->
+    <div id="bonusBanner" class="bonus-banner" style="display:none;">
+      <div style="font-size:2rem;flex-shrink:0;">🎁</div>
+      <div style="flex:1;">
+        <strong id="bonusTitle" style="display:block;font-size:.95rem;color:var(--text-primary);">Daily Login Bonus!</strong>
+        <span id="bonusDesc" style="font-size:.82rem;color:var(--text-secondary);">Claim your free daily bonus now.</span>
+      </div>
+      <button class="btn btn-primary btn-sm" id="claimBonusBtn">Claim ₦50</button>
+    </div>
+
+    <!-- Stats (no total remaining shown) -->
+    <div class="ptc-stats">
+      <div class="stat-card stat-card--gold">
+        <div class="stat-card__label">Earned Today</div>
+        <div class="stat-card__value" id="statToday">₦0</div>
+        <div class="stat-card__sub">From ads today</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-card__label">Ads Viewed</div>
+        <div class="stat-card__value" id="statViewed">0 / 200</div>
+        <div class="stat-card__sub">Resets at midnight</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-card__label">Wallet Balance</div>
+        <div class="stat-card__value" id="statBalance">₦—</div>
+        <div class="stat-card__sub">Total available</div>
+      </div>
+    </div>
+
+    <!-- Info box -->
+    <div style="display:flex;align-items:flex-start;gap:.75rem;padding:1rem 1.25rem;background:rgba(59,130,246,.06);border:1px solid rgba(59,130,246,.2);border-radius:var(--radius-lg);margin-bottom:1.5rem;font-size:.84rem;color:var(--text-secondary);line-height:1.6;">
+      <svg viewBox="0 0 24 24" fill="none" stroke="#3b82f6" stroke-width="2" style="width:20px;height:20px;flex-shrink:0;margin-top:1px;"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+      <div><strong style="color:var(--text-primary);">How it works:</strong> Click <strong>View Ad</strong> → Facebook opens in a new tab → Stay there for the full timer → Come back to Grindpoint → Click <strong>Claim Reward</strong>. If you return before the timer ends, the ad will be cancelled.</div>
+    </div>
+
+    <!-- Filters -->
+    <div class="filter-bar">
+      <button class="fpill active" data-f="all">All (200)</button>
+      <button class="fpill" data-f="available">Available</button>
+      <button class="fpill" data-f="viewed">✓ Viewed</button>
+      <button class="fpill" data-f="10">₦10</button>
+      <button class="fpill" data-f="15">₦15</button>
+      <button class="fpill" data-f="20">₦20</button>
+    </div>
+
+    <div class="ptc-grid" id="ptcGrid">
+      <div style="grid-column:1/-1;text-align:center;padding:3rem;color:var(--text-muted);">Loading ads…</div>
+    </div>
+  </main>
+</div>
+
+<div class="mobile-bottom-nav">
+  <nav>
+    <a href="dashboard" class="mbn-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/></svg>Home</a>
+    <a href="ptc" class="mbn-item active"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 10l4.553-2.069A1 1 0 0121 8.845v6.31a1 1 0 01-1.447.894L15 14M3 8a2 2 0 012-2h10a2 2 0 012 2v8a2 2 0 01-2 2H5a2 2 0 01-2-2V8z"/></svg>Ads</a>
+    <a href="surf" class="mbn-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 12h18"/></svg>Surf</a>
+    <a href="tasks" class="mbn-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 11l3 3L22 4"/></svg>Tasks</a>
+    <a href="profile" class="mbn-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>Profile</a>
+  </nav>
+</div>
+<div class="sidebar-overlay" id="sidebarOverlay"></div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.min.js"></script>
+<script src="js/supabase-config.js"></script>
+<script src="js/main.js"></script>
+<script>
+/* ═══════════════════════════════════════════
+   200 PTC ADS — all open facebook.com
+   Rewards: ₦10 (15s), ₦15 (20s), ₦20 (30s)
+═══════════════════════════════════════════ */
+const PTC_ADS=[
+  {id:'ptc_001',name:'Opay',icon:'💳',color:'rgba(34,197,94,.12)',timer:15,reward:10,desc:'Fast digital payments across Nigeria'},
+  {id:'ptc_002',name:'Kuda Bank',icon:'🏦',color:'rgba(34,197,94,.12)',timer:15,reward:10,desc:'The bank account built for Nigerians'},
+  {id:'ptc_003',name:'PalmPay',icon:'💳',color:'rgba(34,197,94,.12)',timer:20,reward:15,desc:'Send money instantly, pay bills easily'},
+  {id:'ptc_004',name:'Moniepoint',icon:'💳',color:'rgba(34,197,94,.12)',timer:15,reward:10,desc:'Business banking that works for you'},
+  {id:'ptc_005',name:'Carbon Paylater',icon:'💰',color:'rgba(34,197,94,.12)',timer:20,reward:15,desc:'Quick loans and investments online'},
+  {id:'ptc_006',name:'FairMoney',icon:'💳',color:'rgba(34,197,94,.12)',timer:15,reward:10,desc:'Instant loans up to ₦1 million'},
+  {id:'ptc_007',name:'Cowrywise',icon:'💰',color:'rgba(34,197,94,.12)',timer:20,reward:15,desc:'Automated savings and investments'},
+  {id:'ptc_008',name:'PiggyVest',icon:'🐷',color:'rgba(34,197,94,.12)',timer:20,reward:15,desc:'Save and invest with ease in Nigeria'},
+  {id:'ptc_009',name:'Chipper Cash',icon:'💳',color:'rgba(34,197,94,.12)',timer:15,reward:10,desc:'Send money across Africa for free'},
+  {id:'ptc_010',name:'Grey Finance',icon:'💳',color:'rgba(34,197,94,.12)',timer:30,reward:20,desc:'Get a USD EUR GBP account today'},
+  {id:'ptc_011',name:'Jumia Nigeria',icon:'🛒',color:'rgba(245,158,11,.12)',timer:20,reward:15,desc:'Shop from millions of products online'},
+  {id:'ptc_012',name:'Konga',icon:'🛒',color:'rgba(245,158,11,.12)',timer:15,reward:10,desc:"Nigeria's trusted online marketplace"},
+  {id:'ptc_013',name:'Jiji.ng',icon:'🏷️',color:'rgba(245,158,11,.12)',timer:15,reward:10,desc:'Buy and sell anything in Nigeria'},
+  {id:'ptc_014',name:'Printivo',icon:'🖨️',color:'rgba(245,158,11,.12)',timer:20,reward:15,desc:'Quality print services delivered to you'},
+  {id:'ptc_015',name:'Payporte',icon:'🛍️',color:'rgba(245,158,11,.12)',timer:20,reward:15,desc:'Fashion and lifestyle shopping made easy'},
+  {id:'ptc_016',name:'Ruff N Tumble',icon:'👕',color:'rgba(245,158,11,.12)',timer:15,reward:10,desc:"Quality children's fashion accessories"},
+  {id:'ptc_017',name:'Slot Nigeria',icon:'📱',color:'rgba(245,158,11,.12)',timer:20,reward:15,desc:'Latest phones and gadgets best prices'},
+  {id:'ptc_018',name:'Pointek',icon:'💻',color:'rgba(245,158,11,.12)',timer:30,reward:20,desc:'Tech gadgets at best Nigerian prices'},
+  {id:'ptc_019',name:'Supermart.ng',icon:'🛒',color:'rgba(245,158,11,.12)',timer:15,reward:10,desc:'Grocery delivery to your doorstep'},
+  {id:'ptc_020',name:'Farmers Direct',icon:'🌾',color:'rgba(245,158,11,.12)',timer:20,reward:15,desc:'Fresh farm produce delivered daily'},
+  {id:'ptc_021',name:'House of Lunettes',icon:'👓',color:'rgba(236,72,153,.12)',timer:15,reward:10,desc:'Premium eyewear crafted in Nigeria'},
+  {id:'ptc_022',name:'Zivame Nigeria',icon:'👗',color:'rgba(236,72,153,.12)',timer:20,reward:15,desc:"Women's fashion and lingerie online"},
+  {id:'ptc_023',name:'Dealdey',icon:'💅',color:'rgba(236,72,153,.12)',timer:15,reward:10,desc:'Deals on beauty fashion and lifestyle'},
+  {id:'ptc_024',name:'Miniso Nigeria',icon:'🎀',color:'rgba(236,72,153,.12)',timer:20,reward:15,desc:'Affordable lifestyle products and gifts'},
+  {id:'ptc_025',name:'Chicamazing',icon:'👄',color:'rgba(236,72,153,.12)',timer:15,reward:10,desc:'African-inspired fashion for modern women'},
+  {id:'ptc_026',name:"Domino's Nigeria",icon:'🍕',color:'rgba(239,68,68,.12)',timer:20,reward:15,desc:'Hot fresh pizza delivered to your door'},
+  {id:'ptc_027',name:'Chicken Republic',icon:'🍗',color:'rgba(239,68,68,.12)',timer:15,reward:10,desc:"Nigeria's favourite fast food chain"},
+  {id:'ptc_028',name:'Chowdeck',icon:'🍱',color:'rgba(239,68,68,.12)',timer:20,reward:15,desc:'Food delivery from top restaurants fast'},
+  {id:'ptc_029',name:'Glovo Nigeria',icon:'🛵',color:'rgba(239,68,68,.12)',timer:15,reward:10,desc:'Get food and groceries in minutes'},
+  {id:'ptc_030',name:'Eatright.ng',icon:'🥗',color:'rgba(239,68,68,.12)',timer:20,reward:15,desc:'Healthy meal plans delivered weekly'},
+  {id:'ptc_031',name:'Bukka Hut',icon:'🍲',color:'rgba(239,68,68,.12)',timer:15,reward:10,desc:'Authentic Nigerian cuisine near you'},
+  {id:'ptc_032',name:'Cold Stone Nigeria',icon:'🍦',color:'rgba(239,68,68,.12)',timer:20,reward:15,desc:'Premium ice cream and sweet treats'},
+  {id:'ptc_033',name:'Kilimanjaro',icon:'🍖',color:'rgba(239,68,68,.12)',timer:15,reward:10,desc:'Nigerian grill and barbeque restaurant'},
+  {id:'ptc_034',name:'Andela',icon:'💻',color:'rgba(59,130,246,.12)',timer:30,reward:20,desc:"Join Africa's top tech talent network"},
+  {id:'ptc_035',name:'Flutterwave',icon:'⚡',color:'rgba(59,130,246,.12)',timer:30,reward:20,desc:'Payment infrastructure for Africa'},
+  {id:'ptc_036',name:'Interswitch',icon:'💳',color:'rgba(59,130,246,.12)',timer:30,reward:20,desc:"Powering Nigeria's payment ecosystem"},
+  {id:'ptc_037',name:'Paga',icon:'📲',color:'rgba(59,130,246,.12)',timer:20,reward:15,desc:'Mobile money and payment solutions'},
+  {id:'ptc_038',name:'IrokoTV',icon:'📺',color:'rgba(59,130,246,.12)',timer:20,reward:15,desc:'Stream the best Nollywood movies online'},
+  {id:'ptc_039',name:'Boomplay Nigeria',icon:'🎵',color:'rgba(59,130,246,.12)',timer:20,reward:15,desc:'African music streaming platform'},
+  {id:'ptc_040',name:'Paystack',icon:'💳',color:'rgba(59,130,246,.12)',timer:30,reward:20,desc:'Accept online payments with ease'},
+  {id:'ptc_041',name:'Techpoint Africa',icon:'📱',color:'rgba(59,130,246,.12)',timer:20,reward:15,desc:'Your trusted source for African tech news'},
+  {id:'ptc_042',name:'LifeBank',icon:'🏥',color:'rgba(20,184,166,.12)',timer:15,reward:10,desc:'Emergency blood and oxygen delivery'},
+  {id:'ptc_043',name:'Helium Health',icon:'💊',color:'rgba(20,184,166,.12)',timer:20,reward:15,desc:'Digital health records management'},
+  {id:'ptc_044',name:'Kangpe Health',icon:'⚕️',color:'rgba(20,184,166,.12)',timer:15,reward:10,desc:'Talk to a doctor online 24/7'},
+  {id:'ptc_045',name:'Well and Good NG',icon:'🌿',color:'rgba(20,184,166,.12)',timer:20,reward:15,desc:'Natural health and wellness products'},
+  {id:'ptc_046',name:'Reliance HMO',icon:'🏥',color:'rgba(20,184,166,.12)',timer:15,reward:10,desc:'Affordable health insurance for Nigeria'},
+  {id:'ptc_047',name:'DrugStoc',icon:'💊',color:'rgba(20,184,166,.12)',timer:20,reward:15,desc:'Pharmaceutical supply chain platform'},
+  {id:'ptc_048',name:'MedBridge Africa',icon:'⚕️',color:'rgba(20,184,166,.12)',timer:15,reward:10,desc:'Telemedicine for Nigerian patients'},
+  {id:'ptc_049',name:'Lifestore Pharmacy',icon:'💊',color:'rgba(20,184,166,.12)',timer:20,reward:15,desc:'Genuine drugs delivered to you'},
+  {id:'ptc_050',name:'ULesson',icon:'📚',color:'rgba(139,92,246,.12)',timer:20,reward:15,desc:"Learn with Nigeria's best tutors"},
+  {id:'ptc_051',name:'PrepClass',icon:'✏️',color:'rgba(139,92,246,.12)',timer:20,reward:15,desc:'Connect with verified private tutors'},
+  {id:'ptc_052',name:'Schoolable',icon:'🎓',color:'rgba(139,92,246,.12)',timer:15,reward:10,desc:'Education finance and savings platform'},
+  {id:'ptc_053',name:'Tuteria',icon:'📖',color:'rgba(139,92,246,.12)',timer:20,reward:15,desc:'Find trusted home and online tutors'},
+  {id:'ptc_054',name:'Learnfactory',icon:'🏫',color:'rgba(139,92,246,.12)',timer:20,reward:15,desc:'Tech skills for the African market'},
+  {id:'ptc_055',name:'Semicolon Africa',icon:'💻',color:'rgba(139,92,246,.12)',timer:30,reward:20,desc:'Software engineering bootcamp Nigeria'},
+  {id:'ptc_056',name:'AltSchool Africa',icon:'🎓',color:'rgba(139,92,246,.12)',timer:30,reward:20,desc:'Tech education for African developers'},
+  {id:'ptc_057',name:'Wakanow',icon:'✈️',color:'rgba(245,158,11,.12)',timer:30,reward:20,desc:'Book flights and hotels at best prices'},
+  {id:'ptc_058',name:'Hotels.ng',icon:'🏨',color:'rgba(245,158,11,.12)',timer:30,reward:20,desc:'Discover and book hotels across Nigeria'},
+  {id:'ptc_059',name:'Travelstart Nigeria',icon:'🛫',color:'rgba(245,158,11,.12)',timer:30,reward:20,desc:'Compare and book cheap flights online'},
+  {id:'ptc_060',name:'Chisco Transport',icon:'🚌',color:'rgba(245,158,11,.12)',timer:20,reward:15,desc:'Comfortable interstate travel Nigeria'},
+  {id:'ptc_061',name:'God is Good Motors',icon:'🚌',color:'rgba(34,197,94,.12)',timer:20,reward:15,desc:'Safe and reliable road transport'},
+  {id:'ptc_062',name:'DSTV Nigeria',icon:'📺',color:'rgba(239,68,68,.12)',timer:20,reward:15,desc:'Your favourite TV channels and sport'},
+  {id:'ptc_063',name:'ShowMax Nigeria',icon:'🎬',color:'rgba(239,68,68,.12)',timer:20,reward:15,desc:'Stream African and international content'},
+  {id:'ptc_064',name:'Audiomack Nigeria',icon:'🎵',color:'rgba(239,68,68,.12)',timer:15,reward:10,desc:'Discover new Nigerian music daily'},
+  {id:'ptc_065',name:'TurnTable Charts',icon:'🎤',color:'rgba(139,92,246,.12)',timer:20,reward:15,desc:"Nigeria's official music chart platform"},
+  {id:'ptc_066',name:'Naijaloaded',icon:'📰',color:'rgba(59,130,246,.12)',timer:15,reward:10,desc:'Latest music news and entertainment'},
+  {id:'ptc_067',name:'Cowrywise Business',icon:'💼',color:'rgba(59,130,246,.12)',timer:30,reward:20,desc:'Business savings and investment tools'},
+  {id:'ptc_068',name:'TeamApt',icon:'🏦',color:'rgba(59,130,246,.12)',timer:30,reward:20,desc:'Financial solutions for African SMEs'},
+  {id:'ptc_069',name:'TradeDepot',icon:'📦',color:'rgba(245,158,11,.12)',timer:30,reward:20,desc:'Buy and sell FMCG goods with ease'},
+  {id:'ptc_070',name:'Alerzo',icon:'🏪',color:'rgba(59,130,246,.12)',timer:30,reward:20,desc:'Stock your shop from your phone'},
+  {id:'ptc_071',name:'Sabi Business',icon:'🛒',color:'rgba(34,197,94,.12)',timer:30,reward:20,desc:'Wholesale marketplace for retailers'},
+  {id:'ptc_072',name:'Omnibiz',icon:'📲',color:'rgba(59,130,246,.12)',timer:20,reward:15,desc:'B2B marketplace for distributors'},
+  {id:'ptc_073',name:'Brass Banking',icon:'💳',color:'rgba(34,197,94,.12)',timer:30,reward:20,desc:'Business banking for Nigerian SMEs'},
+  {id:'ptc_074',name:'Eyowo',icon:'💳',color:'rgba(34,197,94,.12)',timer:15,reward:10,desc:'Bank with just your phone number'},
+  {id:'ptc_075',name:'Rubies Bank',icon:'🏦',color:'rgba(34,197,94,.12)',timer:20,reward:15,desc:'Digital bank for everyone in Nigeria'},
+  {id:'ptc_076',name:'Stanbic IBTC',icon:'🏦',color:'rgba(34,197,94,.12)',timer:30,reward:20,desc:'Banking and investment services Nigeria'},
+  {id:'ptc_077',name:'FCMB Nigeria',icon:'🏦',color:'rgba(59,130,246,.12)',timer:20,reward:15,desc:'Banking services across Nigeria'},
+  {id:'ptc_078',name:'Access Bank',icon:'🏦',color:'rgba(34,197,94,.12)',timer:30,reward:20,desc:"Africa's largest retail bank by customers"},
+  {id:'ptc_079',name:'Nigerian Breweries',icon:'🍺',color:'rgba(245,158,11,.12)',timer:20,reward:15,desc:'Proudly Nigerian since 1946'},
+  {id:'ptc_080',name:'Indomie Nigeria',icon:'🍜',color:'rgba(239,68,68,.12)',timer:15,reward:10,desc:"Nigeria's most beloved instant noodles"},
+  {id:'ptc_081',name:'Dano Milk',icon:'🥛',color:'rgba(20,184,166,.12)',timer:15,reward:10,desc:'Quality dairy products for your family'},
+  {id:'ptc_082',name:'Amstel Malta',icon:'🥤',color:'rgba(245,158,11,.12)',timer:15,reward:10,desc:"Nigeria's finest non-alcoholic malt"},
+  {id:'ptc_083',name:'Eva Water',icon:'💧',color:'rgba(20,184,166,.12)',timer:15,reward:10,desc:'Refreshing pure water from Eva'},
+  {id:'ptc_084',name:'Dangote Group',icon:'🏗️',color:'rgba(59,130,246,.12)',timer:30,reward:20,desc:'Building a better Africa together'},
+  {id:'ptc_085',name:'BUA Group',icon:'🏭',color:'rgba(59,130,246,.12)',timer:30,reward:20,desc:'Leading conglomerate in Nigeria'},
+  {id:'ptc_086',name:'Zenith Bank',icon:'🏦',color:'rgba(34,197,94,.12)',timer:30,reward:20,desc:'Your number one bank in Nigeria'},
+  {id:'ptc_087',name:'GTBank',icon:'🏦',color:'rgba(245,158,11,.12)',timer:20,reward:15,desc:'Brilliant banking with GTBank'},
+  {id:'ptc_088',name:'UBA Nigeria',icon:'🏦',color:'rgba(34,197,94,.12)',timer:20,reward:15,desc:'United Bank for Africa'},
+  {id:'ptc_089',name:'First Bank Nigeria',icon:'🏦',color:'rgba(59,130,246,.12)',timer:30,reward:20,desc:"Nigeria's first and most trusted bank"},
+  {id:'ptc_090',name:'LAPO Microfinance',icon:'💰',color:'rgba(34,197,94,.12)',timer:20,reward:15,desc:'Empowering through microfinance Nigeria'},
+  {id:'ptc_091',name:'Olam Nigeria',icon:'🌿',color:'rgba(20,184,166,.12)',timer:20,reward:15,desc:'Agricultural products across Nigeria'},
+  {id:'ptc_092',name:'Seplat Energy',icon:'⛽',color:'rgba(245,158,11,.12)',timer:30,reward:20,desc:"Nigeria's leading energy company"},
+  {id:'ptc_093',name:'MTN Nigeria',icon:'📶',color:'rgba(245,158,11,.12)',timer:20,reward:15,desc:'Stay connected everywhere in Nigeria'},
+  {id:'ptc_094',name:'Airtel Nigeria',icon:'📡',color:'rgba(239,68,68,.12)',timer:20,reward:15,desc:'4G internet across all of Nigeria'},
+  {id:'ptc_095',name:'Glo Nigeria',icon:'📱',color:'rgba(34,197,94,.12)',timer:15,reward:10,desc:'Grand master of data in Nigeria'},
+  {id:'ptc_096',name:'9mobile',icon:'📲',color:'rgba(20,184,166,.12)',timer:15,reward:10,desc:'Smarter network for smarter people'},
+  {id:'ptc_097',name:'Bet9ja',icon:'⚽',color:'rgba(34,197,94,.12)',timer:20,reward:15,desc:"Nigeria's number 1 sports betting platform"},
+  {id:'ptc_098',name:'NaijaBet',icon:'🏆',color:'rgba(245,158,11,.12)',timer:20,reward:15,desc:'Bet and win with the best odds Nigeria'},
+  {id:'ptc_099',name:'SportyBet',icon:'🎯',color:'rgba(59,130,246,.12)',timer:20,reward:15,desc:'Sports betting for Nigerian winners'},
+  {id:'ptc_100',name:'1xBet Nigeria',icon:'🎰',color:'rgba(239,68,68,.12)',timer:20,reward:15,desc:'International sports betting platform'},
+  {id:'ptc_101',name:'Nairabet',icon:'⚽',color:'rgba(34,197,94,.12)',timer:15,reward:10,desc:'Nigeria pioneer sports betting site'},
+  {id:'ptc_102',name:'BetKing',icon:'👑',color:'rgba(245,158,11,.12)',timer:20,reward:15,desc:'King of sports betting in Nigeria'},
+  {id:'ptc_103',name:'Merrybet',icon:'🎲',color:'rgba(139,92,246,.12)',timer:15,reward:10,desc:'Trusted sports betting in Nigeria'},
+  {id:'ptc_104',name:'Surebet247',icon:'🎰',color:'rgba(34,197,94,.12)',timer:15,reward:10,desc:'247 sports betting in Nigeria'},
+  {id:'ptc_105',name:'BetPawa',icon:'⚡',color:'rgba(59,130,246,.12)',timer:20,reward:15,desc:'Start betting from just ₦10 today'},
+  {id:'ptc_106',name:'Coca-Cola Nigeria',icon:'🥤',color:'rgba(239,68,68,.12)',timer:15,reward:10,desc:'Refreshing Nigeria since 1953'},
+  {id:'ptc_107',name:'Pepsi Nigeria',icon:'🥤',color:'rgba(59,130,246,.12)',timer:15,reward:10,desc:'Pepsi — the choice of a new generation'},
+  {id:'ptc_108',name:'Fanta Nigeria',icon:'🍊',color:'rgba(245,158,11,.12)',timer:15,reward:10,desc:'Bringing fun to everyday moments'},
+  {id:'ptc_109',name:'Sprite Nigeria',icon:'💚',color:'rgba(34,197,94,.12)',timer:15,reward:10,desc:'Obey your thirst with Sprite'},
+  {id:'ptc_110',name:'Nestle Nigeria',icon:'🍫',color:'rgba(245,158,11,.12)',timer:20,reward:15,desc:'Good food good life in Nigeria'},
+  {id:'ptc_111',name:'Maggi Nigeria',icon:'🍲',color:'rgba(239,68,68,.12)',timer:15,reward:10,desc:'Making food taste better every day'},
+  {id:'ptc_112',name:'Knorr Nigeria',icon:'🍜',color:'rgba(34,197,94,.12)',timer:15,reward:10,desc:'The taste that brings families together'},
+  {id:'ptc_113',name:'Honeywell Nigeria',icon:'🌾',color:'rgba(245,158,11,.12)',timer:15,reward:10,desc:'Nourishing Nigerian families since 1982'},
+  {id:'ptc_114',name:'Flour Mills Nigeria',icon:'🌾',color:'rgba(245,158,11,.12)',timer:20,reward:15,desc:'Nigerian food company for all Nigerians'},
+  {id:'ptc_115',name:'UAC Nigeria',icon:'🏢',color:'rgba(59,130,246,.12)',timer:20,reward:15,desc:'Diversified company serving Nigeria'},
+  {id:'ptc_116',name:'Vitafoam Nigeria',icon:'🛋️',color:'rgba(139,92,246,.12)',timer:15,reward:10,desc:'Premium foam and furniture Nigeria'},
+  {id:'ptc_117',name:'Meyer Plc',icon:'🎨',color:'rgba(236,72,153,.12)',timer:15,reward:10,desc:'Quality paints and coatings Nigeria'},
+  {id:'ptc_118',name:'Berger Paints',icon:'🖌️',color:'rgba(59,130,246,.12)',timer:15,reward:10,desc:"Nigeria's leading paint manufacturer"},
+  {id:'ptc_119',name:'Julius Berger',icon:'🏗️',color:'rgba(245,158,11,.12)',timer:30,reward:20,desc:'Building infrastructure across Nigeria'},
+  {id:'ptc_120',name:'Coscharis Motors',icon:'🚗',color:'rgba(59,130,246,.12)',timer:30,reward:20,desc:'Premium automobiles for Nigeria'},
+  {id:'ptc_121',name:'Stallion Group',icon:'🚗',color:'rgba(34,197,94,.12)',timer:30,reward:20,desc:'Vehicle assembly and distribution Nigeria'},
+  {id:'ptc_122',name:'Innoson Motors',icon:'🚌',color:'rgba(34,197,94,.12)',timer:30,reward:20,desc:"Nigeria's first indigenous car maker"},
+  {id:'ptc_123',name:'Uber Nigeria',icon:'🚗',color:'rgba(20,184,166,.12)',timer:20,reward:15,desc:'Your ride on demand across Nigeria'},
+  {id:'ptc_124',name:'Bolt Nigeria',icon:'⚡',color:'rgba(34,197,94,.12)',timer:20,reward:15,desc:'Affordable rides across Nigerian cities'},
+  {id:'ptc_125',name:'SafeBoda Nigeria',icon:'🛵',color:'rgba(245,158,11,.12)',timer:15,reward:10,desc:'Safe motorcycle rides in Nigeria'},
+  {id:'ptc_126',name:'MAX.ng',icon:'🏍️',color:'rgba(239,68,68,.12)',timer:15,reward:10,desc:'On-demand delivery and rides Nigeria'},
+  {id:'ptc_127',name:'Gokada',icon:'🛵',color:'rgba(34,197,94,.12)',timer:15,reward:10,desc:'Motorcycle taxis across Lagos fast'},
+  {id:'ptc_128',name:'Kobo360',icon:'🚛',color:'rgba(59,130,246,.12)',timer:20,reward:15,desc:'Logistics and trucking platform Africa'},
+  {id:'ptc_129',name:'GIG Logistics',icon:'📦',color:'rgba(245,158,11,.12)',timer:20,reward:15,desc:'Reliable delivery across all Nigeria'},
+  {id:'ptc_130',name:'Sendbox',icon:'📮',color:'rgba(139,92,246,.12)',timer:15,reward:10,desc:'Ship parcels anywhere in Nigeria fast'},
+  {id:'ptc_131',name:'Kwik Delivery',icon:'⚡',color:'rgba(34,197,94,.12)',timer:15,reward:10,desc:'Same-day delivery in Lagos Nigeria'},
+  {id:'ptc_132',name:'Topship',icon:'🚢',color:'rgba(59,130,246,.12)',timer:20,reward:15,desc:'International shipping from Nigeria'},
+  {id:'ptc_133',name:'Helipad',icon:'🚁',color:'rgba(139,92,246,.12)',timer:30,reward:20,desc:'Helicopter rides across Nigeria cities'},
+  {id:'ptc_134',name:'Caverton Helicopters',icon:'🚁',color:'rgba(59,130,246,.12)',timer:30,reward:20,desc:'Aviation services across Nigeria'},
+  {id:'ptc_135',name:'Air Peace Nigeria',icon:'✈️',color:'rgba(59,130,246,.12)',timer:30,reward:20,desc:"Nigeria's largest domestic airline"},
+  {id:'ptc_136',name:'Dana Air',icon:'✈️',color:'rgba(239,68,68,.12)',timer:30,reward:20,desc:'Affordable domestic flights Nigeria'},
+  {id:'ptc_137',name:'Overland Airways',icon:'🛩️',color:'rgba(34,197,94,.12)',timer:30,reward:20,desc:'Safe domestic flights across Nigeria'},
+  {id:'ptc_138',name:'Leadway Assurance',icon:'🛡️',color:'rgba(34,197,94,.12)',timer:20,reward:15,desc:'Insurance solutions for Nigeria'},
+  {id:'ptc_139',name:'Coronation Insurance',icon:'👑',color:'rgba(245,158,11,.12)',timer:20,reward:15,desc:'Comprehensive insurance Nigeria'},
+  {id:'ptc_140',name:'AXA Mansard',icon:'🛡️',color:'rgba(59,130,246,.12)',timer:20,reward:15,desc:'Life and health insurance Nigeria'},
+  {id:'ptc_141',name:'Custodian Insurance',icon:'🔒',color:'rgba(139,92,246,.12)',timer:20,reward:15,desc:'Property and life insurance Nigeria'},
+  {id:'ptc_142',name:'Mutual Benefits',icon:'🤝',color:'rgba(20,184,166,.12)',timer:15,reward:10,desc:'Affordable insurance for Nigerians'},
+  {id:'ptc_143',name:'ARM Pension',icon:'💰',color:'rgba(34,197,94,.12)',timer:20,reward:15,desc:'Pension fund management Nigeria'},
+  {id:'ptc_144',name:'Stanbic IBTC Pension',icon:'🏦',color:'rgba(59,130,246,.12)',timer:20,reward:15,desc:'Secure your retirement in Nigeria'},
+  {id:'ptc_145',name:'FCMB Pension',icon:'💼',color:'rgba(59,130,246,.12)',timer:20,reward:15,desc:'Plan your retirement with FCMB'},
+  {id:'ptc_146',name:'Farmcrowdy',icon:'🌱',color:'rgba(34,197,94,.12)',timer:20,reward:15,desc:'Invest in Nigerian agriculture online'},
+  {id:'ptc_147',name:'Thrive Agric',icon:'🌾',color:'rgba(34,197,94,.12)',timer:20,reward:15,desc:'Agricultural investments for Nigerians'},
+  {id:'ptc_148',name:'OurFarm',icon:'🚜',color:'rgba(34,197,94,.12)',timer:15,reward:10,desc:'Smart farming investments in Nigeria'},
+  {id:'ptc_149',name:'AgroMall',icon:'🌿',color:'rgba(34,197,94,.12)',timer:15,reward:10,desc:'Digital solutions for Nigerian farmers'},
+  {id:'ptc_150',name:'Hello Tractor',icon:'🚜',color:'rgba(245,158,11,.12)',timer:20,reward:15,desc:'Tractor sharing platform for Africa'},
+  {id:'ptc_151',name:'Cheki Nigeria',icon:'🚗',color:'rgba(59,130,246,.12)',timer:20,reward:15,desc:'Buy and sell cars online in Nigeria'},
+  {id:'ptc_152',name:'Cars45',icon:'🚙',color:'rgba(34,197,94,.12)',timer:20,reward:15,desc:'Sell your car fast and fair Nigeria'},
+  {id:'ptc_153',name:'AutoChek Africa',icon:'🔧',color:'rgba(245,158,11,.12)',timer:20,reward:15,desc:'Buy verified used cars across Africa'},
+  {id:'ptc_154',name:'BuyPower',icon:'⚡',color:'rgba(245,158,11,.12)',timer:15,reward:10,desc:'Pay electricity bills instantly Nigeria'},
+  {id:'ptc_155',name:'Ikeja Electric',icon:'💡',color:'rgba(245,158,11,.12)',timer:15,reward:10,desc:'Power distribution Lagos Nigeria'},
+  {id:'ptc_156',name:'Eko Electric',icon:'⚡',color:'rgba(59,130,246,.12)',timer:15,reward:10,desc:'Electricity distribution across Lagos'},
+  {id:'ptc_157',name:'Enugu Electric',icon:'💡',color:'rgba(34,197,94,.12)',timer:15,reward:10,desc:'Power for Enugu and environs Nigeria'},
+  {id:'ptc_158',name:'PropertyPro.ng',icon:'🏠',color:'rgba(139,92,246,.12)',timer:20,reward:15,desc:'Find your perfect home in Nigeria'},
+  {id:'ptc_159',name:'Private Property',icon:'🏘️',color:'rgba(59,130,246,.12)',timer:20,reward:15,desc:'Real estate listings across Nigeria'},
+  {id:'ptc_160',name:'Nigerian Real Estate',icon:'🏗️',color:'rgba(245,158,11,.12)',timer:20,reward:15,desc:'Invest in Nigerian real estate today'},
+  {id:'ptc_161',name:'Mixta Africa',icon:'🏢',color:'rgba(59,130,246,.12)',timer:30,reward:20,desc:'Affordable housing solutions Nigeria'},
+  {id:'ptc_162',name:'Landwey',icon:'🏠',color:'rgba(34,197,94,.12)',timer:30,reward:20,desc:'Real estate investment in Lagos Nigeria'},
+  {id:'ptc_163',name:'Pwan Group',icon:'🏗️',color:'rgba(139,92,246,.12)',timer:30,reward:20,desc:'Property investment opportunities Nigeria'},
+  {id:'ptc_164',name:'NairaBet',icon:'⚽',color:'rgba(34,197,94,.12)',timer:15,reward:10,desc:'Nigeria sports prediction platform'},
+  {id:'ptc_165',name:'BetBonanza',icon:'🎰',color:'rgba(245,158,11,.12)',timer:15,reward:10,desc:'Bonanza offers on sports Nigeria'},
+  {id:'ptc_166',name:'Helios Towers',icon:'📡',color:'rgba(59,130,246,.12)',timer:30,reward:20,desc:'Telecom infrastructure across Africa'},
+  {id:'ptc_167',name:'IHS Towers',icon:'📶',color:'rgba(34,197,94,.12)',timer:30,reward:20,desc:'Connecting Africa with tower infrastructure'},
+  {id:'ptc_168',name:'MainOne',icon:'🌐',color:'rgba(59,130,246,.12)',timer:30,reward:20,desc:'Subsea cable and data center Nigeria'},
+  {id:'ptc_169',name:'Rack Centre',icon:'💾',color:'rgba(139,92,246,.12)',timer:30,reward:20,desc:'Premier data center solutions Nigeria'},
+  {id:'ptc_170',name:'Galaxy Backbone',icon:'🌐',color:'rgba(59,130,246,.12)',timer:30,reward:20,desc:'Nigeria government internet backbone'},
+  {id:'ptc_171',name:'DealDey Fashion',icon:'👒',color:'rgba(236,72,153,.12)',timer:15,reward:10,desc:'Amazing deals on fashion Nigeria'},
+  {id:'ptc_172',name:'Yaba Tech Hub',icon:'💻',color:'rgba(59,130,246,.12)',timer:20,reward:15,desc:'Nigeria leading tech innovation hub'},
+  {id:'ptc_173',name:'CcHub',icon:'🚀',color:'rgba(245,158,11,.12)',timer:20,reward:15,desc:'Nigeria co-creation hub for startups'},
+  {id:'ptc_174',name:'Ventures Platform',icon:'💡',color:'rgba(139,92,246,.12)',timer:20,reward:15,desc:'Startup incubator and accelerator Nigeria'},
+  {id:'ptc_175',name:'L5Lab',icon:'🔬',color:'rgba(59,130,246,.12)',timer:20,reward:15,desc:'Science and technology lab Nigeria'},
+  {id:'ptc_176',name:'Payfi',icon:'💳',color:'rgba(34,197,94,.12)',timer:15,reward:10,desc:'Financial services for Nigerian youth'},
+  {id:'ptc_177',name:'Clane',icon:'💰',color:'rgba(34,197,94,.12)',timer:15,reward:10,desc:'Digital savings platform for Nigeria'},
+  {id:'ptc_178',name:'Thepeer',icon:'🔗',color:'rgba(59,130,246,.12)',timer:20,reward:15,desc:'Peer-to-peer payment infrastructure'},
+  {id:'ptc_179',name:'Nomba',icon:'💳',color:'rgba(34,197,94,.12)',timer:20,reward:15,desc:'Point of sale solutions for Nigeria'},
+  {id:'ptc_180',name:'Mira',icon:'✨',color:'rgba(236,72,153,.12)',timer:15,reward:10,desc:'Beauty and wellness platform Nigeria'},
+  {id:'ptc_181',name:'Bamboo',icon:'📈',color:'rgba(34,197,94,.12)',timer:20,reward:15,desc:'Invest in US stocks from Nigeria'},
+  {id:'ptc_182',name:'Trove',icon:'📊',color:'rgba(59,130,246,.12)',timer:20,reward:15,desc:'Invest in global stocks from Nigeria'},
+  {id:'ptc_183',name:'Chaka',icon:'💹',color:'rgba(34,197,94,.12)',timer:20,reward:15,desc:'Pan-African investment platform'},
+  {id:'ptc_184',name:'Risevest',icon:'📈',color:'rgba(34,197,94,.12)',timer:20,reward:15,desc:'Invest in dollars from Nigeria easily'},
+  {id:'ptc_185',name:'Vestx',icon:'💰',color:'rgba(139,92,246,.12)',timer:20,reward:15,desc:'Investment platform for Nigerians'},
+  {id:'ptc_186',name:'Sudo Africa',icon:'💳',color:'rgba(59,130,246,.12)',timer:30,reward:20,desc:'Card issuance platform for Africa'},
+  {id:'ptc_187',name:'Dojah',icon:'🔐',color:'rgba(139,92,246,.12)',timer:30,reward:20,desc:'Identity verification API for Africa'},
+  {id:'ptc_188',name:'Prembly',icon:'✅',color:'rgba(34,197,94,.12)',timer:30,reward:20,desc:'Identity and compliance for Nigeria'},
+  {id:'ptc_189',name:'SmileID',icon:'😊',color:'rgba(245,158,11,.12)',timer:30,reward:20,desc:'Biometric ID verification for Africa'},
+  {id:'ptc_190',name:'Duplo',icon:'💼',color:'rgba(59,130,246,.12)',timer:30,reward:20,desc:'B2B payments platform for Nigeria'},
+  {id:'ptc_191',name:'Mono',icon:'🔗',color:'rgba(59,130,246,.12)',timer:20,reward:15,desc:'Open finance infrastructure Nigeria'},
+  {id:'ptc_192',name:'Okra',icon:'💡',color:'rgba(34,197,94,.12)',timer:20,reward:15,desc:'Open banking platform for Nigeria'},
+  {id:'ptc_193',name:'OnePipe',icon:'🔧',color:'rgba(139,92,246,.12)',timer:20,reward:15,desc:'Financial services APIs for Nigeria'},
+  {id:'ptc_194',name:'VGG Africa',icon:'🔒',color:'rgba(239,68,68,.12)',timer:30,reward:20,desc:'Security services across Nigeria'},
+  {id:'ptc_195',name:'Terragon',icon:'📊',color:'rgba(59,130,246,.12)',timer:30,reward:20,desc:'Data and marketing platform Africa'},
+  {id:'ptc_196',name:'Publiseer',icon:'📚',color:'rgba(139,92,246,.12)',timer:20,reward:15,desc:'Digital publishing platform Nigeria'},
+  {id:'ptc_197',name:'Printful Nigeria',icon:'👕',color:'rgba(236,72,153,.12)',timer:20,reward:15,desc:'Print on demand services Nigeria'},
+  {id:'ptc_198',name:'Eden Life',icon:'🏠',color:'rgba(34,197,94,.12)',timer:20,reward:15,desc:'Home services subscription Nigeria'},
+  {id:'ptc_199',name:'Kippa',icon:'📱',color:'rgba(245,158,11,.12)',timer:15,reward:10,desc:'Business management app for Nigeria'},
+  {id:'ptc_200',name:'Grindpoint',icon:'⚡',color:'rgba(245,158,11,.12)',timer:15,reward:10,desc:'Nigeria number 1 earning platform'},
+];
+
+/* ════ ANTI-CHEAT: track tab visibility ════ */
+const DAILY_BONUS=50;
+const TODAY=new Date().toISOString().split('T')[0];
+let _user=null,_profile=null,_viewed=new Set(),_earning=0;
+let _active=null; /* {adId,departureTime,required} */
+let _hiddenSince=null,_totalHidden=0;
+
+/* Track when user leaves/returns to the tab */
+document.addEventListener('visibilitychange',()=>{
+  if(document.visibilityState==='hidden'){
+    _hiddenSince=Date.now();
+  } else {
+    /* User returned to Grindpoint */
+    if(_hiddenSince){_totalHidden+=Date.now()-_hiddenSince;_hiddenSince=null;}
+
+    if(_active){
+      const required=_active.required;
+      const spent=_totalHidden;
+      if(spent>=required){
+        /* Enough time spent — show claim */
+        enableClaim(_active.adId,_active.reward);
+      } else {
+        const remaining=Math.ceil((required-spent)/1000);
+        showToast(`⏰ You came back too early! Go back to Facebook and stay for ${remaining} more second${remaining===1?'':'s'}.`,'warning',5000);
+        /* Cancel this ad attempt — reset active */
+        const prevId=_active.adId;
+        _active=null;
+        _totalHidden=0;
+        refreshCard(prevId);
+      }
+    }
+  }
+});
+
+document.addEventListener('DOMContentLoaded',async()=>{
+  const auth=await requireAuth();
+  if(!auth)return;
+  _user=auth.user;_profile=auth.profile;
+  const name=_profile?.full_name||_user.user_metadata?.full_name||'Grinder';
+  document.getElementById('sidebarName').textContent=name;
+  document.getElementById('sidebarAvatar').textContent=name.split(' ').map(n=>n[0]).join('').substring(0,2).toUpperCase();
+  document.getElementById('navBalance').textContent=formatNaira(_profile?.balance||0);
+  document.getElementById('statBalance').textContent=formatNaira(_profile?.balance||0);
+  await loadTodayViews();
+  checkDailyBonus();
+  renderGrid('all');
+  updateStats();
+});
+
+async function loadTodayViews(){
+  const sb=getSupabase();
+  try{
+    const{data}=await sb.from('ptc_views').select('ad_id,reward').eq('user_id',_user.id).eq('view_date',TODAY);
+    if(data)data.forEach(r=>{_viewed.add(r.ad_id);_earning+=r.reward;});
+  }catch(e){console.warn('[PTC] Run supabase-ptc-setup.sql first:',e.message);}
+}
+
+function checkDailyBonus(){
+  if(localStorage.getItem('gp_bonus_date')===TODAY){return;}
+  const streak=parseInt(localStorage.getItem('gp_login_streak')||'0');
+  let amt=DAILY_BONUS,msg='';
+  if(streak>=7){amt=100;msg=' 🔥 7-day streak!';}
+  else if(streak>=3){amt=75;msg=` 🔥 ${streak}-day streak!`;}
+  document.getElementById('bonusTitle').textContent=`🎁 Daily Bonus — ${formatNaira(amt)} Waiting!`;
+  document.getElementById('bonusDesc').textContent=`Welcome back! Claim your free daily reward.${msg} Day ${streak+1} streak.`;
+  document.getElementById('claimBonusBtn').textContent=`Claim ${formatNaira(amt)}`;
+  document.getElementById('claimBonusBtn').dataset.amount=amt;
+  document.getElementById('bonusBanner').style.display='flex';
+}
+
+document.getElementById('claimBonusBtn').addEventListener('click',async()=>{
+  const btn=document.getElementById('claimBonusBtn');
+  const amt=parseInt(btn.dataset.amount||DAILY_BONUS);
+  setButtonLoading(btn,'Claiming…');
+  const sb=getSupabase();
+  const{data:p}=await sb.from('profiles').select('balance').eq('id',_user.id).maybeSingle();
+  const newBal=(p?.balance||0)+amt;
+  const streak=parseInt(localStorage.getItem('gp_login_streak')||'0');
+  const{error}=await sb.from('profiles').update({balance:newBal,last_login_date:TODAY,login_streak:streak+1,updated_at:new Date().toISOString()}).eq('id',_user.id);
+  clearButtonLoading(btn);
+  if(error){showToast('Error: '+error.message,'error');return;}
+  _profile.balance=newBal;
+  localStorage.setItem('gp_bonus_date',TODAY);
+  localStorage.setItem('gp_login_streak',String(streak+1));
+  document.getElementById('bonusBanner').style.display='none';
+  document.getElementById('navBalance').textContent=formatNaira(newBal);
+  document.getElementById('statBalance').textContent=formatNaira(newBal);
+  showToast(`🎁 ${formatNaira(amt)} daily bonus credited to your wallet!`,'success',5000);
+});
+
+function updateStats(){
+  document.getElementById('statToday').textContent=formatNaira(_earning);
+  document.getElementById('statViewed').textContent=`${_viewed.size} / 200`;
+}
+
+function currentFilter(){return document.querySelector('.fpill.active')?.dataset?.f||'all';}
+
+function renderGrid(filter){
+  const grid=document.getElementById('ptcGrid');
+  let list=PTC_ADS;
+  if(filter==='available')list=PTC_ADS.filter(a=>!_viewed.has(a.id));
+  else if(filter==='viewed')list=PTC_ADS.filter(a=>_viewed.has(a.id));
+  else if(filter==='10')list=PTC_ADS.filter(a=>a.reward===10);
+  else if(filter==='15')list=PTC_ADS.filter(a=>a.reward===15);
+  else if(filter==='20')list=PTC_ADS.filter(a=>a.reward===20);
+
+  if(!list.length){
+    grid.innerHTML=`<div class="empty-state" style="grid-column:1/-1;"><div class="empty-state__icon">${filter==='viewed'?'📭':'🎉'}</div><div class="empty-state__title">${filter==='viewed'?'No ads viewed yet today':'All done for today!'}</div><div class="empty-state__desc">Fresh ads unlock at midnight.</div></div>`;
+    return;
+  }
+
+  grid.innerHTML=list.map(ad=>buildCard(ad)).join('');
+  grid.querySelectorAll('.vbtn').forEach(b=>b.addEventListener('click',()=>startAd(b.dataset.id)));
+}
+
+function buildCard(ad){
+  const done=_viewed.has(ad.id);
+  const isAct=_active?.adId===ad.id;
+  return `<div class="ptc-card${done?' viewed':''}${isAct?' is-active':''}" id="card-${ad.id}">
+    <div class="ptc-head">
+      <div class="ptc-icon" style="background:${ad.color};">${ad.icon}</div>
+      <div><div class="ptc-name">${ad.name}</div><div class="ptc-desc">${ad.desc}</div></div>
+    </div>
+    <div class="ptc-body">
+      <div>
+        <div class="ptc-reward">+${formatNaira(ad.reward)}</div>
+        <div class="ptc-timer-info">⏱ ${ad.timer}s on Facebook</div>
+      </div>
+    </div>
+    <div class="ptc-foot" id="foot-${ad.id}">
+      ${done
+        ?`<div style="display:flex;align-items:center;gap:.5rem;color:var(--success);font-size:.82rem;font-weight:600;"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" style="width:16px;height:16px;"><polyline points="20 6 9 17 4 12"/></svg>Viewed today — ${formatNaira(ad.reward)} earned</div>`
+        :isAct
+        ?`<div class="waiting-overlay">⏳ Stay on Facebook for ${ad.timer}s then come back to claim your reward</div>`
+        :`<button class="btn btn-primary btn-block vbtn" data-id="${ad.id}"${_active?' disabled':''}><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:14px;height:14px;"><polygon points="5 3 19 12 5 21 5 3"/></svg> View Ad — Earn ${formatNaira(ad.reward)}</button>`}
+    </div>
+  </div>`;
+}
+
+function refreshCard(adId){
+  const ad=PTC_ADS.find(a=>a.id===adId);
+  if(!ad)return;
+  const card=document.getElementById(`card-${adId}`);
+  if(card){
+    card.classList.remove('is-active');
+    const foot=document.getElementById(`foot-${adId}`);
+    if(foot)foot.innerHTML=`<button class="btn btn-primary btn-block vbtn" data-id="${adId}"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:14px;height:14px;"><polygon points="5 3 19 12 5 21 5 3"/></svg> View Ad — Earn ${formatNaira(ad.reward)}</button>`;
+    card.querySelector('.vbtn')?.addEventListener('click',()=>startAd(adId));
+    /* Re-enable all other buttons */
+    document.querySelectorAll('.vbtn').forEach(b=>{b.disabled=false;});
+  }
+}
+
+function enableClaim(adId,reward){
+  const foot=document.getElementById(`foot-${adId}`);
+  const card=document.getElementById(`card-${adId}`);
+  if(!foot)return;
+  foot.innerHTML=`<button class="btn btn-block" id="cb-${adId}" style="background:linear-gradient(135deg,#22c55e,#16a34a);color:#fff;font-weight:700;">✅ Claim ${formatNaira(reward)} Now!</button>`;
+  document.getElementById(`cb-${adId}`)?.addEventListener('click',()=>claimAd(adId,reward));
+  if(card)card.classList.add('is-active');
+  showToast('Timer complete! Click Claim to get your reward.','success',4000);
+}
+
+function startAd(adId){
+  if(_active){showToast('Finish the current ad first before starting another.','warning');return;}
+  const ad=PTC_ADS.find(a=>a.id===adId);
+  if(!ad||_viewed.has(ad.id))return;
+
+  /* Open Facebook in new tab */
+  window.open('https://www.facebook.com','_blank','noopener,noreferrer');
+
+  /* Set active state */
+  _active={adId,required:ad.timer*1000,reward:ad.reward};
+  _totalHidden=0;
+  _hiddenSince=null;
+
+  /* Disable all other buttons */
+  document.querySelectorAll('.vbtn').forEach(b=>{b.disabled=true;});
+
+  /* Update this card's footer to waiting state */
+  const foot=document.getElementById(`foot-${adId}`);
+  const card=document.getElementById(`card-${adId}`);
+  if(foot)foot.innerHTML=`<div class="waiting-overlay">⏳ Stay on Facebook for ${ad.timer}s then come back to claim your reward</div>`;
+  if(card)card.classList.add('is-active');
+
+  showToast(`Ad opened on Facebook! Stay there for ${ad.timer} seconds, then come back here.`,'success',6000);
+}
+
+async function claimAd(adId,reward){
+  const sb=getSupabase();
+  const btn=document.getElementById(`cb-${adId}`);
+  if(btn){btn.disabled=true;btn.textContent='Crediting…';}
+  try{
+    const{error:ve}=await sb.from('ptc_views').insert({user_id:_user.id,ad_id:adId,reward,view_date:TODAY,viewed_at:new Date().toISOString()});
+    if(ve&&!ve.message?.includes('duplicate'))throw ve;
+    const{data:p}=await sb.from('profiles').select('balance').eq('id',_user.id).maybeSingle();
+    const newBal=(p?.balance||0)+reward;
+    await sb.from('profiles').update({balance:newBal,updated_at:new Date().toISOString()}).eq('id',_user.id);
+    _viewed.add(adId);_earning+=reward;_profile.balance=newBal;
+    _active=null;_totalHidden=0;
+    document.getElementById('navBalance').textContent=formatNaira(newBal);
+    document.getElementById('statBalance').textContent=formatNaira(newBal);
+    updateStats();
+    renderGrid(currentFilter());
+    showToast(`✅ ${formatNaira(reward)} credited to your wallet instantly!`,'success',4000);
+  }catch(err){
+    _active=null;_totalHidden=0;
+    showToast(err.message?.includes('ptc_views')||err.message?.includes('does not exist')?'❌ Run supabase-ptc-setup.sql in Supabase SQL Editor first.':'❌ '+err.message,'error',6000);
+    renderGrid(currentFilter());
+  }
+}
+
+document.querySelectorAll('.fpill').forEach(b=>b.addEventListener('click',()=>{
+  document.querySelectorAll('.fpill').forEach(x=>x.classList.remove('active'));
+  b.classList.add('active');
+  renderGrid(b.dataset.f);
+}));
+
+(function(){
+  const btn=document.getElementById('sidebarToggleBtn'),sb=document.getElementById('sidebar'),ov=document.getElementById('sidebarOverlay');
+  if(!btn||!sb)return;
+  function open(){sb.classList.add('sidebar--open');ov&&ov.classList.add('active');document.body.style.overflow='hidden';}
+  function close(){sb.classList.remove('sidebar--open');ov&&ov.classList.remove('active');document.body.style.overflow='';}
+  btn.addEventListener('click',()=>sb.classList.contains('sidebar--open')?close():open());
+  if(ov)ov.addEventListener('click',close);
+  sb.querySelectorAll('a').forEach(a=>a.addEventListener('click',close));
+})();
+</script>
+</body>
+</html>

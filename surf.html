@@ -1,0 +1,383 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+  <title>Surf & Earn — Grindpoint</title>
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><text y='26' font-size='28'>🌊</text></svg>"/>
+  <link rel="stylesheet" href="css/style.css"/>
+  <style>
+    .surf-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:1.25rem;}
+    .surf-card{background:var(--bg-card);border:1px solid var(--border-subtle);border-radius:var(--radius-lg);overflow:hidden;display:flex;flex-direction:column;transition:all .25s;position:relative;}
+    .surf-card:hover:not(.viewed):not(.is-active){border-color:rgba(59,130,246,.4);transform:translateY(-2px);box-shadow:0 4px 20px rgba(59,130,246,.15);}
+    .surf-card.viewed{opacity:.5;}
+    .surf-card.is-active{border-color:#3b82f6;box-shadow:0 0 0 2px rgba(59,130,246,.2);}
+    .surf-badge{position:absolute;top:.75rem;right:.75rem;padding:.25rem .6rem;border-radius:var(--radius-full);font-size:.65rem;font-weight:700;background:rgba(59,130,246,.15);color:#3b82f6;border:1px solid rgba(59,130,246,.3);}
+    .surf-head{padding:1.1rem 1.25rem .75rem;border-bottom:1px solid var(--border-subtle);}
+    .surf-category{font-size:.7rem;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--text-muted);margin-bottom:.4rem;}
+    .surf-title{font-weight:700;font-size:.95rem;color:var(--text-primary);line-height:1.3;margin-bottom:.25rem;}
+    .surf-desc{font-size:.8rem;color:var(--text-secondary);line-height:1.5;}
+    .surf-body{padding:1rem 1.25rem;flex:1;}
+    .surf-meta{display:flex;align-items:center;justify-content:space-between;gap:.5rem;padding:.75rem;background:var(--bg-elevated);border-radius:var(--radius-md);}
+    .surf-reward{font-family:var(--font-display);font-size:1.2rem;font-weight:800;color:#3b82f6;}
+    .surf-time{font-size:.75rem;color:var(--text-muted);text-align:right;}
+    .surf-foot{padding:.85rem 1.25rem;border-top:1px solid var(--border-subtle);}
+    .btn-surf{background:linear-gradient(135deg,#3b82f6,#2563eb);color:#fff;border:none;width:100%;padding:.65rem;border-radius:var(--radius-md);font-size:.875rem;font-weight:700;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:.5rem;transition:all .2s;}
+    .btn-surf:hover{background:linear-gradient(135deg,#2563eb,#1d4ed8);transform:translateY(-1px);}
+    .btn-surf:disabled{opacity:.6;cursor:not-allowed;transform:none;}
+    .waiting-surf{background:rgba(59,130,246,.06);border:1px dashed #3b82f6;border-radius:var(--radius-md);padding:.85rem;text-align:center;font-size:.82rem;color:#3b82f6;font-weight:600;}
+    .surf-stats{display:grid;grid-template-columns:repeat(3,1fr);gap:.75rem;margin-bottom:1.75rem;}
+    @media(max-width:600px){.surf-stats{grid-template-columns:1fr 1fr;}}
+    .filter-bar{display:flex;gap:.5rem;flex-wrap:wrap;margin-bottom:1.25rem;}
+    .fpill{padding:.38rem .85rem;border-radius:var(--radius-full);font-size:.78rem;font-weight:600;border:1px solid var(--border-default);background:transparent;color:var(--text-secondary);cursor:pointer;transition:all .15s;}
+    .fpill:hover{border-color:#3b82f6;color:#3b82f6;}
+    .fpill.active{background:linear-gradient(135deg,#3b82f6,#2563eb);color:#fff;border-color:transparent;}
+  </style>
+</head>
+<body style="visibility:hidden">
+
+<nav class="navbar">
+  <div class="navbar__inner">
+    <a href="index" class="navbar__logo">Grind<span class="logo-accent">point</span></a>
+    <div class="navbar__actions" style="gap:.75rem;">
+      <button class="sidebar-toggle-btn" id="sidebarToggleBtn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg></button>
+      <span style="font-size:.82rem;color:var(--text-secondary);">Balance: <strong id="navBalance" style="color:var(--gold-500);">₦—</strong></span>
+    </div>
+  </div>
+</nav>
+
+<div class="page-wrapper">
+  <aside class="sidebar" id="sidebar">
+    <nav class="sidebar__nav">
+      <span class="sidebar__label">Main Menu</span>
+      <a href="dashboard" class="sidebar__link"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/></svg>Dashboard</a>
+      <a href="ptc" class="sidebar__link"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 10l4.553-2.069A1 1 0 0121 8.845v6.31a1 1 0 01-1.447.894L15 14M3 8a2 2 0 012-2h10a2 2 0 012 2v8a2 2 0 01-2 2H5a2 2 0 01-2-2V8z"/></svg>View Ads</a>
+      <a href="surf" class="sidebar__link active"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 12h18M3 6h18M3 18h18"/></svg>Surf &amp; Earn <span class="badge" style="margin-left:auto;font-size:.62rem;background:rgba(59,130,246,.15);color:#3b82f6;border:1px solid rgba(59,130,246,.3);">50</span></a>
+      <a href="tasks" class="sidebar__link"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11"/></svg>Earn Tasks</a>
+      <a href="referral" class="sidebar__link"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/></svg>Referrals</a>
+      <a href="leaderboard" class="sidebar__link"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>Leaderboard</a>
+      <a href="proof-of-payment" class="sidebar__link"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 11-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>Proof of Payment</a>
+      <span class="sidebar__label">Account</span>
+      <a href="transactions" class="sidebar__link"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/></svg>Transactions</a>
+      <a href="profile" class="sidebar__link"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>My Profile</a>
+    </nav>
+    <div class="sidebar__footer">
+      <div class="sidebar__user">
+        <div class="user-avatar" id="sidebarAvatar">--</div>
+        <div class="sidebar__user-info">
+          <div class="sidebar__user-name" id="sidebarName">Loading…</div>
+          <div class="sidebar__user-role">Member</div>
+        </div>
+        <button onclick="signOut()" class="btn btn-ghost btn-icon" title="Sign out">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:16px;height:16px;"><path d="M9 21H5a2 2 0 01-2-2V5a2 2 0 012-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+        </button>
+      </div>
+    </div>
+  </aside>
+
+  <main class="main-content">
+    <div class="page-header">
+      <div class="section-label" style="color:#3b82f6;">Surf &amp; Earn</div>
+      <h1 class="page-title">Browse Websites &amp; Earn</h1>
+      <p class="page-subtitle">Different from ads — here you browse real websites for longer. Higher rewards, longer surf time. Opens on Facebook. Resets every midnight.</p>
+    </div>
+
+    <!-- Difference explainer -->
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:1rem;margin-bottom:1.75rem;">
+      <div style="padding:1rem;background:rgba(245,158,11,.06);border:1px solid rgba(245,158,11,.2);border-radius:var(--radius-md);">
+        <div style="font-weight:700;font-size:.875rem;margin-bottom:.35rem;">View Ads</div>
+        <div style="font-size:.8rem;color:var(--text-secondary);line-height:1.6;">200 ads · ₦10–₦20 each · 15–30 seconds · Quick and easy</div>
+      </div>
+      <div style="padding:1rem;background:rgba(59,130,246,.06);border:1px solid rgba(59,130,246,.2);border-radius:var(--radius-md);">
+        <div style="font-weight:700;font-size:.875rem;margin-bottom:.35rem;color:#3b82f6;">Surf &amp; Earn</div>
+        <div style="font-size:.8rem;color:var(--text-secondary);line-height:1.6;">50 sites · ₦25–₦50 each · 45–90 seconds · Higher rewards</div>
+      </div>
+    </div>
+
+    <!-- Stats -->
+    <div class="surf-stats">
+      <div class="stat-card" style="border-color:rgba(59,130,246,.2);">
+        <div class="stat-card__label">Earned Today</div>
+        <div class="stat-card__value" id="statToday" style="color:#3b82f6;">₦0</div>
+        <div class="stat-card__sub">From surfing</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-card__label">Sites Surfed</div>
+        <div class="stat-card__value" id="statViewed">0 / 50</div>
+        <div class="stat-card__sub">Resets at midnight</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-card__label">Wallet Balance</div>
+        <div class="stat-card__value" id="statBalance">₦—</div>
+        <div class="stat-card__sub">Total available</div>
+      </div>
+    </div>
+
+    <!-- Info -->
+    <div style="display:flex;align-items:flex-start;gap:.75rem;padding:1rem 1.25rem;background:rgba(59,130,246,.06);border:1px solid rgba(59,130,246,.2);border-radius:var(--radius-lg);margin-bottom:1.5rem;font-size:.84rem;color:var(--text-secondary);line-height:1.6;">
+      <svg viewBox="0 0 24 24" fill="none" stroke="#3b82f6" stroke-width="2" style="width:20px;height:20px;flex-shrink:0;margin-top:1px;"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+      <div><strong style="color:var(--text-primary);">How surf works:</strong> Click <strong>Start Surfing</strong> → Facebook opens → Browse for the required time → Come back and click <strong>Claim Reward</strong>. Returning too early cancels the session.</div>
+    </div>
+
+    <!-- Filters -->
+    <div class="filter-bar">
+      <button class="fpill active" data-f="all">All (50)</button>
+      <button class="fpill" data-f="available">Available</button>
+      <button class="fpill" data-f="viewed">✓ Surfed</button>
+      <button class="fpill" data-f="25">₦25</button>
+      <button class="fpill" data-f="35">₦35</button>
+      <button class="fpill" data-f="50">₦50</button>
+    </div>
+
+    <div class="surf-grid" id="surfGrid">
+      <div style="grid-column:1/-1;text-align:center;padding:3rem;color:var(--text-muted);">Loading sites…</div>
+    </div>
+  </main>
+</div>
+
+<div class="mobile-bottom-nav">
+  <nav>
+    <a href="dashboard" class="mbn-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/></svg>Home</a>
+    <a href="ptc" class="mbn-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 10l4.553-2.069A1 1 0 0121 8.845v6.31a1 1 0 01-1.447.894L15 14M3 8a2 2 0 012-2h10a2 2 0 012 2v8a2 2 0 01-2 2H5a2 2 0 01-2-2V8z"/></svg>Ads</a>
+    <a href="surf" class="mbn-item active"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 12h18"/></svg>Surf</a>
+    <a href="tasks" class="mbn-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 11l3 3L22 4"/></svg>Tasks</a>
+    <a href="profile" class="mbn-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>Profile</a>
+  </nav>
+</div>
+<div class="sidebar-overlay" id="sidebarOverlay"></div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.min.js"></script>
+<script src="js/supabase-config.js"></script>
+<script src="js/main.js"></script>
+<script>
+/* 50 surf sites — longer timers, higher rewards, all open facebook.com */
+const SURF_SITES=[
+  {id:'surf_01',category:'News',title:'Nigerian News Network',desc:'Stay informed — browse the latest Nigerian news and current affairs.',reward:25,timer:45},
+  {id:'surf_02',category:'Business',title:'Business Intelligence',desc:'Market trends, business news and economic updates for Nigeria.',reward:35,timer:60},
+  {id:'surf_03',category:'Technology',title:'African Tech Review',desc:'Latest technology news, reviews and innovations from Africa.',reward:35,timer:60},
+  {id:'surf_04',category:'Finance',title:'Financial Markets Today',desc:'Stock market data, forex rates and investment opportunities.',reward:50,timer:90},
+  {id:'surf_05',category:'Lifestyle',title:'Nigerian Lifestyle Magazine',desc:'Fashion, food, travel and culture across Nigeria and Africa.',reward:25,timer:45},
+  {id:'surf_06',category:'Sports',title:'Nigerian Sports Arena',desc:'Football, basketball and all your favourite sports updates.',reward:25,timer:45},
+  {id:'surf_07',category:'Entertainment',title:'Nollywood Entertainment Hub',desc:'Latest movies, music, celebrities and entertainment news.',reward:25,timer:45},
+  {id:'surf_08',category:'Education',title:'Education Resource Center',desc:'Learning resources, scholarships and educational opportunities.',reward:35,timer:60},
+  {id:'surf_09',category:'Health',title:'Nigerian Health Portal',desc:'Health tips, medical information and wellness guidance.',reward:35,timer:60},
+  {id:'surf_10',category:'Agriculture',title:'Agribusiness Nigeria',desc:'Farming news, agricultural investments and food production.',reward:35,timer:60},
+  {id:'surf_11',category:'Real Estate',title:'Property Nigeria',desc:'Real estate listings, housing news and property investment.',reward:50,timer:90},
+  {id:'surf_12',category:'Travel',title:'Discover Nigeria',desc:'Tourism spots, travel guides and adventure destinations.',reward:35,timer:60},
+  {id:'surf_13',category:'Food',title:'Nigerian Food & Recipes',desc:'Authentic Nigerian recipes, restaurants and food culture.',reward:25,timer:45},
+  {id:'surf_14',category:'Fashion',title:'Nigerian Fashion Week',desc:'Latest fashion trends, designers and style from Nigeria.',reward:25,timer:45},
+  {id:'surf_15',category:'Music',title:'Afrobeats Central',desc:'Latest Nigerian music, albums, playlists and artist news.',reward:25,timer:45},
+  {id:'surf_16',category:'Politics',title:'Nigerian Political Arena',desc:'Government news, elections, policy and political analysis.',reward:50,timer:90},
+  {id:'surf_17',category:'Startup',title:'Nigerian Startup Ecosystem',desc:'Startup funding, entrepreneurship news and business ideas.',reward:50,timer:90},
+  {id:'surf_18',category:'Finance',title:'Personal Finance Nigeria',desc:'Budgeting, saving, investing and financial planning tips.',reward:50,timer:90},
+  {id:'surf_19',category:'Science',title:'African Science Hub',desc:'Scientific discoveries, research and STEM education in Africa.',reward:35,timer:60},
+  {id:'surf_20',category:'Business',title:'SME Business Nigeria',desc:'Resources, tools and news for small business owners Nigeria.',reward:35,timer:60},
+  {id:'surf_21',category:'Law',title:'Nigerian Legal Directory',desc:'Legal news, rights, regulations and law firm listings.',reward:50,timer:90},
+  {id:'surf_22',category:'Environment',title:'Green Nigeria Initiative',desc:'Environmental news, sustainability and climate change Nigeria.',reward:35,timer:60},
+  {id:'surf_23',category:'Religion',title:'Faith & Spirituality Nigeria',desc:'Religious news, sermons, devotionals and spiritual content.',reward:25,timer:45},
+  {id:'surf_24',category:'Youth',title:'Nigerian Youth Hub',desc:'Youth empowerment, career advice and opportunities for young Nigerians.',reward:35,timer:60},
+  {id:'surf_25',category:'Women',title:'Nigerian Women Network',desc:'Women empowerment, gender news and female entrepreneurship.',reward:35,timer:60},
+  {id:'surf_26',category:'Tech',title:'Coding Nigeria',desc:'Programming tutorials, developer news and tech jobs Nigeria.',reward:50,timer:90},
+  {id:'surf_27',category:'Investment',title:'Investment Nigeria',desc:'Stock tips, mutual funds, real estate and investment analysis.',reward:50,timer:90},
+  {id:'surf_28',category:'Jobs',title:'Nigerian Job Market',desc:'Job listings, career development and employment news.',reward:35,timer:60},
+  {id:'surf_29',category:'Automotive',title:'Nigerian Auto Market',desc:'Car reviews, auto news and vehicle pricing in Nigeria.',reward:35,timer:60},
+  {id:'surf_30',category:'Crypto',title:'Crypto Nigeria',desc:'Cryptocurrency news, prices and blockchain in Nigeria.',reward:50,timer:90},
+  {id:'surf_31',category:'Gaming',title:'Nigerian Gamers Hub',desc:'Gaming news, reviews, esports and game releases Nigeria.',reward:25,timer:45},
+  {id:'surf_32',category:'Comedy',title:'Nigerian Comedy Central',desc:'Funny videos, memes, skits and entertainment from Nigeria.',reward:25,timer:45},
+  {id:'surf_33',category:'Photography',title:'Nigeria Through The Lens',desc:'Photography, art, culture and visual stories from Nigeria.',reward:25,timer:45},
+  {id:'surf_34',category:'Architecture',title:'Nigerian Architecture Today',desc:'Building designs, construction news and real estate Nigeria.',reward:35,timer:60},
+  {id:'surf_35',category:'Diaspora',title:'Nigerian Diaspora Network',desc:'News and resources for Nigerians living abroad worldwide.',reward:35,timer:60},
+  {id:'surf_36',category:'Security',title:'Nigerian Security Watch',desc:'Safety, cybersecurity and security news for Nigeria.',reward:50,timer:90},
+  {id:'surf_37',category:'Economy',title:'Nigerian Economy Tracker',desc:'GDP, inflation, economic indicators and financial news.',reward:50,timer:90},
+  {id:'surf_38',category:'Social',title:'Nigerian Community Forum',desc:'Discussion forums, community news and social topics Nigeria.',reward:25,timer:45},
+  {id:'surf_39',category:'Children',title:'Nigerian Kids Learning Hub',desc:'Educational content, activities and resources for children.',reward:25,timer:45},
+  {id:'surf_40',category:'Marriage',title:'Nigerian Wedding Guide',desc:'Wedding planning, venues, trends and relationship advice.',reward:25,timer:45},
+  {id:'surf_41',category:'Insurance',title:'Insurance Nigeria Guide',desc:'Insurance products, comparisons and financial protection.',reward:35,timer:60},
+  {id:'surf_42',category:'Petroleum',title:'Oil & Gas Nigeria',desc:'Energy sector news, oil prices and industry updates.',reward:50,timer:90},
+  {id:'surf_43',category:'Mining',title:'Mining in Nigeria',desc:'Solid minerals, mining investment and resources sector.',reward:50,timer:90},
+  {id:'surf_44',category:'Telecom',title:'Nigerian Telecom Review',desc:'Network reviews, data plans and telecom news Nigeria.',reward:35,timer:60},
+  {id:'surf_45',category:'Medical',title:'Nigerian Medical Journal',desc:'Medical research, healthcare policy and hospital news.',reward:35,timer:60},
+  {id:'surf_46',category:'Culture',title:'Igbo Heritage Online',desc:'Igbo culture, language, traditions and heritage preservation.',reward:25,timer:45},
+  {id:'surf_47',category:'Culture',title:'Yoruba Cultural Foundation',desc:'Yoruba language, culture, festivals and heritage online.',reward:25,timer:45},
+  {id:'surf_48',category:'Culture',title:'Hausa-Fulani Heritage',desc:'Northern Nigeria culture, history and traditions online.',reward:25,timer:45},
+  {id:'surf_49',category:'Pan-Africa',title:'Pan-African Business',desc:'Africa-wide business, trade, investment and economic news.',reward:50,timer:90},
+  {id:'surf_50',category:'Grindpoint',title:'Grindpoint Community',desc:'Platform updates, tips for earning more and community news.',reward:25,timer:45},
+];
+
+const CAT_COLORS={News:'#ef4444',Business:'#3b82f6',Technology:'#8b5cf6',Finance:'#f59e0b',Lifestyle:'#ec4899',Sports:'#22c55e',Entertainment:'#f97316',Education:'#6366f1',Health:'#14b8a6',Agriculture:'#22c55e',Travel:'#f59e0b',Food:'#ef4444',Music:'#ec4899',Politics:'#3b82f6',Startup:'#8b5cf6',Science:'#14b8a6',Law:'#6366f1',Youth:'#f59e0b',Investment:'#22c55e',Crypto:'#f97316'};
+
+const TODAY=new Date().toISOString().split('T')[0];
+let _user=null,_profile=null,_viewed=new Set(),_earning=0,_active=null;
+let _hiddenSince=null,_totalHidden=0;
+
+document.addEventListener('visibilitychange',()=>{
+  if(document.visibilityState==='hidden'){
+    _hiddenSince=Date.now();
+  } else {
+    if(_hiddenSince){_totalHidden+=Date.now()-_hiddenSince;_hiddenSince=null;}
+    if(_active){
+      const required=_active.required;
+      if(_totalHidden>=required){
+        enableClaim(_active.siteId,_active.reward);
+      } else {
+        const rem=Math.ceil((required-_totalHidden)/1000);
+        showToast(`⏰ Too early! Go back to Facebook and stay for ${rem} more second${rem===1?'':'s'}.`,'warning',5000);
+        const prevId=_active.siteId;
+        _active=null;_totalHidden=0;
+        refreshCard(prevId);
+      }
+    }
+  }
+});
+
+document.addEventListener('DOMContentLoaded',async()=>{
+  const auth=await requireAuth();
+  if(!auth)return;
+  _user=auth.user;_profile=auth.profile;
+  const name=_profile?.full_name||_user.user_metadata?.full_name||'Grinder';
+  document.getElementById('sidebarName').textContent=name;
+  document.getElementById('sidebarAvatar').textContent=name.split(' ').map(n=>n[0]).join('').substring(0,2).toUpperCase();
+  document.getElementById('navBalance').textContent=formatNaira(_profile?.balance||0);
+  document.getElementById('statBalance').textContent=formatNaira(_profile?.balance||0);
+  await loadTodayViews();
+  renderGrid('all');
+  updateStats();
+});
+
+async function loadTodayViews(){
+  const sb=getSupabase();
+  try{
+    const{data}=await sb.from('surf_views').select('site_id,reward').eq('user_id',_user.id).eq('view_date',TODAY);
+    if(data)data.forEach(r=>{_viewed.add(r.site_id);_earning+=r.reward;});
+  }catch(e){console.warn('[Surf] Run supabase-ptc-setup.sql:',e.message);}
+}
+
+function updateStats(){
+  document.getElementById('statToday').textContent=formatNaira(_earning);
+  document.getElementById('statViewed').textContent=`${_viewed.size} / 50`;
+}
+
+function currentFilter(){return document.querySelector('.fpill.active')?.dataset?.f||'all';}
+
+function renderGrid(filter){
+  const grid=document.getElementById('surfGrid');
+  let list=SURF_SITES;
+  if(filter==='available')list=SURF_SITES.filter(s=>!_viewed.has(s.id));
+  else if(filter==='viewed')list=SURF_SITES.filter(s=>_viewed.has(s.id));
+  else if(filter==='25')list=SURF_SITES.filter(s=>s.reward===25);
+  else if(filter==='35')list=SURF_SITES.filter(s=>s.reward===35);
+  else if(filter==='50')list=SURF_SITES.filter(s=>s.reward===50);
+
+  if(!list.length){
+    grid.innerHTML=`<div class="empty-state" style="grid-column:1/-1;"><div class="empty-state__icon">🎉</div><div class="empty-state__title">${filter==='viewed'?'Nothing surfed yet':'All done for today!'}</div><div class="empty-state__desc">Fresh sessions unlock at midnight.</div></div>`;
+    return;
+  }
+
+  grid.innerHTML=list.map(site=>{
+    const done=_viewed.has(site.id);
+    const isAct=_active?.siteId===site.id;
+    const catColor=CAT_COLORS[site.category]||'#3b82f6';
+    const minutes=site.timer>=60?`${site.timer/60}min`:`${site.timer}s`;
+    return `<div class="surf-card${done?' viewed':''}${isAct?' is-active':''}" id="scard-${site.id}">
+      <span class="surf-badge">${site.category}</span>
+      <div class="surf-head">
+        <div class="surf-category" style="color:${catColor};">${site.category}</div>
+        <div class="surf-title">${site.title}</div>
+        <div class="surf-desc">${site.desc}</div>
+      </div>
+      <div class="surf-body">
+        <div class="surf-meta">
+          <div><div class="surf-reward" style="color:${catColor};">+${formatNaira(site.reward)}</div><div style="font-size:.72rem;color:var(--text-muted);">reward</div></div>
+          <div class="surf-time"><div style="font-size:.875rem;font-weight:700;color:var(--text-primary);">${minutes}</div><div>surf time</div></div>
+        </div>
+      </div>
+      <div class="surf-foot" id="sfoot-${site.id}">
+        ${done
+          ?`<div style="display:flex;align-items:center;gap:.5rem;color:var(--success);font-size:.82rem;font-weight:600;"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" style="width:16px;height:16px;"><polyline points="20 6 9 17 4 12"/></svg>Surfed today — ${formatNaira(site.reward)} earned</div>`
+          :isAct
+          ?`<div class="waiting-surf">🌊 Stay on Facebook for ${minutes} then come back to claim!</div>`
+          :`<button class="btn-surf sbtn" data-id="${site.id}"${_active?' disabled':''}><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:15px;height:15px;"><path d="M3 12h18M3 6h18M3 18h18"/></svg> Start Surfing — Earn ${formatNaira(site.reward)}</button>`}
+      </div>
+    </div>`;
+  }).join('');
+
+  grid.querySelectorAll('.sbtn').forEach(b=>b.addEventListener('click',()=>startSurf(b.dataset.id)));
+}
+
+function refreshCard(siteId){
+  const site=SURF_SITES.find(s=>s.id===siteId);if(!site)return;
+  const card=document.getElementById(`scard-${siteId}`);
+  const foot=document.getElementById(`sfoot-${siteId}`);
+  if(card)card.classList.remove('is-active');
+  if(foot){foot.innerHTML=`<button class="btn-surf sbtn" data-id="${siteId}"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:15px;height:15px;"><path d="M3 12h18"/></svg> Start Surfing — Earn ${formatNaira(site.reward)}</button>`;
+    foot.querySelector('.sbtn')?.addEventListener('click',()=>startSurf(siteId));}
+  document.querySelectorAll('.sbtn').forEach(b=>{b.disabled=false;});
+}
+
+function enableClaim(siteId,reward){
+  const foot=document.getElementById(`sfoot-${siteId}`);
+  const card=document.getElementById(`scard-${siteId}`);
+  if(!foot)return;
+  foot.innerHTML=`<button class="btn-surf" id="scb-${siteId}" style="background:linear-gradient(135deg,#22c55e,#16a34a);">✅ Claim ${formatNaira(reward)} Now!</button>`;
+  document.getElementById(`scb-${siteId}`)?.addEventListener('click',()=>claimSurf(siteId,reward));
+  if(card)card.classList.add('is-active');
+  showToast('Surf complete! Claim your reward now.','success',4000);
+}
+
+function startSurf(siteId){
+  if(_active){showToast('Finish your current surf session first.','warning');return;}
+  const site=SURF_SITES.find(s=>s.id===siteId);
+  if(!site||_viewed.has(site.id))return;
+  window.open('https://www.facebook.com','_blank','noopener,noreferrer');
+  _active={siteId,required:site.timer*1000,reward:site.reward};
+  _totalHidden=0;_hiddenSince=null;
+  document.querySelectorAll('.sbtn').forEach(b=>{b.disabled=true;});
+  const foot=document.getElementById(`sfoot-${siteId}`);
+  const card=document.getElementById(`scard-${siteId}`);
+  const minutes=site.timer>=60?`${site.timer/60} minute${site.timer/60===1?'':'s'}`:`${site.timer} seconds`;
+  if(foot)foot.innerHTML=`<div class="waiting-surf">🌊 Stay on Facebook for ${minutes} then come back!</div>`;
+  if(card)card.classList.add('is-active');
+  showToast(`Facebook opened! Browse for ${minutes}, then return here to claim ${formatNaira(site.reward)}.`,'success',7000);
+}
+
+async function claimSurf(siteId,reward){
+  const sb=getSupabase();
+  const btn=document.getElementById(`scb-${siteId}`);
+  if(btn){btn.disabled=true;btn.textContent='Crediting…';}
+  try{
+    const{error:ve}=await sb.from('surf_views').insert({user_id:_user.id,site_id:siteId,reward,view_date:TODAY,viewed_at:new Date().toISOString()});
+    if(ve&&!ve.message?.includes('duplicate'))throw ve;
+    const{data:p}=await sb.from('profiles').select('balance').eq('id',_user.id).maybeSingle();
+    const newBal=(p?.balance||0)+reward;
+    await sb.from('profiles').update({balance:newBal,updated_at:new Date().toISOString()}).eq('id',_user.id);
+    _viewed.add(siteId);_earning+=reward;_profile.balance=newBal;
+    _active=null;_totalHidden=0;
+    document.getElementById('navBalance').textContent=formatNaira(newBal);
+    document.getElementById('statBalance').textContent=formatNaira(newBal);
+    updateStats();
+    renderGrid(currentFilter());
+    showToast(`🌊 ${formatNaira(reward)} credited to your wallet!`,'success',4000);
+  }catch(err){
+    _active=null;_totalHidden=0;
+    showToast(err.message?.includes('surf_views')||err.message?.includes('does not exist')?'Run supabase-ptc-setup.sql in Supabase first.':'Error: '+err.message,'error',6000);
+    renderGrid(currentFilter());
+  }
+}
+
+document.querySelectorAll('.fpill').forEach(b=>b.addEventListener('click',()=>{
+  document.querySelectorAll('.fpill').forEach(x=>x.classList.remove('active'));
+  b.classList.add('active');renderGrid(b.dataset.f);
+}));
+
+(function(){
+  const btn=document.getElementById('sidebarToggleBtn'),sb=document.getElementById('sidebar'),ov=document.getElementById('sidebarOverlay');
+  if(!btn||!sb)return;
+  function open(){sb.classList.add('sidebar--open');ov&&ov.classList.add('active');document.body.style.overflow='hidden';}
+  function close(){sb.classList.remove('sidebar--open');ov&&ov.classList.remove('active');document.body.style.overflow='';}
+  btn.addEventListener('click',()=>sb.classList.contains('sidebar--open')?close():open());
+  if(ov)ov.addEventListener('click',close);
+  sb.querySelectorAll('a').forEach(a=>a.addEventListener('click',close));
+})();
+</script>
+</body>
+</html>

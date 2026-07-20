@@ -1,0 +1,408 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Payout Policy — Grindpoint</title>
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><text y='26' font-size='28'>⚡</text></svg>" />
+  <link rel="stylesheet" href="css/style.css" />
+  <style>
+    .legal-hero { padding: calc(var(--nav-height) + 3rem) 0 3rem; background: var(--bg-surface); border-bottom: 1px solid var(--border-subtle); position: relative; overflow: hidden; }
+    .legal-hero::before { content: ''; position: absolute; inset: 0; background: radial-gradient(ellipse 60% 80% at 50% -10%, rgba(245,158,11,0.07) 0%, transparent 70%); pointer-events: none; }
+    .legal-body { max-width: 780px; margin: 0 auto; padding: 3rem var(--space-6) 5rem; }
+    .legal-body h2 { font-size: 1.25rem; color: var(--text-primary); margin: 2.5rem 0 0.75rem; padding-top: 2.5rem; border-top: 1px solid var(--border-subtle); }
+    .legal-body h2:first-of-type { border-top: none; padding-top: 0; margin-top: 0; }
+    .legal-body h3 { font-size: 1rem; color: var(--gold-400); margin: 1.5rem 0 0.5rem; font-family: var(--font-display); }
+    .legal-body p { color: var(--text-secondary); line-height: 1.8; margin-bottom: 1rem; font-size: 0.95rem; }
+    .legal-body ul, .legal-body ol { color: var(--text-secondary); line-height: 1.8; font-size: 0.95rem; padding-left: 1.5rem; margin-bottom: 1rem; }
+    .legal-body ul { list-style: disc; }
+    .legal-body ol { list-style: decimal; }
+    .legal-body li { margin-bottom: 0.4rem; }
+    .legal-body a { color: var(--gold-500); text-decoration: underline; text-underline-offset: 3px; }
+    .legal-body strong { color: var(--text-primary); }
+    .legal-toc { background: var(--bg-card); border: 1px solid var(--border-subtle); border-radius: var(--radius-lg); padding: 1.5rem; margin-bottom: 2.5rem; }
+    .legal-toc h4 { font-size: 0.78rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em; color: var(--text-muted); margin-bottom: 1rem; }
+    .legal-toc ol { padding-left: 1.25rem; color: var(--text-secondary); font-size: 0.875rem; line-height: 2.2; }
+    .legal-toc a { color: var(--text-secondary); text-decoration: none; transition: color 0.15s; }
+    .legal-toc a:hover { color: var(--gold-500); }
+    .highlight-box { background: rgba(245,158,11,0.06); border: 1px solid rgba(245,158,11,0.2); border-radius: var(--radius-md); padding: 1.25rem 1.5rem; margin: 1.5rem 0; }
+    .highlight-box p { margin-bottom: 0; color: var(--text-primary); font-size: 0.9rem; }
+    .payout-table { width: 100%; border-collapse: collapse; margin: 1.25rem 0; border-radius: var(--radius-lg); overflow: hidden; border: 1px solid var(--border-subtle); }
+    .payout-table th { background: var(--bg-elevated); padding: 0.9rem 1.25rem; text-align: left; font-size: 0.78rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.07em; color: var(--text-muted); border-bottom: 1px solid var(--border-subtle); }
+    .payout-table td { padding: 0.9rem 1.25rem; font-size: 0.9rem; color: var(--text-secondary); border-bottom: 1px solid var(--border-subtle); vertical-align: middle; }
+    .payout-table tr:last-child td { border-bottom: none; }
+    .payout-table tbody tr:hover { background: var(--bg-hover); }
+    .payout-table .check { color: var(--success); font-size: 1rem; }
+    .payout-table .cross { color: var(--error); font-size: 1rem; }
+    .step-flow { display: flex; flex-direction: column; gap: 0; margin: 1.5rem 0; }
+    .step-flow-item { display: flex; gap: 1.25rem; align-items: flex-start; padding: 1.25rem; background: var(--bg-card); border: 1px solid var(--border-subtle); border-radius: 0; border-bottom: none; }
+    .step-flow-item:first-child { border-radius: var(--radius-lg) var(--radius-lg) 0 0; }
+    .step-flow-item:last-child { border-radius: 0 0 var(--radius-lg) var(--radius-lg); border-bottom: 1px solid var(--border-subtle); }
+    .step-flow-num { width: 36px; height: 36px; border-radius: 50%; background: var(--gold-gradient); display: flex; align-items: center; justify-content: center; font-family: var(--font-display); font-size: 0.85rem; font-weight: 800; color: #000; flex-shrink: 0; }
+    .step-flow-content strong { font-size: 0.9rem; color: var(--text-primary); display: block; margin-bottom: 0.25rem; }
+    .step-flow-content p { font-size: 0.83rem; color: var(--text-secondary); margin: 0; line-height: 1.5; }
+  </style>
+<!-- Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-SJRSW6DNNQ"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag("js", new Date());
+  gtag("config", "G-SJRSW6DNNQ");
+</script>
+  <!-- PWA Meta Tags -->
+  <link rel="manifest" href="/manifest.json"/>
+  <meta name="theme-color" content="#f59e0b"/>
+  <meta name="mobile-web-app-capable" content="yes"/>
+  <meta name="apple-mobile-web-app-capable" content="yes"/>
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"/>
+  <meta name="apple-mobile-web-app-title" content="Grindpoint"/>
+  <link rel="apple-touch-icon" href="/icons/icon-192.png"/>
+</head>
+<body>
+
+<nav class="landing-nav">
+  <div class="navbar__inner">
+    <a href="index" class="navbar__logo">Grind<span class="logo-accent">point</span></a>
+    <div class="navbar__links">
+      <a href="index" class="nav__link">Home</a>
+      <a href="terms" class="nav__link">Terms</a>
+      <a href="privacy" class="nav__link">Privacy</a>
+    </div>
+    <div class="navbar__actions" id="navActions">
+      <a href="login" class="btn btn-secondary btn-sm">Sign In</a>
+      <a href="register" class="btn btn-primary btn-sm">Get Started</a>
+    </div>
+  </div>
+</nav>
+
+<div class="legal-hero">
+  <div class="container" style="position:relative;z-index:1;">
+    <div style="display:flex;align-items:center;gap:0.75rem;margin-bottom:1rem;">
+      <span class="badge badge-gold">Legal</span>
+      <span style="font-size:0.8rem;color:var(--text-muted);">Last updated: January 1, 2025</span>
+    </div>
+    <h1 style="font-size:clamp(1.8rem,4vw,2.8rem);margin-bottom:0.75rem;">Payout Policy</h1>
+    <p style="color:var(--text-secondary);max-width:580px;line-height:1.7;">
+      Everything you need to know about how, when, and where Grindpoint pays your earned Naira — including limits, supported banks, processing times, and dispute procedures.
+    </p>
+  </div>
+</div>
+
+<div class="legal-body">
+
+  <div class="legal-toc">
+    <h4>Table of Contents</h4>
+    <ol>
+      <li><a href="#overview">Policy Overview</a></li>
+      <li><a href="#minimum">Minimum Withdrawal Threshold</a></li>
+      <li><a href="#methods">Supported Withdrawal Methods</a></li>
+      <li><a href="#process">Withdrawal Process</a></li>
+      <li><a href="#processing-time">Processing Times</a></li>
+      <li><a href="#fees">Fees &amp; Charges</a></li>
+      <li><a href="#verification">Identity Verification</a></li>
+      <li><a href="#limits">Daily &amp; Monthly Limits</a></li>
+      <li><a href="#failed">Failed or Returned Payments</a></li>
+      <li><a href="#disputes">Payout Disputes</a></li>
+      <li><a href="#forfeiture">Balance Forfeiture</a></li>
+      <li><a href="#contact">Contact &amp; Support</a></li>
+    </ol>
+  </div>
+
+  <div class="highlight-box">
+    <p>💸 <strong>Quick Summary:</strong> Minimum withdrawal is ₦1,000. We support all major Nigerian banks + OPay, Palmpay, and Kuda. Payouts are processed within 1–2 business days. No hidden fees on our end — standard bank charges may apply.</p>
+  </div>
+
+  <h2 id="overview">1. Policy Overview</h2>
+  <p>Grindpoint Nigeria Limited ("we," "us," "our") is committed to ensuring that every legitimate Naira earned on our platform reaches you as quickly, securely, and transparently as possible.</p>
+  <p>This Payout Policy forms part of our overall <a href="terms">Terms &amp; Conditions</a> and applies to all registered users of the Grindpoint platform. By requesting a withdrawal, you confirm that you have read and agreed to this policy in full.</p>
+  <p>All withdrawals are paid in <strong>Nigerian Naira (₦)</strong> only. We do not offer payments in any foreign currency, cryptocurrency, or gift cards.</p>
+
+  <h2 id="minimum">2. Minimum Withdrawal Threshold</h2>
+  <p>The minimum amount you may withdraw from your Grindpoint wallet at any one time is:</p>
+
+  <div style="text-align:center;padding:2.5rem;background:linear-gradient(135deg,rgba(245,158,11,0.08),rgba(245,158,11,0.02));border:1px solid rgba(245,158,11,0.25);border-radius:var(--radius-xl);margin:1.5rem 0;">
+    <div style="font-size:0.75rem;font-weight:700;text-transform:uppercase;letter-spacing:0.1em;color:var(--text-muted);margin-bottom:0.5rem;">Minimum Withdrawal</div>
+    <div style="font-family:var(--font-display);font-size:3.5rem;font-weight:800;color:var(--gold-500);line-height:1;">₦1,000</div>
+    <div style="font-size:0.85rem;color:var(--text-secondary);margin-top:0.5rem;">One thousand Naira</div>
+  </div>
+
+  <p>Balances below ₦1,000 are not eligible for withdrawal until the threshold is reached. The maximum single withdrawal per transaction is your full available balance.</p>
+  <p>We reserve the right to adjust the minimum withdrawal threshold. Any changes will be communicated via platform announcement at least 7 days before taking effect.</p>
+
+  <h2 id="methods">3. Supported Withdrawal Methods</h2>
+  <p>We currently support the following withdrawal channels for Nigerian users:</p>
+
+  <table class="payout-table">
+    <thead>
+      <tr>
+        <th>Method</th>
+        <th>Provider</th>
+        <th>Processing Time</th>
+        <th>Available</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><strong>Bank Transfer</strong></td>
+        <td>All CBN-licensed Nigerian banks (GTBank, Access, First Bank, UBA, Zenith, FCMB, Fidelity, Polaris, Sterling, Wema, Union, Stanbic IBTC, Ecobank, Heritage, Citibank, and others)</td>
+        <td>1–2 business days</td>
+        <td class="check">✓ Active</td>
+      </tr>
+      <tr>
+        <td><strong>OPay Wallet</strong></td>
+        <td>OPay (formerly Opera Pay)</td>
+        <td>1–2 business days</td>
+        <td class="check">✓ Active</td>
+      </tr>
+      <tr>
+        <td><strong>Palmpay Wallet</strong></td>
+        <td>Palmpay Nigeria</td>
+        <td>1–2 business days</td>
+        <td class="check">✓ Active</td>
+      </tr>
+      <tr>
+        <td><strong>Kuda Bank</strong></td>
+        <td>Kuda Microfinance Bank</td>
+        <td>1–2 business days</td>
+        <td class="check">✓ Active</td>
+      </tr>
+      <tr>
+        <td><strong>Moniepoint</strong></td>
+        <td>Moniepoint MFB</td>
+        <td>2–3 business days</td>
+        <td class="check">✓ Active</td>
+      </tr>
+      <tr>
+        <td><strong>Cryptocurrency</strong></td>
+        <td>—</td>
+        <td>—</td>
+        <td class="cross">✗ Not supported</td>
+      </tr>
+      <tr>
+        <td><strong>Foreign Bank Accounts</strong></td>
+        <td>—</td>
+        <td>—</td>
+        <td class="cross">✗ Not supported</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <p>We are continuously working to add more payment channels. Follow our announcements for updates.</p>
+
+  <h2 id="process">4. Withdrawal Process</h2>
+  <p>Follow these steps to request a withdrawal:</p>
+
+  <div class="step-flow">
+    <div class="step-flow-item">
+      <div class="step-flow-num">1</div>
+      <div class="step-flow-content">
+        <strong>Log in and visit your Dashboard</strong>
+        <p>Navigate to your dashboard at <a href="dashboard">grindpoint.ng/dashboard.html</a> and ensure your balance is ₦1,000 or above.</p>
+      </div>
+    </div>
+    <div class="step-flow-item">
+      <div class="step-flow-num">2</div>
+      <div class="step-flow-content">
+        <strong>Click "Withdraw Funds"</strong>
+        <p>Press the "Withdraw Funds" button on your dashboard to open the withdrawal form.</p>
+      </div>
+    </div>
+    <div class="step-flow-item">
+      <div class="step-flow-num">3</div>
+      <div class="step-flow-content">
+        <strong>Select your payment method</strong>
+        <p>Choose from Bank Transfer, OPay/Palmpay, or Kuda Bank tabs and enter your account details carefully.</p>
+      </div>
+    </div>
+    <div class="step-flow-item">
+      <div class="step-flow-num">4</div>
+      <div class="step-flow-content">
+        <strong>Enter the withdrawal amount</strong>
+        <p>Type the amount you wish to withdraw (minimum ₦1,000, maximum your full available balance).</p>
+      </div>
+    </div>
+    <div class="step-flow-item">
+      <div class="step-flow-num">5</div>
+      <div class="step-flow-content">
+        <strong>Submit your request</strong>
+        <p>Review your details and click "Submit Request." Your request enters our admin review queue.</p>
+      </div>
+    </div>
+    <div class="step-flow-item">
+      <div class="step-flow-num">6</div>
+      <div class="step-flow-content">
+        <strong>Admin review &amp; payment</strong>
+        <p>Our team reviews and processes your request within 1–2 business days. Funds are sent directly to your provided account.</p>
+      </div>
+    </div>
+  </div>
+
+  <h2 id="processing-time">5. Processing Times</h2>
+  <p>All withdrawal requests are reviewed by our admin team before being processed. Processing times are as follows:</p>
+  <ul>
+    <li><strong>Standard requests (₦1,000–₦49,999):</strong> 1 business day</li>
+    <li><strong>Large requests (₦50,000–₦199,999):</strong> 1–2 business days</li>
+    <li><strong>High-value requests (₦200,000+):</strong> 2–3 business days (may require additional identity verification)</li>
+  </ul>
+  <p><strong>Business days</strong> are Monday through Friday, excluding Nigerian public holidays. Requests submitted after 4:00 PM WAT or on weekends/holidays will be reviewed on the next business day.</p>
+  <p>We aim to process all requests promptly. However, factors such as bank downtime, public holidays, or unusual transaction volumes may occasionally cause delays beyond these estimates.</p>
+
+  <h2 id="fees">6. Fees &amp; Charges</h2>
+  <p>Grindpoint does <strong>not</strong> charge any withdrawal fee on our end. The full amount you request will be sent to your bank or wallet.</p>
+  <p>However, please note:</p>
+  <ul>
+    <li>Your bank or mobile wallet provider may deduct a standard transfer/receiving fee in accordance with their own policies. Grindpoint has no control over these charges.</li>
+    <li>Some mobile wallets may have daily or monthly receiving limits that could affect when you see the funds in your wallet.</li>
+  </ul>
+
+  <h2 id="verification">7. Identity Verification</h2>
+  <p>To protect our users and comply with Nigerian financial regulations, we may require identity verification before processing certain withdrawals. This may include:</p>
+  <ul>
+    <li>Confirmation of your registered phone number via OTP</li>
+    <li>Submission of a government-issued ID (National ID, Voter's Card, Driver's Licence, or International Passport)</li>
+    <li>BVN (Bank Verification Number) verification for large withdrawal requests</li>
+    <li>Selfie/photo verification for high-risk or first-time large withdrawals</li>
+  </ul>
+  <p>We will contact you at your registered email address if additional verification is required. Failure to provide requested verification within 7 days may result in the withdrawal request being cancelled.</p>
+
+  <h2 id="limits">8. Daily &amp; Monthly Limits</h2>
+  <table class="payout-table">
+    <thead>
+      <tr>
+        <th>Limit Type</th>
+        <th>Amount</th>
+        <th>Notes</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>Minimum per request</td>
+        <td><strong style="color:var(--gold-500);">₦1,000</strong></td>
+        <td>Must be reached before withdrawal is permitted</td>
+      </tr>
+      <tr>
+        <td>Maximum per request</td>
+        <td><strong>Your full balance</strong></td>
+        <td>No upper cap per transaction</td>
+      </tr>
+      <tr>
+        <td>Maximum per day</td>
+        <td><strong>₦500,000</strong></td>
+        <td>Across all withdrawal methods combined</td>
+      </tr>
+      <tr>
+        <td>Maximum per month</td>
+        <td><strong>₦2,000,000</strong></td>
+        <td>Higher limits available upon request with verification</td>
+      </tr>
+      <tr>
+        <td>Pending requests allowed</td>
+        <td><strong>1 at a time</strong></td>
+        <td>New request only after current one is processed</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <h2 id="failed">9. Failed or Returned Payments</h2>
+  <p>If a payment fails or is returned due to:</p>
+  <ul>
+    <li>Incorrect account number or account name provided</li>
+    <li>Account closed or dormant</li>
+    <li>Daily/monthly receiving limits on your wallet</li>
+    <li>Bank system downtime</li>
+  </ul>
+  <p>The funds will be <strong>returned to your Grindpoint wallet within 3–5 business days</strong>. You will be notified via email and can submit a corrected withdrawal request.</p>
+  <p><strong>Important:</strong> Grindpoint is not liable for failed payments resulting from incorrect account details provided by you. Please double-check all payment details before submitting a withdrawal request.</p>
+
+  <h2 id="disputes">10. Payout Disputes</h2>
+  <p>If you believe a withdrawal has been incorrectly processed, not received, or you have any concern about a payment:</p>
+  <ol>
+    <li>Wait at least <strong>3 business days</strong> from the approval date before raising a dispute (to account for standard bank transfer delays).</li>
+    <li>Check with your bank or wallet provider to confirm the transaction has not been received.</li>
+    <li>Contact us at <a href="mailto:support@grindpoint.ng">support@grindpoint.ng</a> with:
+      <ul>
+        <li>Your registered email address</li>
+        <li>The withdrawal amount and date requested</li>
+        <li>Your bank/wallet name and account number</li>
+        <li>Any reference number provided</li>
+      </ul>
+    </li>
+  </ol>
+  <p>Our team will investigate and respond within <strong>5 business days</strong>. Where a payment error is confirmed on our end, we will reprocess the payment or credit your wallet promptly.</p>
+
+  <h2 id="forfeiture">11. Balance Forfeiture</h2>
+  <p>Your wallet balance may be forfeited (set to zero without payout) in the following circumstances:</p>
+  <ul>
+    <li>Account suspension or permanent ban due to violation of our <a href="terms">Terms &amp; Conditions</a> (fraud, multi-accounting, task abuse, etc.)</li>
+    <li>Voluntary account deletion with a balance below ₦1,000</li>
+    <li>Account inactivity for more than <strong>12 consecutive months</strong> with no tasks completed and no login. We will send a 30-day advance notice email before forfeiting an inactive balance.</li>
+    <li>Verified fraudulent earning activity (e.g., automated task completion, fake referrals)</li>
+  </ul>
+  <p>Forfeited balances are not refundable and cannot be appealed in the case of Terms violations confirmed by our investigation.</p>
+
+  <h2 id="contact">12. Contact &amp; Support</h2>
+  <p>For all payout-related inquiries:</p>
+  <ul>
+    <li><strong>Email:</strong> <a href="mailto:support@grindpoint.ng">support@grindpoint.ng</a></li>
+    <li><strong>Response time:</strong> Within 1–2 business days</li>
+    <li><strong>Hours:</strong> Monday – Friday, 8:00 AM – 6:00 PM WAT</li>
+  </ul>
+  <p>Please include your registered email address and account details in all support communications to help us assist you faster.</p>
+
+  <div style="display:flex;gap:1rem;flex-wrap:wrap;margin-top:3rem;padding-top:2rem;border-top:1px solid var(--border-subtle);">
+    <a href="terms" class="btn btn-secondary">Terms &amp; Conditions →</a>
+    <a href="privacy" class="btn btn-secondary">Privacy Policy →</a>
+    <a href="contact" class="btn btn-secondary">Contact Support →</a>
+    <a href="dashboard" class="btn btn-primary">Go to Dashboard →</a>
+  </div>
+</div>
+
+<footer style="background:var(--bg-surface);border-top:1px solid var(--border-subtle);padding:2rem 0;">
+  <div class="container" style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:1rem;">
+    <a href="index" class="navbar__logo">Grind<span class="logo-accent">point</span></a>
+    <div style="display:flex;gap:1.5rem;flex-wrap:wrap;">
+      <a href="privacy" style="font-size:0.82rem;color:var(--text-muted);">Privacy Policy</a>
+      <a href="terms" style="font-size:0.82rem;color:var(--text-muted);">Terms</a>
+      <a href="payout-policy" style="font-size:0.82rem;color:var(--gold-500);">Payout Policy</a>
+      <a href="contact" style="font-size:0.82rem;color:var(--text-muted);">Contact</a>
+    </div>
+    <p style="font-size:0.78rem;color:var(--text-muted);">© 2025 Grindpoint Nigeria Limited</p>
+  </div>
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.min.js"></script>
+<script src="js/supabase-config.js"></script>
+<script src="js/main.js"></script>
+<script>
+  document.addEventListener("DOMContentLoaded", async () => {
+    const { session } = await getCurrentUserAndProfile();
+    if (session) {
+      document.getElementById('navActions').innerHTML = `<a href="dashboard" class="btn btn-primary btn-sm">Dashboard →</a>`;
+    }
+  });
+</script>
+
+<!-- Floating WhatsApp Button -->
+<a href="https://wa.me/2349034192652?text=Hello%20Grindpoint%20Support%2C%20I%20need%20help%20with%20my%20account." 
+   target="_blank" rel="noopener" 
+   class="whatsapp-float" 
+   aria-label="Chat with us on WhatsApp">
+  <svg viewBox="0 0 24 24" fill="currentColor">
+    <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/>
+  </svg>
+  <span class="whatsapp-float__label">Support</span>
+</a>
+
+<script>
+// Register Service Worker for PWA
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', () => {
+    navigator.serviceWorker.register('/sw.js')
+      .then(reg => console.log('[GP] SW registered:', reg.scope))
+      .catch(err => console.warn('[GP] SW registration failed:', err));
+  });
+}
+</script>
+</body>
+</html>

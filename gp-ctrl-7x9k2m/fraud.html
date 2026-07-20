@@ -1,0 +1,313 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+  <title>Fraud Detection — Grindpoint Admin</title>
+  <link rel="stylesheet" href="../css/style.css"/>
+  <style>
+    .admin-sidebar .sidebar__link.active{color:var(--error);background:var(--error-bg);}
+    .admin-sidebar .sidebar__link.active::before{background:var(--error);}
+    .fraud-card{background:var(--bg-card);border:1px solid var(--border-subtle);border-radius:var(--radius-lg);overflow:hidden;margin-bottom:1.25rem;}
+    .fraud-card-header{display:flex;align-items:center;justify-content:space-between;padding:1rem 1.25rem;background:var(--bg-elevated);border-bottom:1px solid var(--border-subtle);}
+    .fraud-card-header h3{font-size:.95rem;font-weight:700;display:flex;align-items:center;gap:.6rem;}
+    .risk-high  {color:var(--error);background:var(--error-bg);border:1px solid rgba(239,68,68,.3);}
+    .risk-medium{color:var(--warning);background:var(--warning-bg);border:1px solid rgba(245,158,11,.3);}
+    .risk-low   {color:var(--success);background:var(--success-bg);border:1px solid rgba(34,197,94,.3);}
+    .flag-tag{display:inline-flex;align-items:center;gap:4px;padding:3px 8px;border-radius:var(--radius-full);font-size:.7rem;font-weight:600;margin:2px;}
+  </style>
+</head>
+<body style="visibility:hidden">
+<nav class="navbar" style="border-bottom-color:rgba(239,68,68,.25);">
+  <div class="navbar__inner">
+    <div style="display:flex;align-items:center;gap:1rem;">
+      <a href="../index.html" class="navbar__logo">Grind<span class="logo-accent">point</span></a>
+      <span class="admin-badge">Admin Panel</span>
+    </div>
+    <div style="display:flex;align-items:center;gap:1rem;">
+      <span id="adminName" style="font-size:.82rem;color:var(--text-secondary);">Admin</span>
+      <button onclick="signOut()" class="btn btn-secondary btn-sm">Sign Out</button>
+    </div>
+  </div>
+</nav>
+
+<div class="page-wrapper">
+  <aside class="sidebar admin-sidebar">
+    <nav class="sidebar__nav">
+      <span class="sidebar__label">Overview</span>
+      <a href="index.html" class="sidebar__link"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/></svg>Dashboard</a>
+      <a href="analytics.html" class="sidebar__link"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>Analytics</a>
+      <a href="fraud.html" class="sidebar__link active"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>Fraud Detection
+        <span class="badge badge-error" id="fraudCount" style="margin-left:auto;font-size:.65rem;">0</span>
+      </a>
+      <span class="sidebar__label">Manage</span>
+      <a href="users.html" class="sidebar__link"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/></svg>All Users</a>
+      <a href="task-submissions.html" class="sidebar__link"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 11l3 3L22 4"/></svg>Task Submissions</a>
+      <a href="withdrawals.html" class="sidebar__link"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 000 7h5a3.5 3.5 0 010 7H6"/></svg>Withdrawals</a>
+      <a href="tasks-admin.html" class="sidebar__link"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 11l3 3L22 4"/></svg>Task Manager</a>
+      <a href="announcements.html" class="sidebar__link"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 17H2a3 3 0 000 6h20V17z"/></svg>Announcements</a>
+      <a href="payment-proofs.html" class="sidebar__link"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 11-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>Payment Proofs</a>
+      <a href="blog-admin.html" class="sidebar__link"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 20h9M16.5 3.5a2.121 2.121 0 013 3L7 19l-4 1 1-4L16.5 3.5z"/></svg>Blog Manager</a>
+      <a href="settings.html" class="sidebar__link"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/></svg>Settings</a>
+    </nav>
+  </aside>
+
+  <main class="main-content">
+    <div class="page-header" style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:1rem;">
+      <div>
+        <h1 class="page-title">🛡️ Fraud Detection</h1>
+        <p class="page-subtitle">Automatically flagged suspicious accounts. Review and take action.</p>
+      </div>
+      <button class="btn btn-secondary btn-sm" onclick="loadFraud()">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:14px;height:14px;"><polyline points="23 4 23 10 17 10"/><polyline points="1 20 1 14 7 14"/><path d="M3.51 9a9 9 0 0114.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0020.49 15"/></svg>
+        Re-scan
+      </button>
+    </div>
+
+    <!-- Fraud rules explanation -->
+    <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:.75rem;margin-bottom:1.75rem;">
+      <div style="padding:1rem;background:var(--bg-card);border:1px solid rgba(239,68,68,.2);border-radius:var(--radius-md);">
+        <div style="font-size:1.1rem;margin-bottom:.4rem;">⚡</div>
+        <div style="font-weight:600;font-size:.85rem;color:var(--error);">Speed Withdrawal</div>
+        <div style="font-size:.78rem;color:var(--text-muted);margin-top:3px;">Withdrawal within 10 min of signup</div>
+      </div>
+      <div style="padding:1rem;background:var(--bg-card);border:1px solid rgba(239,68,68,.2);border-radius:var(--radius-md);">
+        <div style="font-size:1.1rem;margin-bottom:.4rem;">👻</div>
+        <div style="font-weight:600;font-size:.85rem;color:var(--error);">Ghost Referrals</div>
+        <div style="font-size:.78rem;color:var(--text-muted);margin-top:3px;">Referred 3+ users who never completed any task</div>
+      </div>
+      <div style="padding:1rem;background:var(--bg-card);border:1px solid rgba(239,68,68,.2);border-radius:var(--radius-md);">
+        <div style="font-size:1.1rem;margin-bottom:.4rem;">🔄</div>
+        <div style="font-weight:600;font-size:.85rem;color:var(--warning);">Task Flood</div>
+        <div style="font-size:.78rem;color:var(--text-muted);margin-top:3px;">5+ task submissions within 10 minutes</div>
+      </div>
+      <div style="padding:1rem;background:var(--bg-card);border:1px solid rgba(239,68,68,.2);border-radius:var(--radius-md);">
+        <div style="font-size:1.1rem;margin-bottom:.4rem;">💰</div>
+        <div style="font-weight:600;font-size:.85rem;color:var(--warning);">High Balance New User</div>
+        <div style="font-size:.78rem;color:var(--text-muted);margin-top:3px;">Balance > ₦5,000 within 24h of signup</div>
+      </div>
+    </div>
+
+    <!-- Results -->
+    <div id="fraudResults">
+      <div style="display:flex;flex-direction:column;gap:.75rem;">
+        ${[1,2,3].map(()=>`<div class="skeleton" style="height:80px;border-radius:var(--radius-lg);"></div>`).join('')}
+      </div>
+    </div>
+  </main>
+</div>
+
+<!-- Ban confirm modal -->
+<div class="modal" id="banModal">
+  <div class="modal__box" style="max-width:420px;">
+    <div class="modal__header">
+      <h3 class="modal__title" style="color:var(--error);">Ban User</h3>
+      <button class="modal__close" onclick="closeModal('banModal')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
+    </div>
+    <div class="modal__body">
+      <p style="color:var(--text-secondary);line-height:1.7;">Ban <strong id="banUserName" style="color:var(--text-primary);"></strong> for suspicious activity? Their wallet will be frozen and they cannot withdraw.</p>
+    </div>
+    <div class="modal__footer">
+      <button class="btn btn-secondary" onclick="closeModal('banModal')">Cancel</button>
+      <button class="btn btn-danger" id="confirmBanBtn">Ban User</button>
+    </div>
+  </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.min.js"></script>
+<script src="../js/supabase-config.js"></script>
+<script src="../js/main.js"></script>
+<script>
+let _flaggedUsers = [];
+let _banTargetId  = null;
+
+document.addEventListener('DOMContentLoaded', async () => {
+  const auth = await requireAdmin();
+  if (!auth) return;
+  document.getElementById('adminName').textContent = auth.profile?.full_name || 'Admin';
+  await loadFraud();
+});
+
+async function loadFraud() {
+  const sb = getSupabase();
+  document.getElementById('fraudResults').innerHTML = `<div style="display:flex;flex-direction:column;gap:.75rem;">${[1,2,3].map(()=>`<div class="skeleton" style="height:80px;border-radius:var(--radius-lg);"></div>`).join('')}</div>`;
+
+  try {
+    // Fetch all needed data in parallel
+    const [profilesRes, subsRes, wdRes] = await Promise.all([
+      sb.from('profiles').select('*').eq('status','active'),
+      sb.from('task_submissions').select('user_id,submitted_at,status'),
+      sb.from('withdrawal_requests').select('user_id,created_at,amount,status'),
+    ]);
+
+    const profiles = profilesRes.data || [];
+    const subs     = subsRes.data     || [];
+    const wds      = wdRes.data       || [];
+
+    _flaggedUsers = [];
+
+    profiles.forEach(user => {
+      const flags    = [];
+      const joinedAt = new Date(user.created_at);
+      const now      = new Date();
+
+      // ── Rule 1: Speed withdrawal (within 10 min of signup) ──
+      const earlyWd = wds.filter(w =>
+        w.user_id === user.id &&
+        (new Date(w.created_at) - joinedAt) < 10 * 60 * 1000
+      );
+      if (earlyWd.length > 0) {
+        flags.push({ label: '⚡ Speed Withdrawal', risk: 'high',
+          detail: `Withdrew ${formatNaira(earlyWd[0].amount)} within minutes of signup` });
+      }
+
+      // ── Rule 2: Ghost referrals ──────────────────────────────
+      if (user.referral_count >= 3) {
+        const referredIds = profiles
+          .filter(p => p.referrer_id === user.id)
+          .map(p => p.id);
+        const activeReferrals = referredIds.filter(id =>
+          subs.some(s => s.user_id === id && s.status === 'approved')
+        );
+        const ghostCount = referredIds.length - activeReferrals.length;
+        if (ghostCount >= 3) {
+          flags.push({ label: '👻 Ghost Referrals', risk: 'high',
+            detail: `${ghostCount} of ${referredIds.length} referred users never completed a task` });
+        }
+      }
+
+      // ── Rule 3: Task flooding ────────────────────────────────
+      const userSubs = subs.filter(s => s.user_id === user.id);
+      userSubs.sort((a,b) => new Date(a.submitted_at)-new Date(b.submitted_at));
+      for (let i = 0; i < userSubs.length - 4; i++) {
+        const window = (new Date(userSubs[i+4].submitted_at) - new Date(userSubs[i].submitted_at)) / 60000;
+        if (window < 10) {
+          flags.push({ label: '🔄 Task Flooding', risk: 'medium',
+            detail: '5+ task submissions within 10 minutes — possible bot activity' });
+          break;
+        }
+      }
+
+      // ── Rule 4: High balance new user (within 24h) ───────────
+      const hoursOld = (now - joinedAt) / 3600000;
+      if (hoursOld < 24 && user.balance > 5000) {
+        flags.push({ label: '💰 High Balance New User', risk: 'medium',
+          detail: `Balance of ${formatNaira(user.balance)} accumulated within ${Math.round(hoursOld)} hours of signup` });
+      }
+
+      if (flags.length > 0) {
+        const maxRisk = flags.some(f => f.risk === 'high') ? 'high' : 'medium';
+        _flaggedUsers.push({ ...user, flags, maxRisk });
+      }
+    });
+
+    document.getElementById('fraudCount').textContent = _flaggedUsers.length;
+    renderFraud();
+
+  } catch(err) {
+    console.error('[Fraud]', err);
+    document.getElementById('fraudResults').innerHTML =
+      `<div class="card" style="text-align:center;padding:2rem;color:var(--error);">Error: ${err.message}</div>`;
+  }
+}
+
+function renderFraud() {
+  const container = document.getElementById('fraudResults');
+
+  if (!_flaggedUsers.length) {
+    container.innerHTML = `
+      <div class="empty-state">
+        <div class="empty-state__icon">✅</div>
+        <div class="empty-state__title">No suspicious accounts detected</div>
+        <div class="empty-state__desc">All users passed the fraud checks. The platform looks clean.</div>
+      </div>`;
+    return;
+  }
+
+  const riskBadge = { high:'risk-high', medium:'risk-medium', low:'risk-low' };
+
+  container.innerHTML = _flaggedUsers.map(user => `
+    <div class="fraud-card">
+      <div class="fraud-card-header">
+        <h3>
+          <div class="user-avatar" style="width:32px;height:32px;font-size:.75rem;">
+            ${(user.full_name||'U').split(' ').map(n=>n[0]).join('').substring(0,2).toUpperCase()}
+          </div>
+          ${user.full_name || 'Unknown'} — <span style="font-size:.82rem;color:var(--text-muted);">${user.email||'—'}</span>
+        </h3>
+        <div style="display:flex;align-items:center;gap:.5rem;">
+          <span class="badge ${riskBadge[user.maxRisk]}">
+            ${user.maxRisk === 'high' ? '🔴 HIGH RISK' : '🟡 MEDIUM RISK'}
+          </span>
+        </div>
+      </div>
+      <div style="padding:1rem 1.25rem;">
+        <!-- Flags -->
+        <div style="display:flex;flex-wrap:wrap;gap:4px;margin-bottom:.85rem;">
+          ${user.flags.map(f => `
+            <span class="flag-tag ${f.risk === 'high' ? 'risk-high' : 'risk-medium'}">
+              ${f.label}
+            </span>`).join('')}
+        </div>
+        <!-- Details -->
+        <div style="display:flex;flex-direction:column;gap:.35rem;margin-bottom:1rem;">
+          ${user.flags.map(f => `
+            <p style="font-size:.8rem;color:var(--text-secondary);">• ${f.detail}</p>`).join('')}
+        </div>
+        <!-- User stats -->
+        <div style="display:flex;gap:1.5rem;flex-wrap:wrap;padding:.75rem;background:var(--bg-elevated);border-radius:var(--radius-md);margin-bottom:1rem;font-size:.8rem;">
+          <div><span style="color:var(--text-muted);">Balance: </span><strong style="color:var(--gold-500);">${formatNaira(user.balance)}</strong></div>
+          <div><span style="color:var(--text-muted);">Tasks: </span><strong>${user.tasks_completed||0}</strong></div>
+          <div><span style="color:var(--text-muted);">Referrals: </span><strong>${user.referral_count||0}</strong></div>
+          <div><span style="color:var(--text-muted);">Joined: </span><strong>${new Date(user.created_at).toLocaleDateString('en-NG')}</strong></div>
+          <div><span style="color:var(--text-muted);">State: </span><strong>${user.state||'—'}</strong></div>
+        </div>
+        <!-- Actions -->
+        <div style="display:flex;gap:.6rem;flex-wrap:wrap;">
+          <button class="btn btn-danger btn-sm" onclick="openBan('${user.id}','${user.full_name}')">
+            🚫 Ban Account
+          </button>
+          <button class="btn btn-secondary btn-sm" onclick="clearUser('${user.id}')">
+            ✅ Mark as Safe
+          </button>
+          <a href="users.html" class="btn btn-secondary btn-sm">
+            👁️ View Full Profile
+          </a>
+        </div>
+      </div>
+    </div>`).join('');
+}
+
+function openBan(id, name) {
+  _banTargetId = id;
+  document.getElementById('banUserName').textContent = name;
+  openModal('banModal');
+}
+
+document.getElementById('confirmBanBtn').addEventListener('click', async () => {
+  const btn = document.getElementById('confirmBanBtn');
+  setButtonLoading(btn, 'Banning…');
+  const { error } = await getSupabase()
+    .from('profiles')
+    .update({ status: 'banned', updated_at: new Date().toISOString() })
+    .eq('id', _banTargetId);
+  clearButtonLoading(btn);
+  if (error) { showToast('Ban failed: ' + error.message, 'error'); return; }
+  _flaggedUsers = _flaggedUsers.filter(u => u.id !== _banTargetId);
+  document.getElementById('fraudCount').textContent = _flaggedUsers.length;
+  renderFraud();
+  closeModal('banModal');
+  showToast('✅ User banned successfully.', 'success');
+});
+
+function clearUser(id) {
+  _flaggedUsers = _flaggedUsers.filter(u => u.id !== id);
+  document.getElementById('fraudCount').textContent = _flaggedUsers.length;
+  renderFraud();
+  showToast('User marked as safe and removed from fraud queue.', 'info');
+}
+
+initModalCloseOnBackdrop('banModal');
+</script>
+</body>
+</html>

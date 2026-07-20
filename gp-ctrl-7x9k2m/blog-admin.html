@@ -1,0 +1,472 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+  <title>Blog Manager — Grindpoint Admin</title>
+  <link rel="stylesheet" href="../css/style.css"/>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/quill/1.3.7/quill.snow.min.css"/>
+  <style>
+    .admin-sidebar .sidebar__link.active{color:var(--error);background:var(--error-bg);}
+    .admin-sidebar .sidebar__link.active::before{background:var(--error);}
+    /* Table */
+    .post-row td{vertical-align:middle;}
+    .post-thumb{width:52px;height:40px;object-fit:cover;border-radius:6px;background:var(--bg-elevated);}
+    .post-thumb-ph{width:52px;height:40px;border-radius:6px;background:var(--bg-elevated);display:flex;align-items:center;justify-content:center;font-size:1.25rem;}
+    /* Quill editor */
+    .ql-toolbar{background:var(--bg-elevated);border:1px solid var(--border-subtle)!important;border-radius:var(--radius-md) var(--radius-md) 0 0;}
+    .ql-container{background:var(--bg-card);border:1px solid var(--border-subtle)!important;border-top:none!important;border-radius:0 0 var(--radius-md) var(--radius-md);min-height:280px;font-size:.9rem;color:var(--text-primary);}
+    .ql-editor{min-height:260px;color:var(--text-primary);}
+    .ql-snow .ql-stroke{stroke:var(--text-secondary)!important;}
+    .ql-snow .ql-fill{fill:var(--text-secondary)!important;}
+    .ql-snow .ql-picker{color:var(--text-secondary)!important;}
+    /* Upload zone */
+    .upload-zone{border:2px dashed var(--border-default);border-radius:var(--radius-md);padding:1.25rem;text-align:center;cursor:pointer;transition:all .2s;position:relative;}
+    .upload-zone:hover{border-color:var(--gold-500);background:rgba(245,158,11,.04);}
+    .upload-zone input{position:absolute;inset:0;opacity:0;cursor:pointer;width:100%;height:100%;}
+    /* Slug input */
+    .slug-prefix{background:var(--bg-elevated);border:1px solid var(--border-subtle);border-right:none;border-radius:var(--radius-md) 0 0 var(--radius-md);padding:.65rem .85rem;font-size:.78rem;color:var(--text-muted);white-space:nowrap;}
+    .slug-input{border-radius:0 var(--radius-md) var(--radius-md) 0!important;}
+    /* Status badges */
+    .badge-draft{background:rgba(100,116,139,.12);color:#64748b;}
+    .badge-live{background:var(--success-bg);color:var(--success);}
+  </style>
+</head>
+<body style="visibility:hidden">
+
+<nav class="navbar" style="border-bottom-color:rgba(239,68,68,.25);">
+  <div class="navbar__inner">
+    <div style="display:flex;align-items:center;gap:1rem;">
+      <a href="../index.html" class="navbar__logo">Grind<span class="logo-accent">point</span></a>
+      <span class="admin-badge">Admin Panel</span>
+    </div>
+    <div style="display:flex;align-items:center;gap:1rem;">
+      <a href="../blog.html" target="_blank" class="btn btn-secondary btn-sm">👁 View Blog</a>
+      <span id="adminName" style="font-size:.82rem;color:var(--text-secondary);">Admin</span>
+      <button onclick="signOut()" class="btn btn-secondary btn-sm">Sign Out</button>
+    </div>
+  </div>
+</nav>
+
+<div class="page-wrapper">
+  <aside class="sidebar admin-sidebar">
+    <nav class="sidebar__nav">
+      <span class="sidebar__label">Overview</span>
+      <a href="index.html" class="sidebar__link"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/></svg>Dashboard</a>
+      <span class="sidebar__label">Manage</span>
+      <a href="users.html" class="sidebar__link"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/></svg>All Users</a>
+      <a href="task-submissions.html" class="sidebar__link"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 11l3 3L22 4"/></svg>Task Submissions</a>
+      <a href="withdrawals.html" class="sidebar__link"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 000 7h5a3.5 3.5 0 010 7H6"/></svg>Withdrawals</a>
+      <a href="tasks-admin.html" class="sidebar__link"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 11l3 3L22 4"/></svg>Task Manager</a>
+      <a href="payment-proofs.html" class="sidebar__link"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 11-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>Payment Proofs</a>
+      <a href="blog-admin.html" class="sidebar__link active"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 20h9M16.5 3.5a2.121 2.121 0 013 3L7 19l-4 1 1-4L16.5 3.5z"/></svg>Blog Manager</a>
+      <a href="announcements.html" class="sidebar__link"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 17H2a3 3 0 000 6h20V17z"/></svg>Announcements</a>
+      <a href="settings.html" class="sidebar__link"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/></svg>Settings</a>
+    </nav>
+  </aside>
+
+  <main class="main-content">
+    <div class="page-header" style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:1rem;">
+      <div>
+        <h1 class="page-title">Blog Manager</h1>
+        <p class="page-subtitle" id="pageSub">Loading posts…</p>
+      </div>
+      <button class="btn btn-primary" id="newPostBtn">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" style="width:15px;height:15px;"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+        New Post
+      </button>
+    </div>
+
+    <!-- Stats -->
+    <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:.75rem;margin-bottom:1.75rem;" id="statsRow"></div>
+
+    <!-- Table -->
+    <div class="table-wrapper">
+      <table class="data-table">
+        <thead>
+          <tr><th style="width:56px;"></th><th>Title</th><th>Category</th><th>Author</th><th>Date</th><th>Views</th><th>Status</th><th style="width:160px;">Actions</th></tr>
+        </thead>
+        <tbody id="tbody">
+          <tr><td colspan="8" style="text-align:center;padding:3rem;color:var(--text-muted);">Loading…</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </main>
+</div>
+
+<!-- Post editor modal -->
+<div class="modal" id="postModal" style="z-index:300;">
+  <div class="modal__box" style="max-width:780px;max-height:95vh;display:flex;flex-direction:column;">
+    <div class="modal__header" style="flex-shrink:0;">
+      <h3 class="modal__title" id="modalHeading">New Post</h3>
+      <div style="display:flex;align-items:center;gap:.75rem;">
+        <span id="draftLabel" style="font-size:.75rem;color:var(--text-muted);font-weight:600;">DRAFT</span>
+        <button class="modal__close" id="modalClose"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
+      </div>
+    </div>
+    <div class="modal__body" style="overflow-y:auto;flex:1;display:flex;flex-direction:column;gap:1rem;">
+
+      <!-- Title -->
+      <div class="form-group">
+        <label class="form-label">Title <span style="color:var(--error)">*</span></label>
+        <input type="text" id="fTitle" class="form-control" placeholder="e.g. How to Earn ₦10,000 Monthly on Grindpoint" oninput="autoSlug()"/>
+      </div>
+
+      <!-- Slug -->
+      <div class="form-group">
+        <label class="form-label">URL Slug <span style="color:var(--error)">*</span></label>
+        <div style="display:flex;align-items:center;">
+          <span class="slug-prefix">grindpoint.com.ng/blog-post.html?slug=</span>
+          <input type="text" id="fSlug" class="form-control slug-input" placeholder="how-to-earn-10000-monthly"/>
+        </div>
+        <span class="form-hint">Auto-generated from title. Only letters, numbers and hyphens.</span>
+      </div>
+
+      <!-- Category + Author -->
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:.75rem;">
+        <div class="form-group">
+          <label class="form-label">Category <span style="color:var(--error)">*</span></label>
+          <select id="fCategory" class="form-control">
+            <option>Earning Tips</option>
+            <option>Platform Updates</option>
+            <option>Payment Proofs</option>
+            <option>Safety & Security</option>
+            <option>Success Stories</option>
+            <option>News & Announcements</option>
+            <option>General</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Author</label>
+          <input type="text" id="fAuthor" class="form-control" value="Grindpoint Team"/>
+        </div>
+      </div>
+
+      <!-- Excerpt -->
+      <div class="form-group">
+        <label class="form-label">Excerpt <span style="color:var(--text-muted);font-weight:400;">(short summary for cards & SEO)</span></label>
+        <textarea id="fExcerpt" class="form-control" rows="2" placeholder="A short 1-2 sentence summary shown on blog cards and in Google search results…" style="resize:vertical;"></textarea>
+      </div>
+
+      <!-- Featured image -->
+      <div>
+        <label class="form-label">Featured Image</label>
+        <div class="upload-zone" id="imgZone">
+          <input type="file" id="fImage" accept="image/*"/>
+          <div style="pointer-events:none;">
+            <div style="font-size:1.75rem;margin-bottom:.4rem;">🖼️</div>
+            <div style="font-size:.82rem;color:var(--text-secondary);"><strong style="color:var(--gold-400);">Click to upload</strong> featured image</div>
+            <div style="font-size:.72rem;color:var(--text-muted);margin-top:.2rem;">PNG, JPG · Max 5MB · Recommended: 1200×630px</div>
+          </div>
+        </div>
+        <div id="imgPreview" style="display:none;margin-top:.6rem;position:relative;">
+          <img id="imgPreviewImg" src="" style="width:100%;max-height:180px;object-fit:cover;border-radius:var(--radius-md);border:1px solid var(--border-subtle);"/>
+          <button onclick="removeImg()" style="position:absolute;top:.4rem;right:.4rem;background:rgba(0,0,0,.6);color:#fff;border:none;border-radius:4px;padding:.25rem .5rem;font-size:.75rem;cursor:pointer;">✕ Remove</button>
+        </div>
+      </div>
+
+      <!-- Content editor -->
+      <div>
+        <label class="form-label">Content <span style="color:var(--error)">*</span></label>
+        <div id="quillEditor"></div>
+      </div>
+
+      <!-- SEO section -->
+      <div style="padding:1rem;background:var(--bg-elevated);border-radius:var(--radius-md);border:1px solid var(--border-subtle);">
+        <div style="font-size:.75rem;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--text-muted);margin-bottom:.85rem;">🔍 SEO Settings</div>
+        <div class="form-group" style="margin-bottom:.75rem;">
+          <label class="form-label" style="font-size:.8rem;">Meta Title</label>
+          <input type="text" id="fMetaTitle" class="form-control" placeholder="Leave blank to use post title"/>
+          <span class="form-hint" id="metaTitleCount">0 / 60 characters</span>
+        </div>
+        <div class="form-group" style="margin-bottom:0;">
+          <label class="form-label" style="font-size:.8rem;">Meta Description</label>
+          <textarea id="fMetaDesc" class="form-control" rows="2" placeholder="Leave blank to use excerpt" style="resize:vertical;"></textarea>
+          <span class="form-hint" id="metaDescCount">0 / 155 characters</span>
+        </div>
+      </div>
+
+      <!-- Publish toggle -->
+      <div style="display:flex;align-items:center;justify-content:space-between;padding:1rem;background:var(--bg-elevated);border-radius:var(--radius-md);border:1px solid var(--border-subtle);">
+        <div>
+          <div style="font-weight:600;font-size:.9rem;">Published (visible to everyone)</div>
+          <div style="font-size:.78rem;color:var(--text-muted);">Turn off to save as a draft.</div>
+        </div>
+        <label style="position:relative;display:inline-block;width:44px;height:24px;flex-shrink:0;">
+          <input type="checkbox" id="fPublished" style="opacity:0;width:0;height:0;"/>
+          <span id="toggleSlider" style="position:absolute;inset:0;background:var(--bg-hover);border:1px solid var(--border-default);border-radius:12px;cursor:pointer;transition:.25s;">
+            <span style="position:absolute;width:18px;height:18px;left:2px;top:2px;background:var(--text-muted);border-radius:50%;transition:.25s;" id="toggleThumb"></span>
+          </span>
+        </label>
+      </div>
+    </div>
+    <div class="modal__footer" style="flex-shrink:0;">
+      <button class="btn btn-secondary" id="modalCancel">Cancel</button>
+      <button class="btn btn-danger btn-sm" id="deletePostBtn" style="display:none;margin-right:auto;">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:13px;height:13px;"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 01-2 2H7a2 2 0 01-2-2V6m3 0V4a1 1 0 011-1h4a1 1 0 011 1v2"/></svg>
+        Delete
+      </button>
+      <button class="btn btn-primary" id="savePostBtn">Save Post</button>
+    </div>
+  </div>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/quill/1.3.7/quill.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.min.js"></script>
+<script src="../js/supabase-config.js"></script>
+<script src="../js/main.js"></script>
+<script>
+let _posts=[];
+let _editingId=null;
+let _imgBase64=null;
+let _quill=null;
+
+document.addEventListener('DOMContentLoaded',async()=>{
+  const auth=await requireAdmin();
+  if(!auth)return;
+  document.getElementById('adminName').textContent=auth.profile?.full_name||'Admin';
+
+  /* Init Quill */
+  _quill=new Quill('#quillEditor',{
+    theme:'snow',
+    modules:{toolbar:[[{header:[1,2,3,false]}],'bold','italic','underline','strike',['blockquote'],
+      [{list:'ordered'},{list:'bullet'}],['link'],['clean']]},
+    placeholder:'Write your article here…',
+  });
+
+  /* Toggle switch visual */
+  document.getElementById('fPublished').addEventListener('change',e=>{
+    const on=e.target.checked;
+    document.getElementById('toggleSlider').style.background=on?'rgba(34,197,94,.2)':'var(--bg-hover)';
+    document.getElementById('toggleSlider').style.borderColor=on?'var(--success)':'var(--border-default)';
+    document.getElementById('toggleThumb').style.background=on?'var(--success)':'var(--text-muted)';
+    document.getElementById('toggleThumb').style.transform=on?'translateX(20px)':'translateX(0)';
+    document.getElementById('draftLabel').textContent=on?'LIVE':'DRAFT';
+    document.getElementById('draftLabel').style.color=on?'var(--success)':'var(--text-muted)';
+  });
+
+  /* SEO char counters */
+  document.getElementById('fMetaTitle').addEventListener('input',e=>{
+    document.getElementById('metaTitleCount').textContent=`${e.target.value.length} / 60 characters`;
+    document.getElementById('metaTitleCount').style.color=e.target.value.length>60?'var(--error)':'var(--text-muted)';
+  });
+  document.getElementById('fMetaDesc').addEventListener('input',e=>{
+    document.getElementById('metaDescCount').textContent=`${e.target.value.length} / 155 characters`;
+    document.getElementById('metaDescCount').style.color=e.target.value.length>155?'var(--error)':'var(--text-muted)';
+  });
+
+  await load();
+});
+
+async function load(){
+  const sb=getSupabase();
+  const{data,error}=await sb.from('blog_posts').select('*').order('created_at',{ascending:false});
+  if(error){
+    document.getElementById('tbody').innerHTML=`<tr><td colspan="8" style="text-align:center;padding:2rem;color:var(--error);">${error.code==='42P01'?'Run supabase-blog-setup.sql in Supabase SQL Editor first.':error.message}</td></tr>`;
+    return;
+  }
+  _posts=data||[];
+  renderStats();
+  renderTable();
+}
+
+function fmt(d){return d?new Date(d).toLocaleDateString('en-NG',{day:'numeric',month:'short',year:'numeric'}):'Draft';}
+
+function renderStats(){
+  const pub=_posts.filter(p=>p.published).length;
+  const views=_posts.reduce((s,p)=>s+(p.views||0),0);
+  document.getElementById('pageSub').textContent=`${_posts.length} posts · ${pub} published · ${views} total views`;
+  document.getElementById('statsRow').innerHTML=`
+    <div class="stat-card"><div class="stat-card__label">Total Posts</div><div class="stat-card__value">${_posts.length}</div></div>
+    <div class="stat-card stat-card--gold"><div class="stat-card__label">Published</div><div class="stat-card__value">${pub}</div></div>
+    <div class="stat-card"><div class="stat-card__label">Drafts</div><div class="stat-card__value">${_posts.length-pub}</div></div>
+    <div class="stat-card"><div class="stat-card__label">Total Views</div><div class="stat-card__value">${views}</div></div>`;
+}
+
+function renderTable(){
+  if(!_posts.length){
+    document.getElementById('tbody').innerHTML=`<tr><td colspan="8" style="text-align:center;padding:3rem;color:var(--text-muted);">No posts yet. Click "New Post" to write your first article.</td></tr>`;
+    return;
+  }
+  document.getElementById('tbody').innerHTML=_posts.map(p=>`
+    <tr class="post-row" id="row-${p.id}">
+      <td>${p.featured_image?`<img src="${p.featured_image}" class="post-thumb" alt="" onerror="this.style.display='none'"/>`:
+        `<div class="post-thumb-ph">📝</div>`}</td>
+      <td>
+        <div style="font-weight:600;font-size:.875rem;color:var(--text-primary);margin-bottom:.2rem;">${p.title}</div>
+        <div style="font-size:.73rem;color:var(--text-muted);">/${p.slug}</div>
+      </td>
+      <td><span class="badge badge-muted" style="font-size:.7rem;">${p.category}</span></td>
+      <td style="font-size:.82rem;">${p.author||'—'}</td>
+      <td style="font-size:.78rem;color:var(--text-muted);">${fmt(p.published_at||p.created_at)}</td>
+      <td style="font-size:.82rem;">${p.views||0}</td>
+      <td><span class="badge ${p.published?'badge-success':'badge-muted'}">${p.published?'Live':'Draft'}</span></td>
+      <td>
+        <div style="display:flex;gap:.4rem;flex-wrap:wrap;">
+          <button class="btn btn-primary btn-sm" onclick="openEdit('${p.id}')">Edit</button>
+          <a href="../blog-post.html?slug=${p.slug}" target="_blank" class="btn btn-secondary btn-sm" style="font-size:.72rem;">Preview</a>
+          <button class="btn btn-sm" style="background:${p.published?'var(--bg-hover)':'var(--success-bg)'};color:${p.published?'var(--text-secondary)':'var(--success)'};border:1px solid ${p.published?'var(--border-subtle)':'rgba(34,197,94,.3)'};" onclick="togglePublish('${p.id}')">
+            ${p.published?'Unpublish':'Publish'}
+          </button>
+        </div>
+      </td>
+    </tr>`).join('');
+}
+
+/* ── Slug auto-gen ── */
+function slugify(t){return t.toLowerCase().replace(/[^a-z0-9\s-]/g,'').trim().replace(/[\s]+/g,'-').replace(/-+/g,'-');}
+function autoSlug(){
+  if(_editingId)return; /* Don't change slug when editing existing post */
+  document.getElementById('fSlug').value=slugify(document.getElementById('fTitle').value);
+}
+
+/* ── Image upload ── */
+document.getElementById('fImage').addEventListener('change',e=>{
+  const file=e.target.files[0];if(!file)return;
+  if(file.size>5*1024*1024){showToast('Image too large. Max 5MB.','warning');return;}
+  const reader=new FileReader();
+  reader.onload=ev=>{
+    _imgBase64=ev.target.result;
+    document.getElementById('imgPreviewImg').src=_imgBase64;
+    document.getElementById('imgPreview').style.display='block';
+    document.getElementById('imgZone').style.display='none';
+  };
+  reader.readAsDataURL(file);
+});
+function removeImg(){_imgBase64=null;document.getElementById('fImage').value='';document.getElementById('imgPreview').style.display='none';document.getElementById('imgZone').style.display='';}
+
+/* ── Open New ── */
+document.getElementById('newPostBtn').addEventListener('click',()=>{
+  _editingId=null;_imgBase64=null;
+  document.getElementById('modalHeading').textContent='New Post';
+  document.getElementById('deletePostBtn').style.display='none';
+  document.getElementById('fTitle').value='';
+  document.getElementById('fSlug').value='';
+  document.getElementById('fCategory').value='Earning Tips';
+  document.getElementById('fAuthor').value='Grindpoint Team';
+  document.getElementById('fExcerpt').value='';
+  document.getElementById('fMetaTitle').value='';
+  document.getElementById('fMetaDesc').value='';
+  document.getElementById('fPublished').checked=false;
+  document.getElementById('fPublished').dispatchEvent(new Event('change'));
+  _quill.setContents([]);
+  removeImg();
+  openModal('postModal');
+});
+
+/* ── Open Edit ── */
+function openEdit(id){
+  const p=_posts.find(x=>x.id===id);if(!p)return;
+  _editingId=id;_imgBase64=null;
+  document.getElementById('modalHeading').textContent='Edit Post';
+  document.getElementById('deletePostBtn').style.display='flex';
+  document.getElementById('fTitle').value=p.title;
+  document.getElementById('fSlug').value=p.slug;
+  document.getElementById('fCategory').value=p.category;
+  document.getElementById('fAuthor').value=p.author||'Grindpoint Team';
+  document.getElementById('fExcerpt').value=p.excerpt||'';
+  document.getElementById('fMetaTitle').value=p.meta_title||'';
+  document.getElementById('fMetaDesc').value=p.meta_description||'';
+  document.getElementById('fPublished').checked=p.published;
+  document.getElementById('fPublished').dispatchEvent(new Event('change'));
+  _quill.clipboard.dangerouslyPasteHTML(p.content||'');
+  /* Show existing image */
+  if(p.featured_image){document.getElementById('imgPreviewImg').src=p.featured_image;document.getElementById('imgPreview').style.display='block';document.getElementById('imgZone').style.display='none';}
+  else{removeImg();}
+  openModal('postModal');
+}
+
+document.getElementById('modalClose').addEventListener('click',()=>closeModal('postModal'));
+document.getElementById('modalCancel').addEventListener('click',()=>closeModal('postModal'));
+initModalCloseOnBackdrop('postModal');
+
+/* ── Save ── */
+document.getElementById('savePostBtn').addEventListener('click',async()=>{
+  const btn=document.getElementById('savePostBtn');
+  const title=document.getElementById('fTitle').value.trim();
+  const slug=document.getElementById('fSlug').value.trim();
+  const content=_quill.root.innerHTML.trim();
+  if(!title){showToast('Title is required.','warning');return;}
+  if(!slug){showToast('Slug is required.','warning');return;}
+  if(!content||content==='<p><br></p>'){showToast('Content cannot be empty.','warning');return;}
+
+  setButtonLoading(btn,'Saving…');
+  const sb=getSupabase();
+
+  /* Upload image if new one selected */
+  let imageUrl=_editingId?(_posts.find(p=>p.id===_editingId)?.featured_image||null):null;
+  if(_imgBase64){
+    try{
+      const mimeType=_imgBase64.split(',')[0].split(':')[1].split(';')[0]||'image/jpeg';
+      const b64=_imgBase64.split(',')[1];
+      const bytes=atob(b64);const arr=new Uint8Array(bytes.length);
+      for(let i=0;i<bytes.length;i++)arr[i]=bytes.charCodeAt(i);
+      const blob=new Blob([arr],{type:mimeType});
+      const ext=mimeType.split('/')[1]?.replace('jpeg','jpg')||'jpg';
+      const path=`blog/${Date.now()}.${ext}`;
+      const{data:up,error:upErr}=await sb.storage.from('blog-images').upload(path,blob,{contentType:mimeType,upsert:false});
+      if(!upErr&&up){const{data:u}=sb.storage.from('blog-images').getPublicUrl(path);imageUrl=u?.publicUrl||null;}
+    }catch(e){console.warn('Image upload failed:',e);}
+  }
+
+  const published=document.getElementById('fPublished').checked;
+  const payload={
+    title,slug:slugify(slug),content,
+    excerpt:document.getElementById('fExcerpt').value.trim()||null,
+    featured_image:imageUrl,
+    author:document.getElementById('fAuthor').value.trim()||'Grindpoint Team',
+    category:document.getElementById('fCategory').value,
+    published,
+    published_at:published?(_editingId&&_posts.find(p=>p.id===_editingId)?.published_at||new Date().toISOString()):null,
+    meta_title:document.getElementById('fMetaTitle').value.trim()||null,
+    meta_description:document.getElementById('fMetaDesc').value.trim()||null,
+    updated_at:new Date().toISOString(),
+  };
+
+  let error,data;
+  if(_editingId){
+    ({data,error}=await sb.from('blog_posts').update(payload).eq('id',_editingId).select().single());
+  } else {
+    ({data,error}=await sb.from('blog_posts').insert({...payload,created_at:new Date().toISOString()}).select().single());
+  }
+
+  clearButtonLoading(btn);
+  if(error){
+    showToast(error.code==='23505'?'❌ That slug is already used. Choose a different one.':'❌ '+error.message,'error',6000);
+    return;
+  }
+  if(_editingId){const i=_posts.findIndex(p=>p.id===_editingId);if(i>-1)_posts[i]={..._posts[i],...payload};}
+  else{_posts.unshift(data);}
+  closeModal('postModal');
+  renderStats();renderTable();
+  showToast(published?'✅ Post published and live!':'✅ Post saved as draft.','success');
+});
+
+/* ── Quick toggle publish ── */
+async function togglePublish(id){
+  const post=_posts.find(p=>p.id===id);if(!post)return;
+  const newState=!post.published;
+  const{error}=await getSupabase().from('blog_posts').update({
+    published:newState,
+    published_at:newState?new Date().toISOString():null,
+    updated_at:new Date().toISOString(),
+  }).eq('id',id);
+  if(error){showToast('Error: '+error.message,'error');return;}
+  post.published=newState;
+  post.published_at=newState?new Date().toISOString():null;
+  renderStats();renderTable();
+  showToast(newState?'✅ Post is now live.':'Post moved to drafts.','success');
+}
+
+/* ── Delete ── */
+document.getElementById('deletePostBtn').addEventListener('click',async()=>{
+  if(!confirm('Delete this post permanently? This cannot be undone.'))return;
+  const{error}=await getSupabase().from('blog_posts').delete().eq('id',_editingId);
+  if(error){showToast('Delete failed: '+error.message,'error');return;}
+  _posts=_posts.filter(p=>p.id!==_editingId);
+  closeModal('postModal');renderStats();renderTable();
+  showToast('Post deleted.','info');
+});
+</script>
+</body>
+</html>

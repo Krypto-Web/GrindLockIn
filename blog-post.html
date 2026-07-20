@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+  <!-- Dynamic meta — updated by JS after post loads -->
+  <title id="metaTitle">Loading… — Grindpoint Blog</title>
+  <meta name="description" id="metaDesc" content=""/>
+  <meta property="og:title" id="ogTitle" content=""/>
+  <meta property="og:description" id="ogDesc" content=""/>
+  <meta property="og:image" id="ogImage" content=""/>
+  <meta property="og:type" content="article"/>
+  <meta property="og:site_name" content="Grindpoint"/>
+  <meta name="twitter:card" content="summary_large_image"/>
+  <link rel="canonical" id="canonicalLink" href=""/>
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><text y='26' font-size='28'>⚡</text></svg>"/>
+  <link rel="stylesheet" href="css/style.css"/>
+  <style>
+    body{visibility:visible!important;}
+    .pub-nav{background:var(--bg-card);border-bottom:1px solid var(--border-subtle);padding:.85rem 1.5rem;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:100;backdrop-filter:blur(8px);}
+    .post-layout{max-width:1100px;margin:0 auto;padding:2rem 1.25rem;display:grid;grid-template-columns:1fr 300px;gap:2.5rem;}
+    @media(max-width:900px){.post-layout{grid-template-columns:1fr;}.sidebar-col{display:none;}}
+    /* Article */
+    .article-hero{width:100%;max-height:420px;object-fit:cover;border-radius:var(--radius-xl);margin-bottom:2rem;display:block;}
+    .article-hero-ph{width:100%;height:280px;background:linear-gradient(135deg,rgba(245,158,11,.15),rgba(245,158,11,.04));border-radius:var(--radius-xl);display:flex;align-items:center;justify-content:center;font-size:5rem;margin-bottom:2rem;}
+    .article-content{font-size:.95rem;line-height:1.85;color:var(--text-secondary);}
+    .article-content h2{font-size:1.35rem;font-weight:800;color:var(--text-primary);margin:2rem 0 .75rem;}
+    .article-content h3{font-size:1.1rem;font-weight:700;color:var(--text-primary);margin:1.5rem 0 .6rem;}
+    .article-content p{margin-bottom:1.1rem;}
+    .article-content ul,.article-content ol{margin:0 0 1.1rem 1.5rem;}
+    .article-content li{margin-bottom:.4rem;}
+    .article-content a{color:var(--gold-500);text-decoration:underline;}
+    .article-content strong{color:var(--text-primary);font-weight:700;}
+    .article-content blockquote{border-left:3px solid var(--gold-500);padding:.75rem 1.25rem;background:rgba(245,158,11,.05);border-radius:0 var(--radius-md) var(--radius-md) 0;margin:1.25rem 0;font-style:italic;}
+    /* Share bar */
+    .share-bar{display:flex;align-items:center;gap:.75rem;flex-wrap:wrap;padding:1.25rem;background:var(--bg-elevated);border-radius:var(--radius-lg);margin-top:2rem;}
+    .share-btn{display:flex;align-items:center;gap:.4rem;padding:.5rem 1rem;border-radius:var(--radius-md);font-size:.82rem;font-weight:600;cursor:pointer;border:none;transition:all .15s;}
+    /* Related */
+    .related-grid{display:grid;grid-template-columns:1fr 1fr;gap:1rem;}
+    @media(max-width:600px){.related-grid{grid-template-columns:1fr;}}
+    .related-card{background:var(--bg-card);border:1px solid var(--border-subtle);border-radius:var(--radius-lg);overflow:hidden;text-decoration:none;transition:all .2s;display:block;}
+    .related-card:hover{border-color:var(--border-gold);transform:translateY(-2px);}
+    .related-img{width:100%;height:120px;object-fit:cover;}
+    .related-img-ph{width:100%;height:120px;background:var(--bg-elevated);display:flex;align-items:center;justify-content:center;font-size:2rem;}
+    .related-body{padding:.85rem;}
+    /* Sidebar */
+    .sidebar-widget{background:var(--bg-card);border:1px solid var(--border-subtle);border-radius:var(--radius-lg);padding:1.25rem;margin-bottom:1.25rem;}
+    .widget-title{font-weight:700;font-size:.875rem;margin-bottom:1rem;padding-bottom:.6rem;border-bottom:1px solid var(--border-subtle);}
+    .sidebar-post{padding:.6rem 0;border-bottom:1px solid var(--border-subtle);}
+    .sidebar-post:last-child{border-bottom:none;padding-bottom:0;}
+    /* Cat colors */
+    .cat-platform{background:rgba(59,130,246,.12);color:#3b82f6;}
+    .cat-earning{background:rgba(245,158,11,.12);color:var(--gold-500);}
+    .cat-payment{background:rgba(34,197,94,.12);color:var(--success);}
+    .cat-safety{background:rgba(239,68,68,.12);color:var(--error);}
+    .cat-success{background:rgba(139,92,246,.12);color:#8b5cf6;}
+    .cat-news{background:rgba(20,184,166,.12);color:#14b8a6;}
+    .cat-general{background:rgba(100,116,139,.12);color:#64748b;}
+  </style>
+  <!-- JSON-LD structured data — filled by JS -->
+  <script type="application/ld+json" id="jsonLd">{}</script>
+</head>
+<body>
+
+<nav class="pub-nav">
+  <a href="index" style="font-weight:800;font-size:1.1rem;color:var(--text-primary);text-decoration:none;">Grind<span style="color:var(--gold-500);">point</span></a>
+  <div style="display:flex;gap:.75rem;align-items:center;">
+    <a href="blog" style="font-size:.85rem;font-weight:600;color:var(--gold-500);text-decoration:none;">← Blog</a>
+    <a href="login" class="btn btn-secondary btn-sm">Login</a>
+    <a href="register" class="btn btn-primary btn-sm">Join Free</a>
+  </div>
+</nav>
+
+<!-- Loading state -->
+<div id="loadingState" style="text-align:center;padding:5rem 2rem;color:var(--text-muted);">
+  <div style="font-size:2rem;margin-bottom:1rem;">⏳</div>
+  Loading article…
+</div>
+
+<!-- Error state -->
+<div id="errorState" style="display:none;text-align:center;padding:5rem 2rem;">
+  <div style="font-size:3rem;margin-bottom:1rem;">😕</div>
+  <h2>Article Not Found</h2>
+  <p style="color:var(--text-secondary);margin-bottom:1.5rem;">This article may have been removed or the link is incorrect.</p>
+  <a href="blog" class="btn btn-primary">← Back to Blog</a>
+</div>
+
+<!-- Article content -->
+<div id="articleWrap" style="display:none;">
+  <div class="post-layout">
+    <!-- Main -->
+    <article>
+      <!-- Breadcrumb -->
+      <nav style="display:flex;align-items:center;gap:.5rem;font-size:.78rem;color:var(--text-muted);margin-bottom:1.5rem;flex-wrap:wrap;">
+        <a href="index" style="color:var(--text-muted);text-decoration:none;">Home</a>
+        <span>›</span>
+        <a href="blog" style="color:var(--text-muted);text-decoration:none;">Blog</a>
+        <span>›</span>
+        <span id="bcCategory" style="color:var(--gold-500);font-weight:600;"></span>
+      </nav>
+
+      <!-- Category badge -->
+      <span id="catBadge" class="badge" style="font-size:.72rem;margin-bottom:1rem;display:inline-block;"></span>
+
+      <!-- Title -->
+      <h1 id="postTitle" style="font-size:clamp(1.5rem,4vw,2.2rem);font-weight:800;line-height:1.3;margin-bottom:1rem;"></h1>
+
+      <!-- Meta -->
+      <div style="display:flex;align-items:center;gap:.75rem;flex-wrap:wrap;font-size:.8rem;color:var(--text-muted);margin-bottom:1.75rem;padding-bottom:1.25rem;border-bottom:1px solid var(--border-subtle);">
+        <span id="postAuthor"></span>
+        <span style="width:3px;height:3px;border-radius:50%;background:var(--text-muted);flex-shrink:0;"></span>
+        <span id="postDate"></span>
+        <span style="width:3px;height:3px;border-radius:50%;background:var(--text-muted);flex-shrink:0;"></span>
+        <span id="postReadTime"></span>
+        <span style="width:3px;height:3px;border-radius:50%;background:var(--text-muted);flex-shrink:0;"></span>
+        <span id="postViews"></span>
+      </div>
+
+      <!-- Featured image -->
+      <div id="heroImgWrap"></div>
+
+      <!-- Content -->
+      <div class="article-content" id="postContent"></div>
+
+      <!-- Share bar -->
+      <div class="share-bar">
+        <span style="font-size:.85rem;font-weight:700;color:var(--text-primary);">Share this article:</span>
+        <button class="share-btn" style="background:#25D366;color:#fff;" onclick="shareWhatsApp()">
+          <svg viewBox="0 0 24 24" fill="currentColor" style="width:15px;height:15px;"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+          WhatsApp
+        </button>
+        <button class="share-btn" style="background:#1877f2;color:#fff;" onclick="shareFacebook()">
+          <svg viewBox="0 0 24 24" fill="currentColor" style="width:15px;height:15px;"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg>
+          Facebook
+        </button>
+        <button class="share-btn" style="background:var(--bg-elevated);color:var(--text-secondary);border:1px solid var(--border-subtle);" onclick="copyLink()">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:15px;height:15px;"><path d="M10 13a5 5 0 007.54.54l3-3a5 5 0 00-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 00-7.54-.54l-3 3a5 5 0 007.07 7.07l1.71-1.71"/></svg>
+          Copy Link
+        </button>
+      </div>
+
+      <!-- Related posts -->
+      <div style="margin-top:2.5rem;" id="relatedWrap"></div>
+
+      <!-- CTA -->
+      <div style="margin-top:2rem;padding:1.75rem;background:linear-gradient(135deg,rgba(245,158,11,.1),rgba(245,158,11,.03));border:1px solid rgba(245,158,11,.2);border-radius:var(--radius-xl);text-align:center;">
+        <div style="font-size:1.5rem;margin-bottom:.5rem;"></div>
+        <h3 style="font-size:1.1rem;font-weight:800;margin-bottom:.4rem;">Ready to Start Earning?</h3>
+        <p style="color:var(--text-secondary);font-size:.85rem;margin-bottom:1.25rem;">Join thousands of Nigerians making money on Grindpoint — free to join, instant earnings.</p>
+        <div style="display:flex;gap:.75rem;justify-content:center;flex-wrap:wrap;">
+          <a href="register" class="btn btn-primary">Join Free Now</a>
+          <a href="proof-of-payment" class="btn btn-secondary">See Payment Proofs</a>
+        </div>
+      </div>
+    </article>
+
+    <!-- Sidebar -->
+    <div class="sidebar-col">
+      <div class="sidebar-widget">
+        <div class="widget-title">More Articles</div>
+        <div id="sidebarPosts"></div>
+      </div>
+      <div class="sidebar-widget" style="background:linear-gradient(135deg,rgba(245,158,11,.1),rgba(245,158,11,.03));border-color:rgba(245,158,11,.2);">
+        <div style="text-align:center;">
+          <div style="font-size:1.75rem;margin-bottom:.5rem;">💰</div>
+          <div style="font-weight:700;margin-bottom:.4rem;">Earn While You Read</div>
+          <div style="font-size:.8rem;color:var(--text-secondary);margin-bottom:1rem;line-height:1.5;">View 200 ads daily and earn ₦10–₦20 each. No skills needed.</div>
+          <a href="register" class="btn btn-primary btn-block">Start Earning Free</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<footer style="text-align:center;padding:2rem;border-top:1px solid var(--border-subtle);color:var(--text-muted);font-size:.8rem;margin-top:2rem;">
+  © 2025 Grindpoint · <a href="blog" style="color:var(--text-muted);">Blog</a> · <a href="proof-of-payment" style="color:var(--text-muted);">Proof of Payment</a>
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.min.js"></script>
+<script src="js/supabase-config.js"></script>
+<script>
+const CAT_CLASS={'Platform Updates':'cat-platform','Earning Tips':'cat-earning','Payment Proofs':'cat-payment','Safety & Security':'cat-safety','Success Stories':'cat-success','News & Announcements':'cat-news','General':'cat-general'};
+const CAT_EMOJI={'Platform Updates':'📢','Earning Tips':'💡','Payment Proofs':'💰','Safety & Security':'🔒','Success Stories':'🏆','News & Announcements':'📰','General':'📝'};
+
+function fmt(d){return d?new Date(d).toLocaleDateString('en-NG',{day:'numeric',month:'short',year:'numeric'}):'—';}
+function readTime(html){const w=(html||'').replace(/<[^>]*>/g,'').split(/\s+/).filter(Boolean).length;return Math.max(1,Math.ceil(w/200));}
+
+const slug=new URLSearchParams(window.location.search).get('slug');
+
+document.addEventListener('DOMContentLoaded',async()=>{
+  if(!slug){showError();return;}
+  const sb=getSupabase();
+
+  const{data:post,error}=await sb.from('blog_posts')
+    .select('*').eq('slug',slug).eq('published',true).maybeSingle();
+
+  if(error||!post){showError();return;}
+
+  /* Increment views */
+  sb.from('blog_posts').update({views:(post.views||0)+1}).eq('id',post.id).then(()=>{});
+
+  /* Fill SEO meta */
+  const title=post.meta_title||`${post.title} | Grindpoint Blog`;
+  const desc=post.meta_description||post.excerpt||(post.content||'').replace(/<[^>]*>/g,'').substring(0,155);
+  document.getElementById('metaTitle').textContent=title;
+  document.title=title;
+  document.getElementById('metaDesc').setAttribute('content',desc);
+  document.getElementById('ogTitle').setAttribute('content',post.title);
+  document.getElementById('ogDesc').setAttribute('content',desc);
+  if(post.featured_image)document.getElementById('ogImage').setAttribute('content',post.featured_image);
+  document.getElementById('canonicalLink').setAttribute('href',window.location.href);
+
+  /* JSON-LD */
+  document.getElementById('jsonLd').textContent=JSON.stringify({
+    '@context':'https://schema.org','@type':'BlogPosting',
+    headline:post.title,description:desc,
+    author:{'@type':'Organization',name:post.author||'Grindpoint Team'},
+    publisher:{'@type':'Organization',name:'Grindpoint',url:'https://grindpoint.com.ng'},
+    datePublished:post.published_at,dateModified:post.updated_at,
+    image:post.featured_image||'',url:window.location.href,
+  });
+
+  /* Fill article */
+  const catClass=CAT_CLASS[post.category]||'cat-general';
+  const catEmoji=CAT_EMOJI[post.category]||'📝';
+  const rt=readTime(post.content);
+
+  document.getElementById('bcCategory').textContent=post.category;
+  document.getElementById('catBadge').className=`badge ${catClass}`;
+  document.getElementById('catBadge').textContent=`${catEmoji} ${post.category}`;
+  document.getElementById('postTitle').textContent=post.title;
+  document.getElementById('postAuthor').textContent=`${post.author||'Grindpoint Team'}`;
+  document.getElementById('postDate').textContent=`${fmt(post.published_at)}`;
+  document.getElementById('postReadTime').textContent=`${rt} min read`;
+  document.getElementById('postViews').textContent=`${(post.views||0)+1} views`;
+
+  /* Hero image */
+  document.getElementById('heroImgWrap').innerHTML=post.featured_image
+    ?`<img src="${post.featured_image}" class="article-hero" alt="${post.title}" onerror="this.parentElement.innerHTML='<div class=article-hero-ph>${catEmoji}</div>'"/>`
+    :`<div class="article-hero-ph">${catEmoji}</div>`;
+
+  /* Content */
+  document.getElementById('postContent').innerHTML=post.content||'';
+
+  /* Show article */
+  document.getElementById('loadingState').style.display='none';
+  document.getElementById('articleWrap').style.display='block';
+
+  /* Load related + sidebar */
+  const{data:others}=await sb.from('blog_posts')
+    .select('id,title,slug,excerpt,content,featured_image,category,published_at')
+    .eq('published',true).neq('id',post.id).order('published_at',{ascending:false}).limit(6);
+
+  if(others){
+    renderRelated(others.filter(p=>p.category===post.category).slice(0,2).concat(others.filter(p=>p.category!==post.category).slice(0,2)).slice(0,4));
+    renderSidebar(others.slice(0,5));
+  }
+});
+
+function showError(){
+  document.getElementById('loadingState').style.display='none';
+  document.getElementById('errorState').style.display='block';
+}
+
+function renderRelated(posts){
+  if(!posts.length)return;
+  document.getElementById('relatedWrap').innerHTML=`
+    <h3 style="font-weight:700;font-size:1rem;margin-bottom:1rem;">Related Articles</h3>
+    <div class="related-grid">
+      ${posts.map(p=>`
+        <a href="blog-post.html?slug=${p.slug}" class="related-card">
+          ${p.featured_image?`<img src="${p.featured_image}" class="related-img" alt="${p.title}" onerror="this.parentElement.innerHTML='<div class=related-img-ph>${CAT_EMOJI[p.category]||'📝'}</div>'+this.parentElement.innerHTML"/>`:`<div class="related-img-ph">${CAT_EMOJI[p.category]||'📝'}</div>`}
+          <div class="related-body">
+            <div style="font-weight:700;font-size:.85rem;color:var(--text-primary);line-height:1.4;margin-bottom:.25rem;">${p.title}</div>
+            <div style="font-size:.74rem;color:var(--text-muted);">${fmt(p.published_at)}</div>
+          </div>
+        </a>`).join('')}
+    </div>`;
+}
+
+function renderSidebar(posts){
+  document.getElementById('sidebarPosts').innerHTML=posts.map(p=>`
+    <div class="sidebar-post">
+      <a href="blog-post.html?slug=${p.slug}" style="font-weight:600;font-size:.82rem;color:var(--text-primary);text-decoration:none;line-height:1.4;display:block;margin-bottom:.2rem;">${p.title}</a>
+      <div style="font-size:.72rem;color:var(--text-muted);">${fmt(p.published_at)}</div>
+    </div>`).join('');
+}
+
+/* Share */
+function shareWhatsApp(){window.open(`https://wa.me/?text=${encodeURIComponent(document.title+' '+window.location.href)}`);}
+function shareFacebook(){window.open(`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(window.location.href)}`);}
+function copyLink(){navigator.clipboard?.writeText(window.location.href).then(()=>alert('Link copied!'));}
+</script>
+</body>
+</html>
