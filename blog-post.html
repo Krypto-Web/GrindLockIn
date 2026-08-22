@@ -1,136 +1,214 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8"/>
-  <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
-  <!-- Dynamic meta — updated by JS after post loads -->
-  <title id="metaTitle">Loading… — Grindpoint Blog</title>
-  <meta name="description" id="metaDesc" content=""/>
-  <meta property="og:title" id="ogTitle" content=""/>
-  <meta property="og:description" id="ogDesc" content=""/>
-  <meta property="og:image" id="ogImage" content=""/>
-  <meta property="og:type" content="article"/>
-  <meta property="og:site_name" content="Grindpoint"/>
-  <meta name="twitter:card" content="summary_large_image"/>
-  <link rel="canonical" id="canonicalLink" href=""/>
-  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><text y='26' font-size='28'>⚡</text></svg>"/>
-  <link rel="stylesheet" href="css/style.css"/>
-  <style>
-    body{visibility:visible!important;}
-    .pub-nav{background:var(--bg-card);border-bottom:1px solid var(--border-subtle);padding:.85rem 1.5rem;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:100;backdrop-filter:blur(8px);}
-    .post-layout{max-width:1100px;margin:0 auto;padding:2rem 1.25rem;display:grid;grid-template-columns:1fr 300px;gap:2.5rem;}
-    @media(max-width:900px){.post-layout{grid-template-columns:1fr;}.sidebar-col{display:none;}}
-    /* Article */
-    .article-hero{width:100%;max-height:420px;object-fit:cover;border-radius:var(--radius-xl);margin-bottom:2rem;display:block;}
-    .article-hero-ph{width:100%;height:280px;background:linear-gradient(135deg,rgba(245,158,11,.15),rgba(245,158,11,.04));border-radius:var(--radius-xl);display:flex;align-items:center;justify-content:center;font-size:5rem;margin-bottom:2rem;}
-    .article-content{font-size:.95rem;line-height:1.85;color:var(--text-secondary);}
-    .article-content h2{font-size:1.35rem;font-weight:800;color:var(--text-primary);margin:2rem 0 .75rem;}
-    .article-content h3{font-size:1.1rem;font-weight:700;color:var(--text-primary);margin:1.5rem 0 .6rem;}
-    .article-content p{margin-bottom:1.1rem;}
-    .article-content ul,.article-content ol{margin:0 0 1.1rem 1.5rem;}
-    .article-content li{margin-bottom:.4rem;}
-    .article-content a{color:var(--gold-500);text-decoration:underline;}
-    .article-content strong{color:var(--text-primary);font-weight:700;}
-    .article-content blockquote{border-left:3px solid var(--gold-500);padding:.75rem 1.25rem;background:rgba(245,158,11,.05);border-radius:0 var(--radius-md) var(--radius-md) 0;margin:1.25rem 0;font-style:italic;}
-    /* Share bar */
-    .share-bar{display:flex;align-items:center;gap:.75rem;flex-wrap:wrap;padding:1.25rem;background:var(--bg-elevated);border-radius:var(--radius-lg);margin-top:2rem;}
-    .share-btn{display:flex;align-items:center;gap:.4rem;padding:.5rem 1rem;border-radius:var(--radius-md);font-size:.82rem;font-weight:600;cursor:pointer;border:none;transition:all .15s;}
-    /* Related */
-    .related-grid{display:grid;grid-template-columns:1fr 1fr;gap:1rem;}
-    @media(max-width:600px){.related-grid{grid-template-columns:1fr;}}
-    .related-card{background:var(--bg-card);border:1px solid var(--border-subtle);border-radius:var(--radius-lg);overflow:hidden;text-decoration:none;transition:all .2s;display:block;}
-    .related-card:hover{border-color:var(--border-gold);transform:translateY(-2px);}
-    .related-img{width:100%;height:120px;object-fit:cover;}
-    .related-img-ph{width:100%;height:120px;background:var(--bg-elevated);display:flex;align-items:center;justify-content:center;font-size:2rem;}
-    .related-body{padding:.85rem;}
-    /* Sidebar */
-    .sidebar-widget{background:var(--bg-card);border:1px solid var(--border-subtle);border-radius:var(--radius-lg);padding:1.25rem;margin-bottom:1.25rem;}
-    .widget-title{font-weight:700;font-size:.875rem;margin-bottom:1rem;padding-bottom:.6rem;border-bottom:1px solid var(--border-subtle);}
-    .sidebar-post{padding:.6rem 0;border-bottom:1px solid var(--border-subtle);}
-    .sidebar-post:last-child{border-bottom:none;padding-bottom:0;}
-    /* Cat colors */
-    .cat-platform{background:rgba(59,130,246,.12);color:#3b82f6;}
-    .cat-earning{background:rgba(245,158,11,.12);color:var(--gold-500);}
-    .cat-payment{background:rgba(34,197,94,.12);color:var(--success);}
-    .cat-safety{background:rgba(239,68,68,.12);color:var(--error);}
-    .cat-success{background:rgba(139,92,246,.12);color:#8b5cf6;}
-    .cat-news{background:rgba(20,184,166,.12);color:#14b8a6;}
-    .cat-general{background:rgba(100,116,139,.12);color:#64748b;}
-  </style>
-  <!-- JSON-LD structured data — filled by JS -->
-  <script type="application/ld+json" id="jsonLd">{}</script>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title id="metaTitle">Loading… — Grindpoint Blog</title>
+<meta name="description" id="metaDesc" content=""/>
+<meta property="og:title" id="ogTitle" content=""/>
+<meta property="og:description" id="ogDesc" content=""/>
+<meta property="og:image" id="ogImage" content=""/>
+<meta property="og:type" content="article"/>
+<meta property="og:site_name" content="Grindpoint"/>
+<meta name="twitter:card" content="summary_large_image"/>
+<link rel="canonical" id="canonicalLink" href=""/>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='7' fill='%230E7C4A'/><text x='16' y='23' font-size='18' text-anchor='middle' fill='white' font-family='Georgia,serif'>%E2%82%A6</text></svg>"/>
+
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-SJRSW6DNNQ"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag("js", new Date());
+  gtag("config", "G-SJRSW6DNNQ");
+</script>
+<link rel="manifest" href="/manifest.json"/>
+<meta name="theme-color" content="#0E7C4A"/>
+<link rel="apple-touch-icon" href="/icons/icon-192.png"/>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Big+Shoulders+Display:wght@700;800;900&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;0,6..72,600;1,6..72,400;1,6..72,500&family=IBM+Plex+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+<style>
+:root{
+  --paper:#F6F7F2;--paper-dim:#ECEFE7;--white:#FFFFFF;--ink:#0E1F17;--ink-soft:#1B3327;
+  --green:#0E7C4A;--green-deep:#0A5C37;--green-pale:#E3F3E9;
+  --coral:#FF6B47;--coral-deep:#E5502C;
+  --line:#D8DDD1;--line-soft:#E4E8DE;--muted:#5B6B60;
+  --font-display:'Big Shoulders Display',sans-serif;--font-body:'Plus Jakarta Sans',sans-serif;
+  --font-serif:'Newsreader',Georgia,serif;--font-mono:'IBM Plex Mono',monospace;
+  --radius-sm:10px;--radius-md:16px;--radius-lg:24px;--radius-xl:28px;
+  --shadow-card:0 2px 4px rgba(14,31,23,.04),0 12px 28px rgba(14,31,23,.07);
+  --shadow-lift:0 8px 16px rgba(14,31,23,.06),0 24px 48px rgba(14,31,23,.10);
+  --cat-platform:#2563EB;--cat-earning:#D97706;--cat-payment:#0E7C4A;--cat-safety:#DC2626;
+  --cat-success:#7C3AED;--cat-news:#0D9488;--cat-general:#5B6B60;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+body{font-family:var(--font-body);background:var(--paper);color:var(--ink);line-height:1.6;-webkit-font-smoothing:antialiased;}
+img,svg{display:block;max-width:100%;}
+a{color:inherit;text-decoration:none;}
+button{font-family:inherit;cursor:pointer;}
+h1,h2,h3{font-family:var(--font-display);font-weight:800;letter-spacing:-.01em;}
+:focus-visible{outline:3px solid var(--coral);outline-offset:2px;border-radius:4px;}
+.container{max-width:1180px;margin:0 auto;padding:0 1.5rem;}
+@media(max-width:640px){.container{padding:0 1.25rem;}}
+
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:.5rem;font-family:var(--font-body);font-weight:700;font-size:.88rem;padding:.75rem 1.5rem;border-radius:50px;border:2px solid transparent;transition:transform .15s,background .15s;white-space:nowrap;}
+.btn:hover{transform:translateY(-2px);}
+.btn-primary{background:var(--green);color:#fff;box-shadow:0 6px 14px rgba(14,124,74,.26);}
+.btn-primary:hover{background:var(--green-deep);}
+.btn-secondary{background:var(--white);border-color:var(--line);color:var(--ink);}
+.btn-secondary:hover{background:var(--paper-dim);}
+.btn-block{width:100%;}
+
+/* Reading progress bar — signature touch */
+.progress-track{position:fixed;top:0;left:0;right:0;height:3px;background:transparent;z-index:600;}
+.progress-fill{height:100%;width:0%;background:var(--green);transition:width .1s linear;}
+
+.nav{position:sticky;top:0;z-index:500;background:rgba(246,247,242,.9);backdrop-filter:blur(10px);border-bottom:1px solid var(--line);}
+.nav__inner{max-width:1180px;margin:0 auto;padding:.95rem 1.5rem;display:flex;align-items:center;justify-content:space-between;gap:1rem;}
+.logo{display:inline-flex;align-items:center;gap:.5rem;font-family:var(--font-display);font-size:1.3rem;font-weight:800;}
+.logo svg{width:28px;height:28px;}
+.logo .accent{color:var(--green);}
+.nav__back{font-size:.85rem;font-weight:700;color:var(--green-deep);display:flex;align-items:center;gap:.4rem;}
+.nav__actions{display:flex;gap:.6rem;align-items:center;}
+.btn-sm{padding:.55rem 1.1rem;font-size:.8rem;}
+
+.state-block{text-align:center;padding:6rem 2rem;color:var(--muted);}
+.state-block .emoji{font-size:2.5rem;margin-bottom:1rem;}
+.state-block h2{margin-bottom:.6rem;text-transform:none;}
+.state-block p{margin-bottom:1.5rem;}
+
+.post-layout{max-width:1100px;margin:0 auto;padding:2.5rem 1.5rem 4rem;display:grid;grid-template-columns:1fr 300px;gap:3rem;}
+@media(max-width:900px){.post-layout{grid-template-columns:1fr;padding:1.75rem 1.25rem 3rem;}.sidebar-col{display:none;}}
+
+.breadcrumb{display:flex;align-items:center;gap:.5rem;font-size:.78rem;color:var(--muted);margin-bottom:1.75rem;flex-wrap:wrap;font-family:var(--font-mono);}
+.breadcrumb a:hover{color:var(--green-deep);}
+.breadcrumb span#bcCategory{font-weight:700;}
+
+.post-cat{display:inline-flex;align-items:center;gap:.35rem;padding:.35rem .85rem;border-radius:50px;font-size:.7rem;font-weight:700;text-transform:uppercase;letter-spacing:.05em;margin-bottom:1.25rem;}
+
+#postTitle{font-size:clamp(2rem,5vw,3.4rem);line-height:1.05;text-transform:uppercase;margin-bottom:1.5rem;letter-spacing:-.01em;}
+
+.byline{display:flex;align-items:center;gap:.85rem;padding-bottom:1.75rem;margin-bottom:2rem;border-bottom:1px solid var(--line);}
+.byline__avatar{width:42px;height:42px;border-radius:50%;background:var(--green);color:#fff;display:flex;align-items:center;justify-content:center;font-family:var(--font-mono);font-weight:700;font-size:.85rem;flex-shrink:0;}
+.byline__meta{font-size:.8rem;color:var(--muted);display:flex;align-items:center;gap:.55rem;flex-wrap:wrap;}
+.byline__meta strong{color:var(--ink);}
+.byline__dot{width:3px;height:3px;border-radius:50%;background:var(--muted);flex-shrink:0;}
+
+.article-hero{width:100%;max-height:460px;object-fit:cover;border-radius:var(--radius-xl);margin-bottom:2.5rem;}
+.article-hero-ph{width:100%;height:280px;border-radius:var(--radius-xl);display:flex;align-items:center;justify-content:center;font-size:5rem;margin-bottom:2.5rem;}
+
+/* Editorial article body — serif, drop cap, pull quotes */
+.article-content{font-family:var(--font-serif);font-size:1.2rem;line-height:1.8;color:var(--ink-soft);max-width:680px;}
+.article-content>p:first-of-type::first-letter{font-family:var(--font-display);font-size:4.2rem;font-weight:800;float:left;line-height:.8;padding:.1rem .5rem 0 0;color:var(--green-deep);}
+.article-content h2{font-family:var(--font-display);text-transform:uppercase;font-size:1.6rem;color:var(--ink);margin:2.5rem 0 1rem;letter-spacing:-.005em;}
+.article-content h3{font-family:var(--font-body);font-weight:800;font-size:1.15rem;color:var(--ink);margin:2rem 0 .75rem;}
+.article-content p{margin-bottom:1.4rem;}
+.article-content ul,.article-content ol{margin:0 0 1.4rem 1.5rem;}
+.article-content li{margin-bottom:.5rem;}
+.article-content a{color:var(--green-deep);text-decoration:underline;text-decoration-color:var(--line);text-underline-offset:3px;}
+.article-content strong{color:var(--ink);font-weight:700;}
+.article-content blockquote{font-family:var(--font-display);font-size:1.5rem;font-weight:700;text-transform:uppercase;line-height:1.25;color:var(--ink);border-left:4px solid var(--coral);padding:.25rem 0 .25rem 1.5rem;margin:2.25rem 0;letter-spacing:-.005em;}
+.article-content img{border-radius:var(--radius-md);margin:1.5rem 0;}
+
+.share-bar{display:flex;align-items:center;gap:.75rem;flex-wrap:wrap;padding:1.35rem;background:var(--white);border:1px solid var(--line);border-radius:var(--radius-lg);margin-top:2.75rem;}
+.share-bar>span{font-size:.85rem;font-weight:700;font-family:var(--font-body);}
+.share-btn{display:flex;align-items:center;gap:.45rem;padding:.55rem 1.05rem;border-radius:50px;font-size:.82rem;font-weight:700;border:none;font-family:var(--font-body);}
+
+.related-section{margin-top:3rem;}
+.related-section h3{font-size:1.1rem;margin-bottom:1.1rem;text-transform:none;letter-spacing:0;font-family:var(--font-body);font-weight:800;}
+.related-grid{display:grid;grid-template-columns:1fr 1fr;gap:1rem;}
+@media(max-width:600px){.related-grid{grid-template-columns:1fr;}}
+.related-card{background:var(--white);border:1px solid var(--line);border-radius:var(--radius-lg);overflow:hidden;display:block;transition:transform .18s,border-color .18s;}
+.related-card:hover{border-color:var(--green);transform:translateY(-2px);}
+.related-img{width:100%;height:120px;object-fit:cover;}
+.related-img-ph{width:100%;height:120px;display:flex;align-items:center;justify-content:center;font-size:2rem;}
+.related-body{padding:.9rem 1rem;}
+.related-body .rtitle{font-weight:700;font-size:.85rem;line-height:1.4;margin-bottom:.3rem;font-family:var(--font-body);}
+.related-body .rdate{font-size:.72rem;color:var(--muted);font-family:var(--font-mono);}
+
+.cta-block{margin-top:2.5rem;padding:2rem;background:linear-gradient(135deg,var(--green-deep),var(--green));border-radius:var(--radius-xl);text-align:center;color:#fff;}
+.cta-block .emoji{font-size:1.8rem;margin-bottom:.6rem;}
+.cta-block h3{font-size:1.3rem;margin-bottom:.5rem;text-transform:none;letter-spacing:0;}
+.cta-block p{color:rgba(255,255,255,.78);font-size:.88rem;margin-bottom:1.35rem;font-family:var(--font-body);}
+.cta-block .btns{display:flex;gap:.75rem;justify-content:center;flex-wrap:wrap;}
+.cta-block .btn-primary{background:#fff;color:var(--green-deep);}
+.cta-block .btn-secondary{background:transparent;border-color:rgba(255,255,255,.4);color:#fff;}
+
+.sidebar-widget{background:var(--white);border:1px solid var(--line);border-radius:var(--radius-lg);padding:1.35rem;margin-bottom:1.25rem;}
+.widget-title{font-family:var(--font-mono);font-weight:700;font-size:.72rem;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);margin-bottom:1.1rem;padding-bottom:.8rem;border-bottom:1px solid var(--line);}
+.sidebar-post{padding:.7rem 0;border-bottom:1px solid var(--line-soft);}
+.sidebar-post:last-child{border-bottom:none;padding-bottom:0;}
+.sidebar-post a{font-weight:700;font-size:.83rem;line-height:1.45;display:block;margin-bottom:.25rem;}
+.sidebar-post a:hover{color:var(--green-deep);}
+.sidebar-post .sdate{font-size:.71rem;color:var(--muted);font-family:var(--font-mono);}
+.earn-widget{background:linear-gradient(135deg,var(--green-deep),var(--green));color:#fff;text-align:center;border:none;}
+.earn-widget .emoji{font-size:1.7rem;margin-bottom:.5rem;}
+.earn-widget strong{display:block;margin-bottom:.5rem;font-size:.98rem;}
+.earn-widget p{font-size:.8rem;color:rgba(255,255,255,.8);margin-bottom:1rem;line-height:1.5;}
+.earn-widget .btn-primary{background:#fff;color:var(--green-deep);}
+
+footer{text-align:center;padding:2.5rem;border-top:1px solid var(--line);color:var(--muted);font-size:.82rem;}
+footer a{color:var(--muted);font-weight:600;}
+footer a:hover{color:var(--green-deep);}
+
+@media(prefers-reduced-motion:reduce){.progress-fill{transition:none;}}
+</style>
+<script type="application/ld+json" id="jsonLd">{}</script>
 </head>
 <body>
 
-<nav class="pub-nav">
-  <a href="index" style="font-weight:800;font-size:1.1rem;color:var(--text-primary);text-decoration:none;">Grind<span style="color:var(--gold-500);">point</span></a>
-  <div style="display:flex;gap:.75rem;align-items:center;">
-    <a href="blog" style="font-size:.85rem;font-weight:600;color:var(--gold-500);text-decoration:none;">← Blog</a>
-    <a href="login" class="btn btn-secondary btn-sm">Login</a>
-    <a href="register" class="btn btn-primary btn-sm">Join Free</a>
+<div class="progress-track"><div class="progress-fill" id="progressFill"></div></div>
+
+<nav class="nav">
+  <div class="nav__inner">
+    <a href="index" class="logo"><svg viewBox="0 0 28 28" fill="none"><circle cx="14" cy="14" r="13" fill="#0E7C4A"/><path d="M8 14.3l4 4 8-9" stroke="white" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg>Grind<span class="accent">point</span></a>
+    <a href="blog" class="nav__back">← Blog</a>
+    <div class="nav__actions">
+      <a href="login" class="btn btn-secondary btn-sm">Login</a>
+      <a href="register" class="btn btn-primary btn-sm">Join Free</a>
+    </div>
   </div>
 </nav>
 
-<!-- Loading state -->
-<div id="loadingState" style="text-align:center;padding:5rem 2rem;color:var(--text-muted);">
-  <div style="font-size:2rem;margin-bottom:1rem;">⏳</div>
+<div id="loadingState" class="state-block">
+  <div class="emoji">⏳</div>
   Loading article…
 </div>
-  <script async="async" data-cfasync="false" src="https://pl30455768.effectivecpmnetwork.com/59966b160a10d7ff1e49abd3768d08ed/invoke.js"></script>
-<div id="container-59966b160a10d7ff1e49abd3768d08ed"></div>
 
-
-<!-- Error state -->
-<div id="errorState" style="display:none;text-align:center;padding:5rem 2rem;">
-  <div style="font-size:3rem;margin-bottom:1rem;">😕</div>
+<div id="errorState" class="state-block" style="display:none;">
+  <div class="emoji">😕</div>
   <h2>Article Not Found</h2>
-  <p style="color:var(--text-secondary);margin-bottom:1.5rem;">This article may have been removed or the link is incorrect.</p>
+  <p>This article may have been removed or the link is incorrect.</p>
   <a href="blog" class="btn btn-primary">← Back to Blog</a>
 </div>
-  <script async="async" data-cfasync="false" src="https://pl30455768.effectivecpmnetwork.com/59966b160a10d7ff1e49abd3768d08ed/invoke.js"></script>
-<div id="container-59966b160a10d7ff1e49abd3768d08ed"></div>
 
-
-<!-- Article content -->
 <div id="articleWrap" style="display:none;">
   <div class="post-layout">
-    <!-- Main -->
     <article>
-      <!-- Breadcrumb -->
-      <nav style="display:flex;align-items:center;gap:.5rem;font-size:.78rem;color:var(--text-muted);margin-bottom:1.5rem;flex-wrap:wrap;">
-        <a href="index" style="color:var(--text-muted);text-decoration:none;">Home</a>
-        <span>›</span>
-        <a href="blog" style="color:var(--text-muted);text-decoration:none;">Blog</a>
-        <span>›</span>
-        <span id="bcCategory" style="color:var(--gold-500);font-weight:600;"></span>
+      <nav class="breadcrumb">
+        <a href="index">Home</a><span>›</span><a href="blog">Blog</a><span>›</span><span id="bcCategory"></span>
       </nav>
 
-      <!-- Category badge -->
-      <span id="catBadge" class="badge" style="font-size:.72rem;margin-bottom:1rem;display:inline-block;"></span>
+      <span id="catBadge" class="post-cat"></span>
+      <h1 id="postTitle"></h1>
 
-      <!-- Title -->
-      <h1 id="postTitle" style="font-size:clamp(1.5rem,4vw,2.2rem);font-weight:800;line-height:1.3;margin-bottom:1rem;"></h1>
-
-      <!-- Meta -->
-      <div style="display:flex;align-items:center;gap:.75rem;flex-wrap:wrap;font-size:.8rem;color:var(--text-muted);margin-bottom:1.75rem;padding-bottom:1.25rem;border-bottom:1px solid var(--border-subtle);">
-        <span id="postAuthor"></span>
-        <span style="width:3px;height:3px;border-radius:50%;background:var(--text-muted);flex-shrink:0;"></span>
-        <span id="postDate"></span>
-        <span style="width:3px;height:3px;border-radius:50%;background:var(--text-muted);flex-shrink:0;"></span>
-        <span id="postReadTime"></span>
-        <span style="width:3px;height:3px;border-radius:50%;background:var(--text-muted);flex-shrink:0;"></span>
-        <span id="postViews"></span>
+      <div class="byline">
+        <div class="byline__avatar" id="authorAvatar">GP</div>
+        <div class="byline__meta">
+          <strong id="postAuthor"></strong>
+          <span class="byline__dot"></span><span id="postDate"></span>
+          <span class="byline__dot"></span><span id="postReadTime"></span>
+          <span class="byline__dot"></span><span id="postViews"></span>
+        </div>
       </div>
 
-      <!-- Featured image -->
       <div id="heroImgWrap"></div>
-
-      <!-- Content -->
       <div class="article-content" id="postContent"></div>
 
-      <!-- Share bar -->
       <div class="share-bar">
-        <span style="font-size:.85rem;font-weight:700;color:var(--text-primary);">Share this article:</span>
+        <span>Share this article:</span>
         <button class="share-btn" style="background:#25D366;color:#fff;" onclick="shareWhatsApp()">
           <svg viewBox="0 0 24 24" fill="currentColor" style="width:15px;height:15px;"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
           WhatsApp
@@ -139,81 +217,101 @@
           <svg viewBox="0 0 24 24" fill="currentColor" style="width:15px;height:15px;"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg>
           Facebook
         </button>
-        <button class="share-btn" style="background:var(--bg-elevated);color:var(--text-secondary);border:1px solid var(--border-subtle);" onclick="copyLink()">
+        <button class="share-btn" style="background:var(--paper-dim);color:var(--ink-soft);border:1px solid var(--line);" onclick="copyLink()">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:15px;height:15px;"><path d="M10 13a5 5 0 007.54.54l3-3a5 5 0 00-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 00-7.54-.54l-3 3a5 5 0 007.07 7.07l1.71-1.71"/></svg>
           Copy Link
         </button>
       </div>
-      <script async="async" data-cfasync="false" src="https://pl30455768.effectivecpmnetwork.com/59966b160a10d7ff1e49abd3768d08ed/invoke.js"></script>
-<div id="container-59966b160a10d7ff1e49abd3768d08ed"></div>
 
+      <div class="ad-slot__box" style="margin-top:2rem;border:1px solid var(--line);border-radius:10px;padding:.6rem .9rem 1rem;background:var(--white);">
+        <span style="display:block;font-family:var(--font-mono);font-size:.62rem;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);margin-bottom:.4rem;">Advertisement</span>
+        <script async="async" data-cfasync="false" src="https://pl30455768.effectivecpmnetwork.com/59966b160a10d7ff1e49abd3768d08ed/invoke.js"></script>
+        <div id="container-59966b160a10d7ff1e49abd3768d08ed"></div>
+      </div>
 
-      <!-- Related posts -->
-      <div style="margin-top:2.5rem;" id="relatedWrap"></div>
+      <div class="related-section" id="relatedWrap"></div>
 
-      <!-- CTA -->
-      <div style="margin-top:2rem;padding:1.75rem;background:linear-gradient(135deg,rgba(245,158,11,.1),rgba(245,158,11,.03));border:1px solid rgba(245,158,11,.2);border-radius:var(--radius-xl);text-align:center;">
-        <div style="font-size:1.5rem;margin-bottom:.5rem;"></div>
-        <h3 style="font-size:1.1rem;font-weight:800;margin-bottom:.4rem;">Ready to Start Earning?</h3>
-        <p style="color:var(--text-secondary);font-size:.85rem;margin-bottom:1.25rem;">Join thousands of Nigerians making money on Grindpoint — free to join, instant earnings.</p>
-        <div style="display:flex;gap:.75rem;justify-content:center;flex-wrap:wrap;">
+      <div class="cta-block">
+        <div class="emoji">🚀</div>
+        <h3>Ready to Start Earning?</h3>
+        <p>Join thousands of Nigerians making money on Grindpoint — free to join, instant earnings.</p>
+        <div class="btns">
           <a href="register" class="btn btn-primary">Join Free Now</a>
           <a href="proof-of-payment" class="btn btn-secondary">See Payment Proofs</a>
         </div>
       </div>
-      <script async="async" data-cfasync="false" src="https://pl30455768.effectivecpmnetwork.com/59966b160a10d7ff1e49abd3768d08ed/invoke.js"></script>
-<div id="container-59966b160a10d7ff1e49abd3768d08ed"></div>
-
     </article>
 
-
-    <!-- Sidebar -->
     <div class="sidebar-col">
       <div class="sidebar-widget">
         <div class="widget-title">More Articles</div>
         <div id="sidebarPosts"></div>
       </div>
-      <div class="sidebar-widget" style="background:linear-gradient(135deg,rgba(245,158,11,.1),rgba(245,158,11,.03));border-color:rgba(245,158,11,.2);">
-        <div style="text-align:center;">
-          <div style="font-size:1.75rem;margin-bottom:.5rem;">💰</div>
-          <div style="font-weight:700;margin-bottom:.4rem;">Earn While You Read</div>
-          <div style="font-size:.8rem;color:var(--text-secondary);margin-bottom:1rem;line-height:1.5;">View 200 ads daily and earn ₦10–₦20 each. No skills needed.</div>
-          <a href="register" class="btn btn-primary btn-block">Start Earning Free</a>
-        </div>
+      <div class="sidebar-widget earn-widget">
+        <div class="emoji">💰</div>
+        <strong>Earn While You Read</strong>
+        <p>View 200 ads daily and earn ₦10–₦20 each. No skills needed.</p>
+        <a href="register" class="btn btn-primary btn-block">Start Earning Free</a>
       </div>
     </div>
   </div>
 </div>
-  <script async="async" data-cfasync="false" src="https://pl30455768.effectivecpmnetwork.com/59966b160a10d7ff1e49abd3768d08ed/invoke.js"></script>
-<div id="container-59966b160a10d7ff1e49abd3768d08ed"></div>
 
-
-<footer style="text-align:center;padding:2rem;border-top:1px solid var(--border-subtle);color:var(--text-muted);font-size:.8rem;margin-top:2rem;">
-  © 2026 Grindpoint · <a href="blog" style="color:var(--text-muted);">Blog</a> · <a href="proof-of-payment" style="color:var(--text-muted);">Proof of Payment</a>
-</footer>
+<footer>© 2026 Grindpoint · <a href="blog">Blog</a> · <a href="proof-of-payment">Proof of Payment</a></footer>
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.min.js"></script>
 <script src="js/supabase-config.js"></script>
 <script>
 const CAT_CLASS={'Platform Updates':'cat-platform','Earning Tips':'cat-earning','Payment Proofs':'cat-payment','Safety & Security':'cat-safety','Success Stories':'cat-success','News & Announcements':'cat-news','General':'cat-general'};
 const CAT_EMOJI={'Platform Updates':'📢','Earning Tips':'💡','Payment Proofs':'💰','Safety & Security':'🔒','Success Stories':'🏆','News & Announcements':'📰','General':'📝'};
+function catColor(c){return getComputedStyle(document.documentElement).getPropertyValue('--'+(CAT_CLASS[c]||'cat-general')).trim()||'#5B6B60';}
 
 function fmt(d){return d?new Date(d).toLocaleDateString('en-NG',{day:'numeric',month:'short',year:'numeric'}):'—';}
 function readTime(html){const w=(html||'').replace(/<[^>]*>/g,'').split(/\s+/).filter(Boolean).length;return Math.max(1,Math.ceil(w/200));}
 
 const slug=new URLSearchParams(window.location.search).get('slug');
 
+/* Demo article — renders only when the page is opened with no ?slug= at all,
+   purely so the design can be previewed without a live Supabase connection.
+   Any real ?slug= always goes through the real query below, unchanged. */
+const DEMO_POST={
+  title:'5 Ways to Boost Your Grindpoint Earnings This Month',
+  slug:'demo', author:'Grindpoint Team', category:'Earning Tips',
+  published_at:new Date().toISOString(), views:1842, meta_title:null, meta_description:null,
+  excerpt:'Small changes to how you use the platform can add up to real Naira by month end.',
+  featured_image:null,
+  content:`<p>Every week we hear from members who are earning ₦500 a month, and members earning ₦15,000 a month — using the exact same platform. The difference almost never comes down to luck. It comes down to a handful of habits.</p>
+    <h2>1. Stack all three earning methods</h2>
+    <p>Most people pick one earning method and stick to it. The members at the top of our leaderboard use all three: they clear their daily ad views first thing in the morning, complete two or three tasks over lunch, and surf a handful of sites in the evening while watching TV.</p>
+    <blockquote>Consistency beats intensity. Ten minutes a day, every day, outperforms one big push a month.</blockquote>
+    <h2>2. Don't sleep on referrals</h2>
+    <p>A single active referral who logs in daily is often worth more over a year than an extra hour of your own ad-viewing. Share your link in group chats where people already trust you — family WhatsApp groups, church or mosque groups, and old classmate reunions tend to convert best.</p>
+    <ul>
+      <li>Send your link with a short, honest message — not a copy-pasted script</li>
+      <li>Follow up once, politely, if a friend hasn't signed up</li>
+      <li>Check your Referrals page weekly to see who's actually active</li>
+    </ul>
+    <h2>3. Withdraw on a schedule, not on impulse</h2>
+    <p>Members who withdraw the moment they hit ₦10,000 tend to earn less overall than members who let their balance build for two to three weeks first. There's no magic here — it's simply that logging in to withdraw is also when you're most likely to view a few extra ads while you're there.</p>
+    <p>Whatever schedule you choose, the platform is built to support it: every withdrawal method, from GTBank to OPay to Kuda, processes on the same timeline.</p>`
+};
+
 document.addEventListener('DOMContentLoaded',async()=>{
-  if(!slug){showError();return;}
+  if(!slug){ renderPost(DEMO_POST,{isDemo:true}); return; }
   const sb=getSupabase();
 
   const{data:post,error}=await sb.from('blog_posts')
     .select('*').eq('slug',slug).eq('published',true).maybeSingle();
 
   if(error||!post){showError();return;}
+  renderPost(post,{isDemo:false});
+});
 
-  /* Increment views */
-  sb.from('blog_posts').update({views:(post.views||0)+1}).eq('id',post.id).then(()=>{});
+async function renderPost(post,{isDemo}){
+  const sb=isDemo?null:getSupabase();
+
+  /* Increment views (skipped for the local demo article) */
+  if(!isDemo) sb.from('blog_posts').update({views:(post.views||0)+1}).eq('id',post.id).then(()=>{});
 
   /* Fill SEO meta */
   const title=post.meta_title||`${post.title} | Grindpoint Blog`;
@@ -237,23 +335,27 @@ document.addEventListener('DOMContentLoaded',async()=>{
   });
 
   /* Fill article */
-  const catClass=CAT_CLASS[post.category]||'cat-general';
+  const col=catColor(post.category);
   const catEmoji=CAT_EMOJI[post.category]||'📝';
   const rt=readTime(post.content);
+  const authorName=post.author||'Grindpoint Team';
 
   document.getElementById('bcCategory').textContent=post.category;
-  document.getElementById('catBadge').className=`badge ${catClass}`;
+  document.getElementById('bcCategory').style.color=col;
+  document.getElementById('catBadge').style.background=col+'1A';
+  document.getElementById('catBadge').style.color=col;
   document.getElementById('catBadge').textContent=`${catEmoji} ${post.category}`;
   document.getElementById('postTitle').textContent=post.title;
-  document.getElementById('postAuthor').textContent=`${post.author||'Grindpoint Team'}`;
-  document.getElementById('postDate').textContent=`${fmt(post.published_at)}`;
+  document.getElementById('authorAvatar').textContent=authorName.split(' ').map(n=>n[0]).join('').substring(0,2).toUpperCase();
+  document.getElementById('postAuthor').textContent=authorName;
+  document.getElementById('postDate').textContent=fmt(post.published_at);
   document.getElementById('postReadTime').textContent=`${rt} min read`;
   document.getElementById('postViews').textContent=`${(post.views||0)+1} views`;
 
   /* Hero image */
   document.getElementById('heroImgWrap').innerHTML=post.featured_image
-    ?`<img src="${post.featured_image}" class="article-hero" alt="${post.title}" onerror="this.parentElement.innerHTML='<div class=article-hero-ph>${catEmoji}</div>'"/>`
-    :`<div class="article-hero-ph">${catEmoji}</div>`;
+    ?`<img src="${post.featured_image}" class="article-hero" alt="${post.title}" onerror="this.outerHTML='<div class=article-hero-ph style=background:linear-gradient(135deg,${col},${col}CC);color:#fff;>${catEmoji}</div>'"/>`
+    :`<div class="article-hero-ph" style="background:linear-gradient(135deg,${col},${col}CC);color:#fff;">${catEmoji}</div>`;
 
   /* Content */
   document.getElementById('postContent').innerHTML=post.content||'';
@@ -262,7 +364,19 @@ document.addEventListener('DOMContentLoaded',async()=>{
   document.getElementById('loadingState').style.display='none';
   document.getElementById('articleWrap').style.display='block';
 
-  /* Load related + sidebar */
+  /* Reading progress bar — simple, robust whole-page scroll fraction */
+  window.addEventListener('scroll',()=>{
+    const scrollable=document.documentElement.scrollHeight-window.innerHeight;
+    const pct=scrollable>0?(window.scrollY/scrollable)*100:0;
+    document.getElementById('progressFill').style.width=Math.min(100,Math.max(0,pct))+'%';
+  },{passive:true});
+
+  /* Load related + sidebar (skipped for the local demo article — no real posts to relate to) */
+  if(isDemo){
+    document.getElementById('sidebarPosts').innerHTML='<p style="font-size:.82rem;color:var(--muted);">Previewing with sample content — real articles from your Supabase blog_posts table will list here.</p>';
+    return;
+  }
+
   const{data:others}=await sb.from('blog_posts')
     .select('id,title,slug,excerpt,content,featured_image,category,published_at')
     .eq('published',true).neq('id',post.id).order('published_at',{ascending:false}).limit(6);
@@ -271,7 +385,7 @@ document.addEventListener('DOMContentLoaded',async()=>{
     renderRelated(others.filter(p=>p.category===post.category).slice(0,2).concat(others.filter(p=>p.category!==post.category).slice(0,2)).slice(0,4));
     renderSidebar(others.slice(0,5));
   }
-});
+}
 
 function showError(){
   document.getElementById('loadingState').style.display='none';
@@ -281,24 +395,22 @@ function showError(){
 function renderRelated(posts){
   if(!posts.length)return;
   document.getElementById('relatedWrap').innerHTML=`
-    <h3 style="font-weight:700;font-size:1rem;margin-bottom:1rem;">Related Articles</h3>
+    <h3>Related Articles</h3>
     <div class="related-grid">
-      ${posts.map(p=>`
-        <a href="blog-post.html?slug=${p.slug}" class="related-card">
-          ${p.featured_image?`<img src="${p.featured_image}" class="related-img" alt="${p.title}" onerror="this.parentElement.innerHTML='<div class=related-img-ph>${CAT_EMOJI[p.category]||'📝'}</div>'+this.parentElement.innerHTML"/>`:`<div class="related-img-ph">${CAT_EMOJI[p.category]||'📝'}</div>`}
-          <div class="related-body">
-            <div style="font-weight:700;font-size:.85rem;color:var(--text-primary);line-height:1.4;margin-bottom:.25rem;">${p.title}</div>
-            <div style="font-size:.74rem;color:var(--text-muted);">${fmt(p.published_at)}</div>
-          </div>
-        </a>`).join('')}
+      ${posts.map(p=>{
+        const c=catColor(p.category);
+        return `<a href="blog-post.html?slug=${p.slug}" class="related-card">
+          ${p.featured_image?`<img src="${p.featured_image}" class="related-img" alt="${p.title}" onerror="this.outerHTML='<div class=related-img-ph style=background:${c}1A;color:${c};>${CAT_EMOJI[p.category]||'📝'}</div>'"/>`:`<div class="related-img-ph" style="background:${c}1A;color:${c};">${CAT_EMOJI[p.category]||'📝'}</div>`}
+          <div class="related-body"><div class="rtitle">${p.title}</div><div class="rdate">${fmt(p.published_at)}</div></div>
+        </a>`;}).join('')}
     </div>`;
 }
 
 function renderSidebar(posts){
   document.getElementById('sidebarPosts').innerHTML=posts.map(p=>`
     <div class="sidebar-post">
-      <a href="blog-post.html?slug=${p.slug}" style="font-weight:600;font-size:.82rem;color:var(--text-primary);text-decoration:none;line-height:1.4;display:block;margin-bottom:.2rem;">${p.title}</a>
-      <div style="font-size:.72rem;color:var(--text-muted);">${fmt(p.published_at)}</div>
+      <a href="blog-post.html?slug=${p.slug}">${p.title}</a>
+      <div class="sdate">${fmt(p.published_at)}</div>
     </div>`).join('');
 }
 
@@ -307,7 +419,7 @@ function shareWhatsApp(){window.open(`https://wa.me/?text=${encodeURIComponent(d
 function shareFacebook(){window.open(`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(window.location.href)}`);}
 function copyLink(){navigator.clipboard?.writeText(window.location.href).then(()=>alert('Link copied!'));}
 </script>
-  <script src="https://pl30455769.effectivecpmnetwork.com/17/30/07/173007aec1679d8ab5054961c9d70239.js"></script>
+<script src="https://pl30455769.effectivecpmnetwork.com/17/30/07/173007aec1679d8ab5054961c9d70239.js"></script>
 
 </body>
 </html>
