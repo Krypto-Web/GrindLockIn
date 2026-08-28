@@ -1,12 +1,11 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Page Not Found — Grindpoint</title>
-  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><text y='26' font-size='28'>⚡</text></svg>" />
-  <link rel="stylesheet" href="css/style.css" />
-<!-- Google Analytics -->
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Page Not Found — Grindpoint</title>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='7' fill='%230E7C4A'/><text x='16' y='23' font-size='18' text-anchor='middle' fill='white' font-family='Georgia,serif'>%E2%82%A6</text></svg>" />
+
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-SJRSW6DNNQ"></script>
 <script>
   window.dataLayer = window.dataLayer || [];
@@ -14,56 +13,101 @@
   gtag("js", new Date());
   gtag("config", "G-SJRSW6DNNQ");
 </script>
-  <!-- PWA Meta Tags -->
-  <link rel="manifest" href="/manifest.json"/>
-  <meta name="theme-color" content="#f59e0b"/>
-  <meta name="mobile-web-app-capable" content="yes"/>
-  <meta name="apple-mobile-web-app-capable" content="yes"/>
-  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"/>
-  <meta name="apple-mobile-web-app-title" content="Grindpoint"/>
-  <link rel="apple-touch-icon" href="/icons/icon-192.png"/>
+
+<link rel="manifest" href="/manifest.json"/>
+<meta name="theme-color" content="#0E7C4A"/>
+<meta name="mobile-web-app-capable" content="yes"/>
+<meta name="apple-mobile-web-app-capable" content="yes"/>
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"/>
+<meta name="apple-mobile-web-app-title" content="Grindpoint"/>
+<link rel="apple-touch-icon" href="/icons/icon-192.png"/>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Big+Shoulders+Display:wght@700;800;900&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=IBM+Plex+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+<style>
+:root{
+  --paper:#F6F7F2;--paper-dim:#ECEFE7;--white:#FFFFFF;--ink:#0E1F17;--ink-soft:#1B3327;
+  --green:#0E7C4A;--green-deep:#0A5C37;--green-pale:#E3F3E9;
+  --coral:#FF6B47;--coral-deep:#E5502C;--info:#2563EB;--info-pale:#DBEAFE;
+  --line:#D8DDD1;--muted:#5B6B60;
+  --font-display:'Big Shoulders Display',sans-serif;--font-body:'Plus Jakarta Sans',sans-serif;--font-mono:'IBM Plex Mono',monospace;
+  --radius-md:16px;--radius-lg:24px;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+body{font-family:var(--font-body);background:var(--paper);color:var(--ink);line-height:1.6;-webkit-font-smoothing:antialiased;}
+a{color:inherit;text-decoration:none;}
+h1,h2{font-family:var(--font-display);font-weight:800;letter-spacing:-.01em;}
+:focus-visible{outline:3px solid var(--coral);outline-offset:2px;border-radius:4px;}
+
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:.5rem;font-family:var(--font-body);font-weight:700;font-size:.92rem;padding:.9rem 1.7rem;border-radius:50px;border:2px solid transparent;transition:transform .15s,background .15s;}
+.btn:hover{transform:translateY(-2px);}
+.btn-primary{background:var(--green);color:#fff;box-shadow:0 6px 14px rgba(14,124,74,.26);}
+.btn-primary:hover{background:var(--green-deep);}
+.btn-secondary{background:var(--white);border:2px solid var(--line);color:var(--ink);}
+.btn-secondary:hover{background:var(--paper-dim);}
+
+.nav{padding:1.25rem 1.5rem;}
+.logo{display:inline-flex;align-items:center;gap:.5rem;font-family:var(--font-display);font-size:1.3rem;font-weight:800;}
+.logo svg{width:28px;height:28px;}
+.logo .accent{color:var(--green);}
+
+.wrap{min-height:calc(100vh - 70px);display:flex;align-items:center;justify-content:center;padding:2rem 1.5rem 3rem;}
+.content{text-align:center;max-width:560px;}
+
+.stamp{width:120px;height:120px;border-radius:50%;border:3px dashed var(--coral);display:flex;align-items:center;justify-content:center;margin:0 auto 1.5rem;transform:rotate(-8deg);}
+.stamp-inner{width:96px;height:96px;border-radius:50%;border:1.5px solid var(--coral);display:flex;flex-direction:column;align-items:center;justify-content:center;font-family:var(--font-mono);color:var(--coral-deep);}
+.stamp-inner strong{font-size:.72rem;letter-spacing:.06em;}
+.stamp-inner span{font-size:.58rem;color:var(--muted);margin-top:2px;}
+
+h1.big404{font-size:clamp(5rem,16vw,9rem);line-height:.85;margin-bottom:.5rem;color:var(--ink);}
+@supports (-webkit-text-stroke:1px black){
+  h1.big404{-webkit-text-stroke:3px var(--ink);color:var(--paper);}
+}
+h2{font-size:1.4rem;margin-bottom:.9rem;text-transform:uppercase;}
+.content p{color:var(--muted);max-width:400px;margin:0 auto 1.85rem;font-size:.96rem;line-height:1.7;}
+.ctas{display:flex;gap:1rem;justify-content:center;flex-wrap:wrap;margin-bottom:3rem;}
+
+.quick-label{font-family:var(--font-mono);font-size:.74rem;color:var(--muted);text-transform:uppercase;letter-spacing:.08em;font-weight:700;margin-bottom:1rem;}
+.quick-grid{display:grid;grid-template-columns:1fr 1fr;gap:.75rem;text-align:left;max-width:480px;margin:0 auto;}
+@media(max-width:480px){.quick-grid{grid-template-columns:1fr;}}
+.quick-card{display:flex;align-items:center;gap:.75rem;padding:.9rem 1.05rem;background:var(--white);border:1.5px solid var(--line);border-radius:var(--radius-md);transition:transform .15s,border-color .15s;}
+.quick-card:hover{transform:translateY(-2px);border-color:var(--green);}
+.quick-card .emoji{font-size:1.3rem;flex-shrink:0;}
+.quick-card .title{font-weight:700;font-size:.86rem;}
+.quick-card .sub{font-size:.72rem;color:var(--muted);}
+
+.telegram-float{position:fixed;bottom:1.5rem;right:1.5rem;z-index:600;display:flex;align-items:center;gap:.5rem;background:#26A5E4;color:#fff;padding:.85rem;border-radius:50px;box-shadow:0 8px 20px rgba(38,165,228,.35);transition:padding .2s ease;}
+.telegram-float svg{width:22px;height:22px;flex-shrink:0;}
+.telegram-float__label{max-width:0;overflow:hidden;white-space:nowrap;font-size:.85rem;font-weight:700;transition:max-width .2s ease;}
+.telegram-float:hover{padding:.85rem 1.1rem;}
+.telegram-float:hover .telegram-float__label{max-width:140px;margin-left:.15rem;}
+</style>
 </head>
 <body>
-<nav class="landing-nav">
-  <div class="navbar__inner">
-    <a href="index" class="navbar__logo">Grind<span class="logo-accent">point</span></a>
-  </div>
+
+<nav class="nav">
+  <a href="index" class="logo"><svg viewBox="0 0 28 28" fill="none"><circle cx="14" cy="14" r="13" fill="#0E7C4A"/><path d="M8 14.3l4 4 8-9" stroke="white" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg>Grind<span class="accent">point</span></a>
 </nav>
 
-<div style="min-height:100vh;display:flex;align-items:center;justify-content:center;text-align:center;padding:2rem;padding-top:var(--nav-height);">
-  <div>
-    <div style="font-size:6rem;margin-bottom:1rem;line-height:1;"></div>
-    <h1 style="font-size:clamp(5rem,15vw,10rem);font-family:var(--font-display);font-weight:800;background:var(--gold-gradient);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;line-height:1;margin-bottom:0.5rem;">404</h1>
-    <h2 style="margin-bottom:1rem;">Page Not Found</h2>
-    <p style="color:var(--text-secondary);max-width:400px;margin:0 auto 1.75rem;line-height:1.7;">
-      Looks like this page took a wrong turn. The grind never stops — let's get you back on track.
-    </p>
-    <div style="display:flex;gap:1rem;justify-content:center;flex-wrap:wrap;margin-bottom:2.5rem;">
-      <a href="dashboard" class="btn btn-primary btn-lg">Go to Dashboard</a>
-      <a href="index" class="btn btn-secondary btn-lg">← Back to Home</a>
+<div class="wrap">
+  <div class="content">
+    <div class="stamp"><div class="stamp-inner"><strong>NOT FOUND</strong><span>VOID</span></div></div>
+    <h1 class="big404">404</h1>
+    <h2>Page Not Found</h2>
+    <p>Looks like this page took a wrong turn. The grind never stops — let's get you back on track.</p>
+    <div class="ctas">
+      <a href="dashboard" class="btn btn-primary">Go to Dashboard</a>
+      <a href="index" class="btn btn-secondary">← Back to Home</a>
     </div>
 
-    <!-- Quick links -->
-    <div style="max-width:520px;margin:0 auto;">
-      <p style="font-size:.82rem;color:var(--text-muted);margin-bottom:1rem;text-transform:uppercase;letter-spacing:.08em;font-weight:600;">Or go directly to</p>
-      <div style="display:grid;grid-template-columns:1fr 1fr;gap:.75rem;text-align:left;">
-        <a href="ptc" style="display:flex;align-items:center;gap:.75rem;padding:.85rem 1rem;background:var(--bg-card);border:1px solid var(--border-subtle);border-radius:var(--radius-md);text-decoration:none;color:var(--text-primary);transition:all .15s;">
-          <span style="font-size:1.25rem;"></span>
-          <div><div style="font-weight:600;font-size:.875rem;">View Ads</div><div style="font-size:.73rem;color:var(--text-muted);">Earn ₦10–₦20 per ad</div></div>
-        </a>
-        <a href="surf" style="display:flex;align-items:center;gap:.75rem;padding:.85rem 1rem;background:var(--bg-card);border:1px solid rgba(59,130,246,.2);border-radius:var(--radius-md);text-decoration:none;color:var(--text-primary);transition:all .15s;">
-          <span style="font-size:1.25rem;"></span>
-          <div><div style="font-weight:600;font-size:.875rem;">Surf &amp; Earn</div><div style="font-size:.73rem;color:var(--text-muted);">Earn ₦25–₦50 per site</div></div>
-        </a>
-        <a href="tasks" style="display:flex;align-items:center;gap:.75rem;padding:.85rem 1rem;background:var(--bg-card);border:1px solid var(--border-subtle);border-radius:var(--radius-md);text-decoration:none;color:var(--text-primary);transition:all .15s;">
-          <span style="font-size:1.25rem;">✅</span>
-          <div><div style="font-weight:600;font-size:.875rem;">Earn Tasks</div><div style="font-size:.73rem;color:var(--text-muted);">Up to ₦600 per task</div></div>
-        </a>
-        <a href="proof-of-payment" style="display:flex;align-items:center;gap:.75rem;padding:.85rem 1rem;background:rgba(34,197,94,.05);border:1px solid rgba(34,197,94,.2);border-radius:var(--radius-md);text-decoration:none;color:var(--text-primary);transition:all .15s;">
-          <span style="font-size:1.25rem;">💰</span>
-          <div><div style="font-weight:600;font-size:.875rem;">Proof of Payment</div><div style="font-size:.73rem;color:var(--success);">We always pay</div></div>
-        </a>
-      </div>
+    <div class="quick-label">Or go directly to</div>
+    <div class="quick-grid">
+      <a href="ptc" class="quick-card"><span class="emoji">⚡</span><div><div class="title">View Ads</div><div class="sub">Earn ₦10–₦20 per ad</div></div></a>
+      <a href="surf" class="quick-card"><span class="emoji">🌐</span><div><div class="title">Surf &amp; Earn</div><div class="sub">Earn ₦25–₦50 per site</div></div></a>
+      <a href="tasks" class="quick-card"><span class="emoji">✅</span><div><div class="title">Earn Tasks</div><div class="sub">Up to ₦600 per task</div></div></a>
+      <a href="proof-of-payment" class="quick-card"><span class="emoji">💰</span><div><div class="title">Proof of Payment</div><div class="sub" style="color:var(--green-deep);">We always pay</div></div></a>
     </div>
   </div>
 </div>
@@ -72,28 +116,19 @@
 <script src="js/supabase-config.js"></script>
 <script src="js/main.js"></script>
 
-<!-- Floating WhatsApp Button -->
-<a href="https://wa.me/2349034192652?text=Hello%20Grindpoint%20Support%2C%20I%20need%20help%20with%20my%20account." 
-   target="_blank" rel="noopener" 
-   class="whatsapp-float" 
-   aria-label="Chat with us on WhatsApp">
-  <svg viewBox="0 0 24 24" fill="currentColor">
-    <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/>
-  </svg>
-  <span class="whatsapp-float__label">Support</span>
+<a href="https://t.me/FSDme" target="_blank" rel="noopener" class="telegram-float" aria-label="Chat with us on Telegram">
+  <svg viewBox="0 0 24 24" fill="currentColor"><path d="M21.5 4.5L2.7 11.8c-1.2.5-1.2 1.2-.2 1.5l4.8 1.5 1.8 5.6c.2.6.4.8.9.8.4 0 .6-.2.8-.4l2.4-2.3 4.9 3.6c.9.5 1.5.2 1.7-.8l3.2-15.1c.3-1.2-.4-1.7-1.5-1.2z"/></svg>
+  <span class="telegram-float__label">Support</span>
 </a>
 
 <script>
-// Register Service Worker for PWA
 if ('serviceWorker' in navigator) {
   window.addEventListener('load', () => {
-    navigator.serviceWorker.register('/sw.js')
-      .then(reg => console.log('[GP] SW registered:', reg.scope))
-      .catch(err => console.warn('[GP] SW registration failed:', err));
+    navigator.serviceWorker.register('/sw.js').then(reg => console.log('[GP] SW registered:', reg.scope)).catch(err => console.warn('[GP] SW registration failed:', err));
   });
 }
 </script>
-  <script src="https://pl30455769.effectivecpmnetwork.com/17/30/07/173007aec1679d8ab5054961c9d70239.js"></script>
+<script src="https://pl30455769.effectivecpmnetwork.com/17/30/07/173007aec1679d8ab5054961c9d70239.js"></script>
 
 </body>
 </html>
