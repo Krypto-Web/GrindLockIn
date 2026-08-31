@@ -148,6 +148,44 @@ h1,h2,h3{font-family:var(--font-display);font-weight:800;letter-spacing:-.01em;}
 
 .trust-tip-row{display:grid;grid-template-columns:1fr 1fr;gap:1rem;}
 @media (max-width:760px){.trust-tip-row{grid-template-columns:1fr;}}
+
+/* ===== Streak + Tier widget ===== */
+.progress-row{display:grid;grid-template-columns:1fr 1fr;gap:1rem;margin-bottom:1.75rem;}
+@media (max-width:760px){.progress-row{grid-template-columns:1fr;}}
+.progress-card{background:var(--white);border:1px solid var(--line);border-radius:var(--radius-lg);padding:1.4rem 1.5rem;}
+.progress-card__head{display:flex;align-items:center;gap:.65rem;margin-bottom:1rem;}
+.progress-card__icon{font-size:1.4rem;}
+.progress-card__title{font-weight:700;font-size:.9rem;}
+.progress-card__val{font-family:var(--font-mono);font-size:1.5rem;font-weight:700;color:var(--coral-deep);}
+.progress-card--tier .progress-card__val{color:var(--violet,#7C3AED);}
+.progress-card__sub{font-size:.78rem;color:var(--muted);margin-top:.2rem;margin-bottom:.9rem;}
+.mini-bar{height:8px;border-radius:20px;background:var(--paper-dim);overflow:hidden;}
+.mini-bar__fill{height:100%;border-radius:20px;background:var(--coral);transition:width .4s ease;}
+.progress-card--tier .mini-bar__fill{background:#7C3AED;}
+.mini-bar__label{display:flex;justify-content:space-between;font-size:.72rem;color:var(--muted);margin-top:.5rem;}
+
+/* ===== Blog card ===== */
+.blog-card{display:flex;gap:1.1rem;align-items:center;background:var(--white);border:1px solid var(--line);border-radius:var(--radius-lg);padding:1.1rem;margin-bottom:1.75rem;transition:transform .15s,border-color .15s;}
+.blog-card:hover{transform:translateY(-2px);border-color:var(--green);}
+.blog-card__img{width:64px;height:64px;border-radius:var(--radius-md);flex-shrink:0;object-fit:cover;display:flex;align-items:center;justify-content:center;font-size:1.6rem;}
+.blog-card__eyebrow{font-family:var(--font-mono);font-size:.68rem;color:var(--green-deep);text-transform:uppercase;letter-spacing:.06em;margin-bottom:.3rem;}
+.blog-card__title{font-weight:700;font-size:.88rem;line-height:1.4;}
+.blog-card svg.arrow{width:15px;height:15px;color:var(--muted);margin-left:auto;flex-shrink:0;}
+
+/* ===== Daily check-in gate ===== */
+.checkin-overlay{position:fixed;inset:0;z-index:900;background:linear-gradient(160deg,var(--ink),var(--ink-soft));display:flex;align-items:center;justify-content:center;padding:1.5rem;}
+.checkin-box{text-align:center;max-width:340px;color:#fff;}
+.checkin-flame{font-size:3rem;margin-bottom:.5rem;}
+.checkin-box h2{font-size:1.6rem;text-transform:uppercase;margin-bottom:.5rem;}
+.checkin-streak{font-family:var(--font-mono);font-size:2.2rem;font-weight:700;color:var(--coral);margin-bottom:.3rem;}
+.checkin-streak-label{font-size:.8rem;color:rgba(255,255,255,.55);margin-bottom:1.75rem;}
+.checkin-btn{width:120px;height:120px;border-radius:50%;background:var(--green);border:none;color:#fff;font-family:var(--font-display);font-size:1.05rem;font-weight:800;text-transform:uppercase;cursor:pointer;transition:transform .2s,background .2s;box-shadow:0 8px 24px rgba(14,124,74,.4);}
+.checkin-btn:hover{transform:scale(1.05);background:var(--green-deep);}
+.checkin-btn.done{background:var(--coral);pointer-events:none;}
+.checkin-success{display:none;margin-top:1.5rem;font-size:.88rem;color:rgba(255,255,255,.75);}
+.checkin-success.show{display:block;animation:fadeInUp .4s ease both;}
+@keyframes fadeInUp{from{opacity:0;transform:translateY(8px);}to{opacity:1;transform:translateY(0);}}
+@media (prefers-reduced-motion:reduce){.checkin-btn{transition:none;}.checkin-success.show{animation:none;}}
 .trust-bar,.tip-bar{display:flex;align-items:center;gap:.85rem;border-radius:var(--radius-md);padding:1rem 1.2rem;}
 .trust-bar{background:var(--green-pale);border:1px solid rgba(14,124,74,.2);}
 .trust-bar svg{width:20px;height:20px;color:var(--green-deep);flex-shrink:0;}
@@ -188,12 +226,6 @@ h1,h2,h3{font-family:var(--font-display);font-weight:800;letter-spacing:-.01em;}
 .form-hint{display:block;font-size:.74rem;color:var(--muted);margin-top:.35rem;}
 select.form-control{appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='14' height='9'%3E%3Cpath d='M1 1l6 6 6-6' stroke='%235B6B60' stroke-width='1.8' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right .9rem center;padding-right:2.3rem;}
 
-.resolve-status{display:flex;align-items:center;gap:.6rem;padding:.75rem .9rem;border-radius:var(--radius-sm);font-size:.83rem;margin-top:.6rem;}
-.resolve-status--loading{background:var(--paper-dim);color:var(--muted);}
-.resolve-status--success{background:var(--green-pale);color:var(--green-deep);font-weight:700;}
-.resolve-status--error{background:var(--danger-pale);color:var(--danger);}
-.resolve-status svg{width:16px;height:16px;flex-shrink:0;}
-.spin-sm{animation:spin .8s linear infinite;}
 
 #gp-toast-container{position:fixed;top:1.25rem;right:1.25rem;z-index:1000;display:flex;flex-direction:column;gap:.6rem;max-width:min(360px,calc(100vw - 2.5rem));}
 .gp-toast{display:flex;align-items:flex-start;gap:.6rem;background:var(--white);border:1px solid var(--line);border-radius:var(--radius-sm);padding:.85rem 1rem;box-shadow:var(--shadow-lift);opacity:0;transform:translateX(16px);transition:opacity .25s,transform .25s;}
@@ -227,6 +259,17 @@ select.form-control{appearance:none;background-image:url("data:image/svg+xml,%3C
 </style>
 </head>
 <body style="visibility:hidden">
+
+<div class="checkin-overlay" id="checkinOverlay" style="display:none;">
+  <div class="checkin-box">
+    <div class="checkin-flame">🔥</div>
+    <h2>Welcome Back!</h2>
+    <div class="checkin-streak" id="checkinStreakVal">1 Day</div>
+    <div class="checkin-streak-label">Login Streak</div>
+    <button class="checkin-btn" id="checkinBtn" onclick="doCheckIn()">Check In</button>
+    <div class="checkin-success" id="checkinSuccess">✓ Nice! Head to View Ads to keep today's streak going.</div>
+  </div>
+</div>
 
 <nav class="topbar">
   <a href="index" class="logo">
@@ -289,6 +332,23 @@ select.form-control{appearance:none;background-image:url("data:image/svg+xml,%3C
 
     <div id="announcementsWrap" style="margin-bottom:1.5rem;display:none;"></div>
 
+    <div class="progress-row">
+      <div class="progress-card">
+        <div class="progress-card__head"><span class="progress-card__icon">🔥</span><span class="progress-card__title">Login Streak</span></div>
+        <div class="progress-card__val" id="streakVal">0 days</div>
+        <div class="progress-card__sub" id="streakSub">Check in daily on View Ads to build your streak</div>
+        <div class="mini-bar"><div class="mini-bar__fill" id="streakBarFill" style="width:0%;"></div></div>
+        <div class="mini-bar__label"><span>Today</span><span>7-day bonus tier</span></div>
+      </div>
+      <div class="progress-card progress-card--tier">
+        <div class="progress-card__head"><span class="progress-card__icon">🎖️</span><span class="progress-card__title">Referral Tier</span></div>
+        <div class="progress-card__val" id="tierVal">Grinder</div>
+        <div class="progress-card__sub" id="tierSub">0/10 referrals to Hustler (₦300/referral)</div>
+        <div class="mini-bar"><div class="mini-bar__fill" id="tierBarFill" style="width:0%;"></div></div>
+        <div class="mini-bar__label"><span id="tierCountLabel">0 referrals</span><span id="tierNextLabel">10 = Hustler</span></div>
+      </div>
+    </div>
+
     <!-- PTC Spotlight -->
     <div class="ptc-spotlight">
       <div class="ptc-spotlight__inner">
@@ -335,6 +395,8 @@ select.form-control{appearance:none;background-image:url("data:image/svg+xml,%3C
       </div>
     </div>
 
+    <div class="blog-card" id="blogCardWrap" style="display:none;"></div>
+
     <div class="trust-tip-row">
       <div class="trust-bar">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M22 11.08V12a10 10 0 11-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
@@ -364,17 +426,26 @@ select.form-control{appearance:none;background-image:url("data:image/svg+xml,%3C
       <div class="form-group">
         <label class="form-label" for="bankSelect">Bank / Wallet</label>
         <select id="bankSelect" class="form-control">
-          <option value="" disabled selected>Loading bank list…</option>
+          <option value="" disabled selected>Select your bank or wallet</option>
+          <option>Access Bank</option><option>Citibank</option><option>Ecobank</option>
+          <option>FCMB</option><option>Fidelity Bank</option><option>First Bank</option>
+          <option>GTBank</option><option>Heritage Bank</option><option>Kuda Bank</option>
+          <option>Moniepoint</option><option>OPay</option><option>PalmPay</option>
+          <option>Polaris Bank</option><option>Stanbic IBTC</option><option>Sterling Bank</option>
+          <option>UBA</option><option>Union Bank</option><option>Wema Bank</option>
+          <option>Zenith Bank</option>
         </select>
       </div>
 
       <div class="form-group">
         <label class="form-label" for="accountNumber">Account Number</label>
-        <input type="text" id="accountNumber" class="form-control" placeholder="10-digit account number" maxlength="10" inputmode="numeric" disabled />
-        <span class="form-hint">Select a bank first, then enter your 10-digit account number.</span>
+        <input type="text" id="accountNumber" class="form-control" placeholder="10-digit account number" maxlength="10" inputmode="numeric" />
       </div>
 
-      <div id="resolveStatusWrap"></div>
+      <div class="form-group">
+        <label class="form-label" for="accountName">Account Name</label>
+        <input type="text" id="accountName" class="form-control" placeholder="As it appears on your account" />
+      </div>
 
       <div class="form-group" style="margin-top:1.25rem;">
         <label class="form-label" for="withdrawAmount">Withdrawal Amount (₦)</label>
@@ -384,7 +455,7 @@ select.form-control{appearance:none;background-image:url("data:image/svg+xml,%3C
     </div>
     <div class="modal__footer">
       <button class="btn btn-secondary" onclick="closeModal('withdrawModal')">Cancel</button>
-      <button class="btn btn-primary" id="confirmWithdrawBtn" disabled><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:15px;height:15px;"><path d="M22 11.08V12a10 10 0 11-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>Submit Request</button>
+      <button class="btn btn-primary" id="confirmWithdrawBtn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:15px;height:15px;"><path d="M22 11.08V12a10 10 0 11-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>Submit Request</button>
     </div>
   </div>
 </div>
@@ -426,9 +497,6 @@ select.form-control{appearance:none;background-image:url("data:image/svg+xml,%3C
 <script src="js/main.js"></script>
 <script>
 let _currentProfile = null;
-let _resolvedAccountName = null;
-let _bankList = [];
-let _resolveTimer = null;
 
 /* Fetch and display announcements — query unchanged from before */
 async function loadAnnouncements(sb) {
@@ -477,12 +545,82 @@ async function loadAnnouncements(sb) {
   document.getElementById('tasksCompleted').textContent = profile?.tasks_completed || 0;
   document.getElementById('referralCount').textContent = profile?.referral_count || 0;
 
-  // Telegram support/community popup — once per browser session
-  if (!sessionStorage.getItem('gp_telegram_modal_seen')) {
-    setTimeout(() => openModal('telegramModal'), 1800);
-    sessionStorage.setItem('gp_telegram_modal_seen', '1');
+  /* Login streak — read-only display. The streak itself is incremented on the
+     View Ads (ptc.html) daily-bonus claim, not here, so it only ever changes in one place. */
+  const streak = profile?.login_streak || 0;
+  document.getElementById('streakVal').textContent = `${streak} day${streak === 1 ? '' : 's'}`;
+  document.getElementById('streakBarFill').style.width = Math.min((streak / 7) * 100, 100) + '%';
+  document.getElementById('streakSub').textContent = streak >= 7
+    ? "You're at the top bonus tier — nice work"
+    : `${7 - streak} more day${7 - streak === 1 ? '' : 's'} to your biggest daily bonus`;
+
+  /* Referral tier — Grinder → Hustler (10+) → Champion (50+), matching the FAQ and the tier-based crediting in register.html */
+  const refCount = profile?.referral_count || 0;
+  let tierName = 'Grinder', tierNext = 10, tierPct = (refCount / 10) * 100, tierSubText = `${refCount}/10 referrals to Hustler (₦300/referral)`, tierNextLabel = '10 = Hustler';
+  if (refCount >= 50) { tierName = 'Champion'; tierPct = 100; tierSubText = "Top tier — you're earning ₦500 per referral"; tierNextLabel = 'Max tier'; }
+  else if (refCount >= 10) { tierName = 'Hustler'; tierNext = 50; tierPct = ((refCount - 10) / 40) * 100; tierSubText = `${refCount}/50 referrals to Champion (₦500/referral)`; tierNextLabel = '50 = Champion'; }
+  document.getElementById('tierVal').textContent = tierName;
+  document.getElementById('tierSub').textContent = tierSubText;
+  document.getElementById('tierBarFill').style.width = Math.min(tierPct, 100) + '%';
+  document.getElementById('tierCountLabel').textContent = `${refCount} referral${refCount === 1 ? '' : 's'}`;
+  document.getElementById('tierNextLabel').textContent = tierNextLabel;
+
+  loadLatestBlogPost(getSupabase());
+
+  /* Daily check-in gate — once per calendar day, purely for engagement (a mild
+     speed bump for copy-paste bot scripts, not a real fraud control on its own).
+     The real fraud control is the duplicate-account check on withdrawal. */
+  const today = new Date().toDateString();
+  if (localStorage.getItem('gp_checkin_date') !== today) {
+    document.getElementById('checkinStreakVal').textContent = `${streak + 1} Day${streak + 1 === 1 ? '' : 's'}`;
+    document.getElementById('checkinOverlay').style.display = 'flex';
+  } else {
+    scheduleTelegramPopup();
   }
 })();
+
+function doCheckIn() {
+  localStorage.setItem('gp_checkin_date', new Date().toDateString());
+  document.getElementById('checkinBtn').classList.add('done');
+  document.getElementById('checkinBtn').textContent = '✓';
+  document.getElementById('checkinSuccess').classList.add('show');
+  setTimeout(() => {
+    document.getElementById('checkinOverlay').style.display = 'none';
+    scheduleTelegramPopup();
+  }, 1300);
+}
+
+function scheduleTelegramPopup() {
+  // Telegram support/community popup — once per browser session
+  if (!sessionStorage.getItem('gp_telegram_modal_seen')) {
+    setTimeout(() => openModal('telegramModal'), 1200);
+    sessionStorage.setItem('gp_telegram_modal_seen', '1');
+  }
+}
+
+async function loadLatestBlogPost(sb) {
+  try {
+    const { data } = await sb.from('blog_posts')
+      .select('title,slug,featured_image,category')
+      .eq('published', true)
+      .order('published_at', { ascending: false })
+      .limit(1)
+      .maybeSingle();
+    if (!data) return;
+
+    const emoji = { 'Platform Updates':'📢','Earning Tips':'💡','Payment Proofs':'💰','Safety & Security':'🔒','Success Stories':'🏆','News & Announcements':'📰' }[data.category] || '📝';
+    const wrap = document.getElementById('blogCardWrap');
+    wrap.style.display = 'flex';
+    wrap.onclick = () => window.location.href = `blog-post.html?slug=${data.slug}`;
+    wrap.style.cursor = 'pointer';
+    wrap.innerHTML = `
+      ${data.featured_image
+        ? `<img src="${data.featured_image}" class="blog-card__img" alt="" onerror="this.outerHTML='<div class=blog-card__img style=background:var(--green-pale);>${emoji}</div>'"/>`
+        : `<div class="blog-card__img" style="background:var(--green-pale);">${emoji}</div>`}
+      <div><div class="blog-card__eyebrow">From the Blog</div><div class="blog-card__title">${data.title}</div></div>
+      <svg class="arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>`;
+  } catch (e) { /* non-critical */ }
+}
 
 function dismissTelegramModal() { closeModal('telegramModal'); }
 initModalCloseOnBackdrop('telegramModal');
@@ -500,86 +638,28 @@ initModalCloseOnBackdrop('telegramModal');
   sidebar.querySelectorAll('a').forEach(a => a.addEventListener('click', close));
 })();
 
-/* ── Withdraw modal: bank list + live account-name verification ── */
-async function loadBankList() {
-  const select = document.getElementById('bankSelect');
-  if (_bankList.length) return; // already loaded this session
-  try {
-    const client = getSupabase();
-    const { data, error } = await client.functions.invoke('bank-utils', { body: { action: 'list_banks' } });
-    if (error || !data?.banks) throw new Error(error?.message || 'Could not load bank list.');
-    _bankList = data.banks;
-    select.innerHTML = '<option value="" disabled selected>Select your bank or wallet</option>' +
-      _bankList.map(b => `<option value="${b.code}">${b.name}</option>`).join('');
-  } catch (e) {
-    console.warn('[Dashboard] Bank list load failed:', e.message);
-    select.innerHTML = '<option value="" disabled selected>Could not load banks — check setup</option>';
-    showToast('Could not load the bank list. The bank-utils function may not be deployed yet.', 'warning', 6000);
-  }
-}
-
+/* ── Withdraw modal: plain manual entry, no external dependency ── */
 ['withdrawBtn', 'withdrawBtnTop'].forEach(id => {
   const el = document.getElementById(id);
-  if (el) el.addEventListener('click', (e) => { e.preventDefault(); openModal('withdrawModal'); loadBankList(); });
+  if (el) el.addEventListener('click', (e) => { e.preventDefault(); openModal('withdrawModal'); });
 });
 initModalCloseOnBackdrop('withdrawModal');
 
 const bankSelect = document.getElementById('bankSelect');
 const accountNumberInput = document.getElementById('accountNumber');
-const resolveWrap = document.getElementById('resolveStatusWrap');
+const accountNameInput = document.getElementById('accountName');
 const confirmBtn = document.getElementById('confirmWithdrawBtn');
-
-bankSelect.addEventListener('change', () => {
-  accountNumberInput.disabled = !bankSelect.value;
-  accountNumberInput.value = '';
-  resolveWrap.innerHTML = '';
-  _resolvedAccountName = null;
-  confirmBtn.disabled = true;
-});
-
-accountNumberInput.addEventListener('input', () => {
-  _resolvedAccountName = null;
-  confirmBtn.disabled = true;
-  clearTimeout(_resolveTimer);
-  resolveWrap.innerHTML = '';
-  const num = accountNumberInput.value.trim();
-  if (num.length === 10 && bankSelect.value) {
-    _resolveTimer = setTimeout(resolveAccount, 500);
-  }
-});
-
-async function resolveAccount() {
-  const bankCode = bankSelect.value;
-  const accNum = accountNumberInput.value.trim();
-  resolveWrap.innerHTML = `<div class="resolve-status resolve-status--loading"><svg class="spin-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M21 12a9 9 0 11-6.219-8.56"/></svg>Verifying account…</div>`;
-
-  try {
-    const client = getSupabase();
-    const { data, error } = await client.functions.invoke('bank-utils', {
-      body: { action: 'resolve', account_number: accNum, bank_code: bankCode }
-    });
-    if (error || data?.error || !data?.account_name) {
-      throw new Error(data?.error || error?.message || 'Could not verify this account.');
-    }
-    _resolvedAccountName = data.account_name;
-    resolveWrap.innerHTML = `<div class="resolve-status resolve-status--success"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 6L9 17l-5-5"/></svg>${data.account_name}</div>`;
-    confirmBtn.disabled = false;
-  } catch (e) {
-    _resolvedAccountName = null;
-    confirmBtn.disabled = true;
-    resolveWrap.innerHTML = `<div class="resolve-status resolve-status--error"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><line x1="15" y1="9" x2="9" y2="15"/><line x1="9" y1="9" x2="15" y2="15"/></svg>${e.message}</div>`;
-  }
-}
 
 confirmBtn.addEventListener('click', async () => {
   const amount = parseFloat(document.getElementById('withdrawAmount').value);
   const balance = _currentProfile?.balance || 0;
-  const bankCode = bankSelect.value;
-  const bankName = bankSelect.options[bankSelect.selectedIndex]?.text || '';
+  const bankName = bankSelect.value;
   const accountNumber = accountNumberInput.value.trim();
+  const accountName = accountNameInput.value.trim();
 
-  if (!bankCode) { showToast('Please select your bank or wallet.', 'warning'); return; }
-  if (!_resolvedAccountName) { showToast('Please verify your account number first.', 'warning'); return; }
+  if (!bankName) { showToast('Please select your bank or wallet.', 'warning'); return; }
+  if (!accountNumber || accountNumber.length !== 10) { showToast('Enter a valid 10-digit account number.', 'warning'); return; }
+  if (!accountName) { showToast('Please enter the account name.', 'warning'); return; }
   if (!amount || amount < 10000) { showToast('Minimum withdrawal amount is ₦10,000.', 'warning'); return; }
   if (amount > balance) { showToast('Insufficient balance. Your current balance is ' + formatNaira(balance), 'error'); return; }
 
@@ -619,7 +699,7 @@ confirmBtn.addEventListener('click', async () => {
       method: bankName,
       bank_name: bankName,
       account_number: accountNumber,
-      account_name: _resolvedAccountName,
+      account_name: accountName,
       status: 'pending',
       created_at: new Date().toISOString(),
     });
@@ -634,14 +714,12 @@ confirmBtn.addEventListener('click', async () => {
     document.getElementById('modalBalance').textContent = formatNaira(newBalance);
 
     closeModal('withdrawModal');
-    showToast(`✅ Withdrawal of ${formatNaira(amount)} to ${_resolvedAccountName} submitted! Processing in 1–2 business days.`, 'success', 7000);
+    showToast(`✅ Withdrawal of ${formatNaira(amount)} submitted! Processing in 1–2 business days.`, 'success', 7000);
 
     document.getElementById('withdrawAmount').value = '';
-    accountNumberInput.value = ''; accountNumberInput.disabled = true;
+    accountNumberInput.value = '';
+    accountNameInput.value = '';
     bankSelect.selectedIndex = 0;
-    resolveWrap.innerHTML = '';
-    _resolvedAccountName = null;
-    confirmBtn.disabled = true;
   } catch (err) {
     console.error('[Dashboard] Withdrawal error:', err);
     showToast(err.message || 'Could not submit request. Please try again.', 'error');
@@ -650,6 +728,7 @@ confirmBtn.addEventListener('click', async () => {
   }
 });
 </script>
+
 
 <a href="https://t.me/FSDme" target="_blank" rel="noopener" class="telegram-float" aria-label="Chat with us on Telegram">
   <svg viewBox="0 0 24 24" fill="currentColor"><path d="M21.5 4.5L2.7 11.8c-1.2.5-1.2 1.2-.2 1.5l4.8 1.5 1.8 5.6c.2.6.4.8.9.8.4 0 .6-.2.8-.4l2.4-2.3 4.9 3.6c.9.5 1.5.2 1.7-.8l3.2-15.1c.3-1.2-.4-1.7-1.5-1.2z"/></svg>
