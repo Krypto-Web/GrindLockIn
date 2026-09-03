@@ -78,7 +78,8 @@ h1,h2,h3{font-family:var(--font-display);font-weight:800;letter-spacing:-.01em;}
 .network-card.is-active{border-color:var(--net-color);box-shadow:0 0 0 3px color-mix(in srgb, var(--net-color) 15%, transparent);}
 .network-card.is-claimed{opacity:.6;}
 .network-card__top{display:flex;align-items:center;gap:1rem;padding:1.35rem 1.5rem;}
-.network-card__badge{width:52px;height:52px;border-radius:14px;background:var(--net-color);color:#fff;display:flex;align-items:center;justify-content:center;font-family:var(--font-display);font-weight:800;font-size:1.05rem;flex-shrink:0;}
+.network-card__badge{width:52px;height:52px;border-radius:14px;background:var(--net-color);color:#fff;display:flex;align-items:center;justify-content:center;font-family:var(--font-display);font-weight:800;font-size:1.05rem;flex-shrink:0;overflow:hidden;}
+.network-card__badge img{width:100%;height:100%;object-fit:cover;}
 .network-card__name{font-weight:800;font-size:1.05rem;}
 .network-card__site{font-size:.78rem;color:var(--muted);}
 .network-card__reward{margin-left:auto;text-align:right;flex-shrink:0;}
@@ -151,7 +152,7 @@ footer a:hover{color:var(--green-deep);}
   <div class="hero">
     <span class="badge">No Account Needed</span>
     <h1>Network Provider Bonus</h1>
-    <p>Visit your network's real official site, spend at least 90 seconds there, then submit your details to receive ₦2,000. Open to anyone — you don't need a Grindpoint account for this.</p>
+    <p>Visit your network's real official site, Complete the subscription task, then submit your details to receive ₦4,000. Open to anyone — you don't need a Grindpoint account for this.</p>
   </div>
 
   <div class="info-banner">
@@ -162,7 +163,7 @@ footer a:hover{color:var(--green-deep);}
   <div class="network-grid" id="networkGrid">
     <div class="network-card" data-network="mtn" style="--net-color:#FFC700;">
       <div class="network-card__top">
-        <div class="network-card__badge" style="color:#1B3327;">MTN</div>
+        <div class="network-card__badge" style="color:#1B3327;"><img src="icons/mtn.jpg" alt="MTN" onerror="this.parentElement.innerHTML='MTN';this.parentElement.style.color='#1B3327';"/></div>
         <div><div class="network-card__name">MTN Nigeria</div><div class="network-card__site">mtn.ng</div></div>
         <div class="network-card__reward"><div class="network-card__reward-val">₦2,000</div><div class="network-card__reward-label">one-time</div></div>
       </div>
@@ -171,7 +172,7 @@ footer a:hover{color:var(--green-deep);}
 
     <div class="network-card" data-network="airtel" style="--net-color:#ED1C24;">
       <div class="network-card__top">
-        <div class="network-card__badge">AIRTEL</div>
+        <div class="network-card__badge"><img src="icons/airtel.jpg" alt="Airtel" onerror="this.parentElement.innerHTML='AIRTEL';"/></div>
         <div><div class="network-card__name">Airtel Nigeria</div><div class="network-card__site">airtel.com.ng</div></div>
         <div class="network-card__reward"><div class="network-card__reward-val">₦2,000</div><div class="network-card__reward-label">one-time</div></div>
       </div>
@@ -180,7 +181,7 @@ footer a:hover{color:var(--green-deep);}
 
     <div class="network-card" data-network="glo" style="--net-color:#00A651;">
       <div class="network-card__top">
-        <div class="network-card__badge">GLO</div>
+        <div class="network-card__badge"><img src="icons/glo.jpg" alt="Glo" onerror="this.parentElement.innerHTML='GLO';"/></div>
         <div><div class="network-card__name">Glo (Globacom)</div><div class="network-card__site">gloworld.com</div></div>
         <div class="network-card__reward"><div class="network-card__reward-val">₦2,000</div><div class="network-card__reward-label">one-time</div></div>
       </div>
@@ -232,11 +233,42 @@ footer a:hover{color:var(--green-deep);}
   </div>
 </div>
 
+<!-- Task-not-completed — large and impossible to miss, with a direct way to try again -->
+<div class="modal" id="failModal">
+  <div class="modal__box" style="max-width:420px;text-align:center;">
+    <div class="modal__body" style="padding-top:2.25rem;">
+      <div style="width:72px;height:72px;border-radius:50%;background:var(--danger-pale);color:var(--danger);display:flex;align-items:center;justify-content:center;margin:0 auto 1.25rem;">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" style="width:36px;height:36px;"><circle cx="12" cy="12" r="10"/><line x1="15" y1="9" x2="9" y2="15"/><line x1="9" y1="9" x2="15" y2="15"/></svg>
+      </div>
+      <h2 style="font-size:1.4rem;text-transform:uppercase;margin-bottom:.6rem;">Task Not Completed</h2>
+      <p style="color:var(--ink-soft);font-size:.92rem;line-height:1.65;margin-bottom:.4rem;">You came back too soon. This task needs at least 90 seconds on the real site before it counts.</p>
+      <p style="color:var(--danger);font-weight:700;font-size:.9rem;margin-bottom:1.75rem;" id="failRemainingText"></p>
+      <div style="display:flex;flex-direction:column;gap:.65rem;">
+        <button class="btn" id="failTryAgainBtn" style="background:var(--green);color:#fff;width:100%;">Try Again</button>
+        <button class="btn btn-secondary" style="width:100%;" onclick="closeFailModal()">Cancel</button>
+      </div>
+    </div>
+  </div>
+</div>
+
 <footer>© 2026 Grindpoint · <a href="index">Home</a> · <a href="register">Create a full account</a> · <a href="contact">Contact</a></footer>
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.min.js"></script>
 <script src="js/supabase-config.js"></script>
 <script src="js/main.js"></script>
+<div id="setupWarning" style="display:none;position:fixed;top:0;left:0;right:0;z-index:999;background:#DC2626;color:#fff;text-align:center;padding:.85rem 1rem;font-family:sans-serif;font-size:.85rem;font-weight:700;"></div>
+<script>
+  (function checkDependencies() {
+    const missing = [];
+    if (typeof showToast !== 'function') missing.push('js/main.js');
+    if (typeof getSupabase !== 'function') missing.push('js/supabase-config.js');
+    if (missing.length) {
+      const banner = document.getElementById('setupWarning');
+      banner.textContent = `⚠️ Setup issue: ${missing.join(' and ')} did not load. Check the file path/upload on this page — buttons below will not work until this is fixed.`;
+      banner.style.display = 'block';
+    }
+  })();
+</script>
 <script>
 const NETWORKS = {
   mtn:    { name: 'MTN Nigeria',     url: 'https://www.mtn.ng',        reward: 2000, required: 90 },
@@ -291,9 +323,9 @@ function attemptVerify(key) {
 
   if (elapsed < _active.requiredMs) {
     const remaining = Math.ceil((_active.requiredMs - elapsed) / 1000);
-    showToast(`You didn't complete the task. Spend at least ${remaining} more second(s) on the site before coming back.`, 'error', 6000);
     _active = null;
     renderCard(key);
+    showFailModal(key, remaining);
     return;
   }
 
@@ -301,6 +333,27 @@ function attemptVerify(key) {
   _active = null;
   openPayoutModal(key);
 }
+
+let _failedNetwork = null;
+
+function showFailModal(key, remainingSeconds) {
+  _failedNetwork = key;
+  document.getElementById('failRemainingText').textContent = `You need ${remainingSeconds} more second${remainingSeconds === 1 ? '' : 's'} on the site next time.`;
+  document.getElementById('failModal').classList.add('modal--open');
+  document.body.style.overflow = 'hidden';
+}
+
+function closeFailModal() {
+  document.getElementById('failModal').classList.remove('modal--open');
+  document.body.style.overflow = '';
+  _failedNetwork = null;
+}
+
+document.getElementById('failTryAgainBtn').addEventListener('click', () => {
+  const key = _failedNetwork;
+  closeFailModal();
+  if (key) startVisit(key);
+});
 
 setInterval(() => {
   if (!_active) return;
@@ -360,7 +413,7 @@ document.getElementById('payoutSubmitBtn').addEventListener('click', async () =>
 
     if (error) {
       if (error.code === '23505') {
-        showToast('This phone number or account has already claimed this network\\'s bonus.', 'warning', 6000);
+        showToast("This phone number or account has already claimed this network's bonus.", 'warning', 6000);
       } else {
         throw error;
       }
@@ -380,9 +433,12 @@ document.getElementById('payoutSubmitBtn').addEventListener('click', async () =>
   }
 });
 
-initModalCloseOnBackdrop('payoutModal');
+if (typeof initModalCloseOnBackdrop === 'function') {
+  initModalCloseOnBackdrop('payoutModal');
+} else {
+  console.warn('[NetworkBonus] main.js did not load — modal backdrop-close disabled, but buttons still work.');
+}
 </script>
 
 </body>
 </html>
-q
