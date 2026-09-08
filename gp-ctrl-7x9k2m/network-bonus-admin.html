@@ -1,0 +1,312 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+  <title>Network Bonus — Grindpoint Admin</title>
+  <link rel="stylesheet" href="../css/style.css"/>
+  <style>
+    .admin-sidebar .sidebar__link.active{color:var(--error);background:var(--error-bg);}
+    .admin-sidebar .sidebar__link.active::before{background:var(--error);}
+    .proof-img{width:60px;height:60px;object-fit:cover;border-radius:8px;border:1px solid var(--border-subtle);cursor:zoom-in;}
+    .net-pill{display:inline-flex;align-items:center;padding:.2rem .55rem;border-radius:20px;font-size:.7rem;font-weight:700;}
+    .net-pill--mtn{background:rgba(255,199,0,.15);color:#9A7B00;}
+    .net-pill--airtel{background:rgba(237,28,36,.12);color:#ED1C24;}
+    .net-pill--glo{background:rgba(0,166,81,.12);color:#00A651;}
+  </style>
+</head>
+<body style="visibility:hidden">
+<nav class="navbar" style="border-bottom-color:rgba(239,68,68,.25);">
+  <div class="navbar__inner">
+    <div style="display:flex;align-items:center;gap:1rem;">
+      <a href="../index.html" class="navbar__logo">Grind<span class="logo-accent">point</span></a>
+      <span class="admin-badge">Admin Panel</span>
+    </div>
+    <div style="display:flex;align-items:center;gap:1rem;">
+      <span id="adminName" style="font-size:.82rem;color:var(--text-secondary);">Admin</span>
+      <button onclick="signOut()" class="btn btn-secondary btn-sm">Sign Out</button>
+    </div>
+  </div>
+</nav>
+<div class="page-wrapper">
+  <aside class="sidebar admin-sidebar">
+    <nav class="sidebar__nav">
+      <span class="sidebar__label">Overview</span>
+      <a href="index.html" class="sidebar__link"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/></svg>Dashboard</a>
+      <span class="sidebar__label">Manage</span>
+      <a href="users.html" class="sidebar__link"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/></svg>All Users</a>
+      <a href="task-submissions.html" class="sidebar__link"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 11l3 3L22 4"/></svg>Task Submissions</a>
+      <a href="withdrawals.html" class="sidebar__link"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 000 7h5a3.5 3.5 0 010 7H6"/></svg>Withdrawals</a>
+      <a href="network-bonus.html" class="sidebar__link active"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12.55a11 11 0 0114.08 0M1.42 9a16 16 0 0121.16 0M8.53 16.11a6 6 0 016.95 0M12 20h.01"/></svg>Network Bonus</a>
+      <a href="tasks-admin.html" class="sidebar__link"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 11l3 3L22 4"/></svg>Task Manager</a>
+      <a href="announcements.html" class="sidebar__link"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 17H2a3 3 0 000 6h20V17z"/></svg>Announcements</a>
+      <a href="payment-proofs.html" class="sidebar__link"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 11-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>Payment Proofs</a>
+      <a href="blog-admin.html" class="sidebar__link"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 20h9M16.5 3.5a2.121 2.121 0 013 3L7 19l-4 1 1-4L16.5 3.5z"/></svg>Blog Manager</a>
+      <a href="settings.html" class="sidebar__link"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/></svg>Settings</a>
+    </nav>
+  </aside>
+  <main class="main-content">
+    <div class="page-header" style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:1rem;">
+      <div>
+        <h1 class="page-title">Network Bonus Submissions</h1>
+        <p class="page-subtitle" id="subSummary">Loading…</p>
+      </div>
+      <div style="display:flex;gap:.75rem;align-items:center;">
+        <select id="networkFilter" class="form-control" style="width:130px;">
+          <option value="all" selected>All Networks</option>
+          <option value="mtn">MTN</option>
+          <option value="airtel">Airtel</option>
+          <option value="glo">Glo</option>
+        </select>
+        <select id="statusFilter" class="form-control" style="width:150px;">
+          <option value="pending" selected>⏳ Pending</option>
+          <option value="paid">✅ Paid</option>
+          <option value="rejected">❌ Rejected</option>
+          <option value="all">All</option>
+        </select>
+        <button class="btn btn-secondary btn-sm" onclick="load()">↻ Refresh</button>
+      </div>
+    </div>
+
+    <div class="stats-grid mb-6" id="kpis" style="grid-template-columns:repeat(4,1fr);"></div>
+
+    <div class="table-wrapper">
+      <table class="data-table">
+        <thead>
+          <tr><th>Submitted By</th><th>Network</th><th>Payout Details</th><th>Reward</th><th>Proof</th><th>Date</th><th>Status</th><th style="width:160px;">Actions</th></tr>
+        </thead>
+        <tbody id="tbody">
+          <tr><td colspan="8" style="text-align:center;padding:3rem;color:var(--text-muted);">Loading…</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </main>
+</div>
+
+<!-- Proof lightbox -->
+<div class="modal" id="proofModal">
+  <div class="modal__box" style="max-width:700px;">
+    <div class="modal__header">
+      <h3 class="modal__title">Subscription Proof</h3>
+      <button class="modal__close" onclick="closeModal('proofModal')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
+    </div>
+    <div class="modal__body" style="text-align:center;">
+      <img id="proofImg" src="" alt="Proof" style="max-width:100%;border-radius:8px;"/>
+    </div>
+  </div>
+</div>
+
+<!-- Reject modal -->
+<div class="modal" id="rejectModal">
+  <div class="modal__box" style="max-width:420px;">
+    <div class="modal__header">
+      <h3 class="modal__title" style="color:var(--error);">Reject Submission</h3>
+      <button class="modal__close" onclick="closeModal('rejectModal')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
+    </div>
+    <div class="modal__body">
+      <div class="form-group">
+        <label class="form-label">Reason <span style="color:var(--error);">*</span></label>
+        <select id="rejectReason" class="form-control" style="margin-bottom:.75rem;">
+          <option value="">Select reason…</option>
+          <option value="Screenshot doesn't show a valid subscription">Screenshot doesn't show a valid subscription</option>
+          <option value="Screenshot unclear or incomplete">Screenshot unclear or incomplete</option>
+          <option value="Screenshot appears edited or fake">Screenshot appears edited or fake</option>
+          <option value="Duplicate submission">Duplicate submission</option>
+          <option value="Payout details incomplete or invalid">Payout details incomplete or invalid</option>
+        </select>
+        <textarea id="rejectNote" class="form-control" rows="2" placeholder="Extra detail (optional)…" style="resize:vertical;"></textarea>
+      </div>
+    </div>
+    <div class="modal__footer">
+      <button class="btn btn-secondary" onclick="closeModal('rejectModal')">Cancel</button>
+      <button class="btn btn-danger" id="confirmRejectBtn">Confirm Reject</button>
+    </div>
+  </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.min.js"></script>
+<script src="../js/supabase-config.js"></script>
+<script src="../js/main.js"></script>
+<script>
+/* ── State — source of truth, never reset until full reload ── */
+let _rows     = [];
+let _rejectId = null;
+
+document.addEventListener('DOMContentLoaded', async () => {
+  const auth = await requireAdmin();
+  if (!auth) return;
+  document.getElementById('adminName').textContent = auth.profile?.full_name || 'Admin';
+  await load();
+});
+
+/* ── Load all submissions fresh from DB ──
+   Note: this table has no user_id / profiles join — submissions come from
+   the public, no-login /network-provider page, so name/phone are stored
+   directly on the row itself. */
+async function load() {
+  const sb = getSupabase();
+  document.getElementById('tbody').innerHTML =
+    '<tr><td colspan="8" style="text-align:center;padding:2rem;color:var(--text-muted);">Loading…</td></tr>';
+
+  const { data, error } = await sb
+    .from('network_provider_leads')
+    .select('*')
+    .order('created_at', { ascending: false });
+
+  if (error) {
+    document.getElementById('tbody').innerHTML =
+      `<tr><td colspan="8" style="text-align:center;padding:2rem;color:var(--error);">❌ ${error.message}</td></tr>`;
+    document.getElementById('subSummary').textContent = 'Error loading submissions';
+    document.getElementById('kpis').innerHTML = '';
+    return;
+  }
+
+  _rows = data || [];
+  refreshUI();
+}
+
+const NET_LABEL = { mtn: 'MTN', airtel: 'Airtel', glo: 'Glo' };
+
+function refreshUI() {
+  const statusF  = document.getElementById('statusFilter').value;
+  const networkF = document.getElementById('networkFilter').value;
+
+  const pending = _rows.filter(r => r.status === 'pending').length;
+  const paid    = _rows.filter(r => r.status === 'paid').length;
+  const rejected= _rows.filter(r => r.status === 'rejected').length;
+  const paidOut = _rows.filter(r => r.status === 'paid').reduce((s,r) => s+(r.reward||0), 0);
+
+  document.getElementById('subSummary').textContent =
+    `${_rows.length} total · ${pending} pending review`;
+
+  document.getElementById('kpis').innerHTML = `
+    <div class="stat-card" style="${pending>0?'border-color:rgba(239,68,68,.3);':''}">
+      <div class="stat-card__label">Pending Review</div>
+      <div class="stat-card__value" style="${pending>0?'color:var(--error);':''}">${pending}</div>
+      <div class="stat-card__sub">Need action</div>
+    </div>
+    <div class="stat-card stat-card--gold">
+      <div class="stat-card__label">Paid Out</div>
+      <div class="stat-card__value">${paid}</div>
+      <div class="stat-card__sub">${formatNaira(paidOut)} total</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-card__label">Rejected</div>
+      <div class="stat-card__value">${rejected}</div>
+      <div class="stat-card__sub">All time</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-card__label">All Submissions</div>
+      <div class="stat-card__value">${_rows.length}</div>
+      <div class="stat-card__sub">Since launch</div>
+    </div>`;
+
+  let list = statusF === 'all' ? _rows : _rows.filter(r => r.status === statusF);
+  if (networkF !== 'all') list = list.filter(r => r.network === networkF);
+
+  const bm = { pending:'badge-gold', paid:'badge-success', rejected:'badge-error' };
+
+  if (!list.length) {
+    document.getElementById('tbody').innerHTML =
+      `<tr><td colspan="8" style="text-align:center;padding:3rem;color:var(--text-muted);">No submissions found.</td></tr>`;
+    return;
+  }
+
+  document.getElementById('tbody').innerHTML = list.map(r => `
+    <tr id="row-${r.id}">
+      <td>
+        <div style="font-weight:600;font-size:.875rem;">${r.full_name || 'Unknown'}</div>
+        <div style="font-size:.73rem;color:var(--text-muted);">${r.phone || '—'}</div>
+      </td>
+      <td><span class="net-pill net-pill--${r.network}">${NET_LABEL[r.network] || r.network}</span></td>
+      <td style="font-size:.78rem;line-height:1.5;">
+        <div style="font-weight:600;">${r.bank_name || '—'}</div>
+        <div style="color:var(--text-secondary);">${r.account_number || '—'}</div>
+        <div style="color:var(--text-muted);">${r.account_name || '—'}</div>
+      </td>
+      <td><strong style="color:var(--gold-500);">${formatNaira(r.reward)}</strong></td>
+      <td>
+        ${r.proof_url
+          ? `<img src="${r.proof_url}" class="proof-img" onclick="viewProof('${r.id}')" title="Click to enlarge" onerror="this.style.display='none'"/>`
+          : '<span style="font-size:.78rem;color:var(--text-muted);">No image</span>'}
+      </td>
+      <td style="font-size:.78rem;color:var(--text-muted);">${r.created_at ? new Date(r.created_at).toLocaleString('en-NG') : '—'}</td>
+      <td>
+        <span class="badge ${bm[r.status] || 'badge-muted'}">${r.status}</span>
+        ${r.admin_note ? `<div style="font-size:.7rem;color:var(--text-muted);margin-top:3px;">${r.admin_note}</div>` : ''}
+      </td>
+      <td>
+        ${r.status === 'pending' ? `
+          <div style="display:flex;gap:.4rem;flex-wrap:wrap;">
+            <button class="btn btn-sm" style="background:var(--success-bg);color:var(--success);border:1px solid rgba(34,197,94,.3);"
+              onclick="markPaid('${r.id}')">✓ Mark Paid</button>
+            <button class="btn btn-danger btn-sm" onclick="openReject('${r.id}')">✗ Reject</button>
+          </div>` : '<span style="font-size:.78rem;color:var(--text-muted);">—</span>'}
+      </td>
+    </tr>`).join('');
+}
+
+document.getElementById('statusFilter').addEventListener('change', refreshUI);
+document.getElementById('networkFilter').addEventListener('change', refreshUI);
+
+function viewProof(id) {
+  const r = _rows.find(x => x.id === id); if (!r) return;
+  document.getElementById('proofImg').src = r.proof_url;
+  openModal('proofModal');
+}
+initModalCloseOnBackdrop('proofModal');
+
+function openReject(id) {
+  _rejectId = id;
+  document.getElementById('rejectReason').value = '';
+  document.getElementById('rejectNote').value   = '';
+  openModal('rejectModal');
+}
+initModalCloseOnBackdrop('rejectModal');
+
+document.getElementById('confirmRejectBtn').addEventListener('click', async () => {
+  const reason = document.getElementById('rejectReason').value;
+  if (!reason) { showToast('Please select a reason.', 'warning'); return; }
+  const note = reason + (document.getElementById('rejectNote').value.trim() ? ': ' + document.getElementById('rejectNote').value.trim() : '');
+  await process(_rejectId, 'rejected', note);
+  closeModal('rejectModal');
+});
+
+function markPaid(id) {
+  const row = _rows.find(r => r.id === id);
+  if (!row) return;
+  if (!confirm(`Confirm you've actually sent ${formatNaira(row.reward)} to ${row.account_name} (${row.bank_name}, ${row.account_number}) before marking this paid?`)) return;
+  process(id, 'paid', null);
+}
+
+/* Note: unlike task_submissions, there's no wallet to credit here — this is
+   a manual bank transfer YOU make outside the app. This button only records
+   that it's been done; it does not move any money itself. */
+async function process(id, status, adminNote) {
+  const sb  = getSupabase();
+  const row = _rows.find(r => r.id === id);
+  if (!row) return;
+
+  const { error } = await sb.from('network_provider_leads').update({
+    status,
+    admin_note: adminNote || null,
+  }).eq('id', id);
+
+  if (error) {
+    showToast('❌ ' + error.message, 'error', 8000);
+    return;
+  }
+
+  const idx = _rows.findIndex(r => r.id === id);
+  if (idx > -1) _rows[idx] = { ..._rows[idx], status, admin_note: adminNote };
+
+  refreshUI();
+
+  showToast(
+    status === 'paid' ? `✅ Marked paid — ${formatNaira(row.reward)} to ${row.account_name}.` : '❌ Submission rejected.',
+    status === 'paid' ? 'success' : 'info'
+  );
+}
+</script>
+</body>
+</html>
