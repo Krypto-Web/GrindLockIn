@@ -287,6 +287,63 @@ h1,h2,h3,h4{font-family:var(--font-display);font-weight:800;line-height:1.05;let
 }
 .stamp__inner strong{font-size:.62rem;letter-spacing:.06em;line-height:1.3;}
 .stamp__inner span{font-size:.56rem;color:var(--muted);}
+
+/* Payment methods strip — static, no live data, pure branding */
+.pay-strip{background:var(--white);border-top:1px solid var(--line);border-bottom:1px solid var(--line);padding:1.5rem 0;}
+.pay-strip__inner{display:flex;align-items:center;justify-content:center;gap:.6rem;flex-wrap:wrap;}
+.pay-strip__label{font-family:var(--font-mono);font-size:.7rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);margin-right:.4rem;}
+.pay-badge{display:flex;align-items:center;gap:.5rem;background:var(--paper-dim);border:1px solid var(--line);border-radius:var(--radius-sm);padding:.5rem .9rem;}
+.pay-badge img{width:20px;height:20px;object-fit:contain;border-radius:4px;flex-shrink:0;}
+.pay-badge span{font-size:.78rem;font-weight:700;color:var(--ink);}
+.pay-strip__more{font-size:.76rem;color:var(--muted);margin-left:.3rem;}
+
+/* Task categories grid */
+.cat-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:1rem;margin-top:1rem;}
+@media (max-width:860px){.cat-grid{grid-template-columns:repeat(2,1fr);}}
+.cat-card{background:var(--white);border:1px solid var(--line);border-radius:var(--radius-md);padding:1.35rem 1.1rem;text-align:center;transition:transform .18s,border-color .18s,box-shadow .18s;}
+.cat-card:hover{border-color:var(--green);transform:translateY(-3px);box-shadow:var(--shadow-card);}
+.cat-emoji{font-size:1.9rem;margin-bottom:.6rem;}
+.cat-name{font-weight:700;font-size:.87rem;margin-bottom:.4rem;}
+.cat-range{display:inline-block;font-family:var(--font-mono);font-size:.74rem;font-weight:700;color:var(--green-deep);background:var(--green-pale);padding:.2rem .55rem;border-radius:20px;}
+
+/* Homepage FAQ (condensed — links to full FAQ for more) */
+.home-faq-list{max-width:720px;margin:0 auto;display:flex;flex-direction:column;gap:.75rem;}
+.hf-item{background:var(--white);border:1px solid var(--line);border-radius:var(--radius-md);overflow:hidden;transition:border-color .18s;}
+.hf-item.open{border-color:var(--green);}
+.hf-q{display:flex;align-items:center;justify-content:space-between;padding:1.1rem 1.3rem;cursor:pointer;gap:1rem;}
+.hf-q span{font-weight:700;font-size:.92rem;}
+.hf-chevron{width:26px;height:26px;border-radius:50%;background:var(--paper-dim);display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:transform .2s,background .2s,color .2s;color:var(--muted);font-size:.7rem;}
+.hf-item.open .hf-chevron{transform:rotate(180deg);background:var(--green);color:#fff;}
+.hf-a{display:none;padding:0 1.3rem 1.2rem;font-size:.88rem;color:var(--muted);line-height:1.7;}
+.hf-item.open .hf-a{display:block;}
+.home-faq-more{text-align:center;margin-top:1.5rem;font-size:.88rem;color:var(--muted);}
+.home-faq-more a{color:var(--green-deep);font-weight:700;}
+
+/* SEO content block */
+.seo-block{background:var(--paper-dim);border-top:1px solid var(--line);border-bottom:1px solid var(--line);}
+.seo-block .container{max-width:800px;text-align:center;}
+.seo-block h2{font-size:1.5rem;margin-bottom:1rem;}
+.seo-block p{font-size:.92rem;color:var(--muted);line-height:1.8;margin-bottom:1rem;text-align:left;}
+.seo-block p:last-of-type{margin-bottom:0;}
+.seo-block a{color:var(--green-deep);font-weight:700;}
+
+/* Expanded footer */
+.footer-rich{background:var(--ink);color:rgba(255,255,255,.6);padding:4rem 0 2rem;}
+.footer-rich-grid{display:grid;grid-template-columns:1.6fr 1fr 1fr 1fr;gap:2.5rem;padding-bottom:2.5rem;border-bottom:1px solid rgba(255,255,255,.1);}
+@media (max-width:760px){.footer-rich-grid{grid-template-columns:1fr 1fr;}}
+@media (max-width:480px){.footer-rich-grid{grid-template-columns:1fr;}}
+.footer-rich .logo{color:#fff;}
+.footer-rich .logo .accent{color:#5FD69A;}
+.footer-rich-brand p{margin-top:.9rem;font-size:.86rem;max-width:280px;line-height:1.65;color:rgba(255,255,255,.45);}
+.footer-rich-social{display:flex;gap:.6rem;margin-top:1.1rem;}
+.footer-rich-social a{width:34px;height:34px;border-radius:8px;background:rgba(255,255,255,.07);display:flex;align-items:center;justify-content:center;color:rgba(255,255,255,.6);transition:background .15s,color .15s;}
+.footer-rich-social a:hover{background:var(--green);color:#fff;}
+.footer-rich-social svg{width:16px;height:16px;}
+.footer-rich h5{font-family:var(--font-mono);font-size:.7rem;letter-spacing:.1em;text-transform:uppercase;color:rgba(255,255,255,.85);margin-bottom:1rem;}
+.footer-rich ul li{margin-bottom:.6rem;}
+.footer-rich ul a{font-size:.86rem;transition:color .15s;}
+.footer-rich ul a:hover{color:#fff;}
+.footer-rich-bottom{display:flex;flex-wrap:wrap;justify-content:space-between;gap:1rem;padding-top:1.6rem;font-size:.78rem;}
 .trust h3{font-size:1.15rem;margin-bottom:.4rem;text-transform:none;letter-spacing:0;}
 .trust p{color:var(--muted);font-size:.92rem;}
 
@@ -554,6 +611,27 @@ h1,h2,h3,h4{font-family:var(--font-display);font-weight:800;line-height:1.05;let
   </div>
 </section>
 
+<!-- ─── Task Categories ─── -->
+<section class="section" style="background:var(--white);">
+  <div class="container">
+    <div class="section-head">
+      <div class="eyebrow" style="justify-content:center;">Available Right Now</div>
+      <h2>Every Way To Earn On Grindpoint</h2>
+      <p>Eight categories, updated daily — pick whichever fits how much time you've got.</p>
+    </div>
+    <div class="cat-grid">
+      <div class="cat-card"><div class="cat-emoji">⚡</div><div class="cat-name">View Ads</div><span class="cat-range">₦10 – ₦20</span></div>
+      <div class="cat-card"><div class="cat-emoji">🌐</div><div class="cat-name">Surf &amp; Earn</div><span class="cat-range">₦25 – ₦50</span></div>
+      <div class="cat-card"><div class="cat-emoji">📱</div><div class="cat-name">Social Tasks</div><span class="cat-range">₦150 – ₦400</span></div>
+      <div class="cat-card"><div class="cat-emoji">🎬</div><div class="cat-name">Video Tasks</div><span class="cat-range">₦120 – ₦300</span></div>
+      <div class="cat-card"><div class="cat-emoji">📊</div><div class="cat-name">Surveys</div><span class="cat-range">₦200 – ₦500</span></div>
+      <div class="cat-card"><div class="cat-emoji">📲</div><div class="cat-name">App Tasks</div><span class="cat-range">₦350 – ₦600</span></div>
+      <div class="cat-card"><div class="cat-emoji">✍️</div><div class="cat-name">Reviews</div><span class="cat-range">₦300 – ₦400</span></div>
+      <div class="cat-card"><div class="cat-emoji">🔗</div><div class="cat-name">Referrals</div><span class="cat-range">₦200 – ₦500</span></div>
+    </div>
+  </div>
+</section>
+
 <!-- ─── Trust ─── -->
 <section class="section trust">
   <div class="container">
@@ -564,6 +642,59 @@ h1,h2,h3,h4{font-family:var(--font-display);font-weight:800;line-height:1.05;let
         <p>Every connection is SSL-encrypted and Grindpoint is a CAC-registered Nigerian company — your earnings and your data are protected end to end.</p>
       </div>
     </div>
+  </div>
+</section>
+
+<!-- ─── Payment methods (static — no live data, just supported-methods branding) ─── -->
+<div class="pay-strip">
+  <div class="container pay-strip__inner">
+    <span class="pay-strip__label">Withdraw to:</span>
+    <div class="pay-badge"><img src="icons/pay-gtbank.png" alt="GTBank" onerror="this.remove()"/><span>GTBank</span></div>
+    <div class="pay-badge"><img src="icons/pay-moniepoint.png" alt="Moniepoint" onerror="this.remove()"/><span>Moniepoint</span></div>
+    <div class="pay-badge"><img src="icons/pay-opay.png" alt="OPay" onerror="this.remove()"/><span>OPay</span></div>
+    <div class="pay-badge"><img src="icons/pay-palmpay.png" alt="PalmPay" onerror="this.remove()"/><span>PalmPay</span></div>
+    <div class="pay-badge"><img src="icons/pay-kuda.png" alt="Kuda" onerror="this.remove()"/><span>Kuda</span></div>
+    <span class="pay-strip__more">+ All Nigerian Banks</span>
+  </div>
+</div>
+
+<!-- ─── Homepage FAQ (condensed — full version lives at /faq) ─── -->
+<section class="section" style="background:var(--paper);">
+  <div class="container">
+    <div class="section-head">
+      <div class="eyebrow" style="justify-content:center;">Common Questions</div>
+      <h2>Quick Answers</h2>
+      <p>The things people ask most before signing up.</p>
+    </div>
+    <div class="home-faq-list">
+      <div class="hf-item open">
+        <div class="hf-q" onclick="toggleHomeFaq(this)"><span>Is Grindpoint free to join?</span><div class="hf-chevron">▼</div></div>
+        <div class="hf-a">Yes, 100% free. There are no registration fees, subscription charges, or hidden costs. You never pay Grindpoint anything — we pay you. If any platform claims to be Grindpoint and asks you to pay to join, it is a scam.</div>
+      </div>
+      <div class="hf-item">
+        <div class="hf-q" onclick="toggleHomeFaq(this)"><span>How do I get paid?</span><div class="hf-chevron">▼</div></div>
+        <div class="hf-a">Earnings land in your Grindpoint wallet, and you withdraw straight to your Nigerian bank account or mobile wallet (GTBank, Moniepoint, OPay, PalmPay, Kuda, and other Nigerian banks). Withdrawals are processed within 1–2 business days.</div>
+      </div>
+      <div class="hf-item">
+        <div class="hf-q" onclick="toggleHomeFaq(this)"><span>Do I need any experience or money to start?</span><div class="hf-chevron">▼</div></div>
+        <div class="hf-a">No. You need a smartphone, an email address, and a Nigerian bank account or mobile wallet to withdraw to. Tasks are simple — watching ads, following pages, filling short surveys, rating apps — and take a few minutes each.</div>
+      </div>
+      <div class="hf-item">
+        <div class="hf-q" onclick="toggleHomeFaq(this)"><span>Who can join?</span><div class="hf-chevron">▼</div></div>
+        <div class="hf-a">Grindpoint is open to Nigerian residents aged 18 or older.</div>
+      </div>
+    </div>
+    <p class="home-faq-more">More questions? See the <a href="faq">full FAQ</a> or <a href="contact">contact support</a>.</p>
+  </div>
+</section>
+
+<!-- ─── About / SEO content ─── -->
+<section class="section seo-block">
+  <div class="container">
+    <h2>Nigeria's Micro-Task Earning Platform</h2>
+    <p>Grindpoint is a Nigerian platform where you earn real Naira by completing simple online tasks — watching short ads, browsing partner sites, following social pages, answering surveys, and rating apps. Every task is paid directly into your Grindpoint wallet, and you can withdraw to any Nigerian bank account or mobile wallet.</p>
+    <p>Whether you're a student looking for side income, someone between jobs, or just want to make better use of spare time on your phone, Grindpoint is built to work with how Nigerians actually use the internet — mobile-first, low data usage, and no app download required. You can also earn from friends you invite through our <a href="referral">referral program</a>, with higher rewards as you bring in more people.</p>
+    <p>Have a question before you sign up? Read the <a href="faq">FAQ</a>, check our <a href="blog">blog</a> for earning guides and platform updates, or <a href="contact">get in touch</a> with our support team.</p>
   </div>
 </section>
 
@@ -580,44 +711,52 @@ h1,h2,h3,h4{font-family:var(--font-display);font-weight:800;line-height:1.05;let
 </section>
 
 <!-- ─── Footer ─── -->
-<footer class="footer">
+<footer class="footer-rich">
   <div class="container">
-    <div class="footer-grid">
-      <div class="footer-brand">
+    <div class="footer-rich-grid">
+      <div class="footer-rich-brand">
         <a href="index" class="logo">
           <svg viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg"><circle cx="14" cy="14" r="13" fill="#0E7C4A"/><path d="M8 14.3l4 4 8-9" stroke="white" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
           Grind<span class="accent">point</span>
         </a>
-        <p>Nigeria's trusted platform for earning real Naira through simple online micro-tasks.</p>
+        <p>Nigeria's trusted platform for earning real Naira through simple online micro-tasks. CAC registered, SSL secured.</p>
+        <div class="footer-rich-social">
+          <a href="https://t.me/+NJLTREq5F6E4NWE0" target="_blank" rel="noopener" aria-label="Telegram Community"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M21.5 4.5L2.7 11.8c-1.2.5-1.2 1.2-.2 1.5l4.8 1.5 1.8 5.6c.2.6.4.8.9.8.4 0 .6-.2.8-.4l2.4-2.3 4.9 3.6c.9.5 1.5.2 1.7-.8l3.2-15.1c.3-1.2-.4-1.7-1.5-1.2z"/></svg></a>
+          <a href="https://t.me/FSDme" target="_blank" rel="noopener" aria-label="Contact Admin"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 11.5a8.38 8.38 0 01-.9 3.8 8.5 8.5 0 01-7.6 4.7 8.38 8.38 0 01-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 01-.9-3.8 8.5 8.5 0 014.7-7.6 8.38 8.38 0 013.8-.9h.5a8.48 8.48 0 018 8v.5z"/></svg></a>
+        </div>
       </div>
       <div>
         <h5>Platform</h5>
         <ul>
           <li><a href="tasks">Browse Tasks</a></li>
+          <li><a href="ptc">View Ads</a></li>
+          <li><a href="surf">Surf &amp; Earn</a></li>
           <li><a href="leaderboard">Leaderboard</a></li>
           <li><a href="referral">Refer &amp; Earn</a></li>
           <li><a href="dashboard">Dashboard</a></li>
         </ul>
       </div>
       <div>
-        <h5>Account</h5>
+        <h5>Resources</h5>
         <ul>
-          <li><a href="register">Sign Up</a></li>
-          <li><a href="login">Sign In</a></li>
-        </ul>
-      </div>
-      <div>
-        <h5>Legal</h5>
-        <ul>
-          <li><a href="terms">Terms of Service</a></li>
-          <li><a href="privacy">Privacy Policy</a></li>
-          <li><a href="payout-policy">Payout Policy</a></li>
+          <li><a href="blog">Blog</a></li>
           <li><a href="faq">FAQ</a></li>
+          <li><a href="proof-of-payment">Proof of Payment</a></li>
           <li><a href="contact">Contact Support</a></li>
         </ul>
       </div>
+      <div>
+        <h5>Account &amp; Legal</h5>
+        <ul>
+          <li><a href="register">Sign Up</a></li>
+          <li><a href="login">Sign In</a></li>
+          <li><a href="terms">Terms of Service</a></li>
+          <li><a href="privacy">Privacy Policy</a></li>
+          <li><a href="payout-policy">Payout Policy</a></li>
+        </ul>
+      </div>
     </div>
-    <div class="footer-bottom">
+    <div class="footer-rich-bottom">
       <p>© 2021-2026 Grindpoint. All rights reserved. Developed by GrindPoint Inc.</p>
       <div><span class="status-dot"></span>All systems operational</div>
     </div>
@@ -647,6 +786,14 @@ h1,h2,h3,h4{font-family:var(--font-display);font-weight:800;line-height:1.05;let
       document.getElementById('ctaBottom').href = 'dashboard';
     }
   });
+
+  // Homepage FAQ accordion
+  window.toggleHomeFaq = function(el) {
+    const item = el.closest('.hf-item');
+    const isOpen = item.classList.contains('open');
+    document.querySelectorAll('.hf-item.open').forEach(i => i.classList.remove('open'));
+    if (!isOpen) item.classList.add('open');
+  };
 
   // Smooth anchor scroll
   document.querySelectorAll('a[href^="#"]').forEach(a => {
