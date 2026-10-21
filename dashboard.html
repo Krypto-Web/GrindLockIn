@@ -298,6 +298,7 @@ select.form-control{appearance:none;background-image:url("data:image/svg+xml,%3C
       <a href="blog" class="sidebar__link"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 20h9M16.5 3.5a2.121 2.121 0 013 3L7 19l-4 1 1-4L16.5 3.5z"/></svg>Blog</a>
       <span class="sidebar__label" style="margin-top:.5rem;">Account</span>
       <a href="transactions" class="sidebar__link"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/><line x1="3" y1="6" x2="3.01" y2="6"/><line x1="3" y1="12" x2="3.01" y2="12"/><line x1="3" y1="18" x2="3.01" y2="18"/></svg>Transactions</a>
+      <a href="#" class="sidebar__link" id="depositBtn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>Deposit Funds</a>
       <a href="#" class="sidebar__link" id="withdrawBtn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 000 7h5a3.5 3.5 0 010 7H6"/></svg>Withdraw Funds</a>
       <a href="profile" class="sidebar__link"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>My Profile</a>
     </nav>
@@ -327,7 +328,10 @@ select.form-control{appearance:none;background-image:url("data:image/svg+xml,%3C
           <div class="balance-hero__stat"><strong id="referralCount">0</strong> referrals</div>
         </div>
       </div>
-      <button class="btn btn-primary" id="withdrawBtnTop"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" style="width:15px;height:15px;"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 000 7h5a3.5 3.5 0 010 7H6"/></svg>Withdraw</button>
+      <div style="display:flex;gap:.6rem;">
+        <button class="btn btn-secondary" id="depositBtnTop"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" style="width:15px;height:15px;"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>Deposit</button>
+        <button class="btn btn-primary" id="withdrawBtnTop"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" style="width:15px;height:15px;"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 000 7h5a3.5 3.5 0 010 7H6"/></svg>Withdraw</button>
+      </div>
     </div>
 
     <div id="announcementsWrap" style="margin-bottom:1.5rem;display:none;"></div>
@@ -408,6 +412,57 @@ select.form-control{appearance:none;background-image:url("data:image/svg+xml,%3C
       </div>
     </div>
   </main>
+</div>
+
+<!-- Deposit Modal — manual bank transfer + screenshot, admin reviews and credits -->
+<div class="modal" id="depositModal">
+  <div class="modal__box">
+    <div class="modal__header">
+      <h3 class="modal__title"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:18px;height:18px;display:inline;vertical-align:middle;margin-right:6px;color:var(--green);"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>Deposit Funds</h3>
+      <button class="modal__close" onclick="closeModal('depositModal')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
+    </div>
+    <div class="modal__body">
+      <div id="depositFormView">
+        <div class="form-group">
+          <label class="form-label" for="depositAmount">Amount to Deposit (₦)</label>
+          <input type="number" id="depositAmount" class="form-control" placeholder="e.g. 5000" min="100" step="100" />
+        </div>
+
+        <div style="background:var(--paper-dim);border:1px solid var(--line);border-radius:var(--radius-md);padding:1rem 1.1rem;margin:1.1rem 0;">
+          <div style="font-size:.72rem;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);margin-bottom:.7rem;">Transfer To</div>
+          <div style="font-size:.88rem;line-height:1.9;">
+            <div><strong>Bank:</strong> <span id="depBankName">PLACEHOLDER — add your real bank name</span></div>
+            <div><strong>Account Number:</strong> <span id="depAccNumber">0000000000</span></div>
+            <div><strong>Account Name:</strong> <span id="depAccName">GRINDPOINT NIGERIA LIMITED</span></div>
+          </div>
+          <div style="font-size:.76rem;color:var(--muted);margin-top:.7rem;">Transfer the exact amount above, then upload your payment screenshot below.</div>
+        </div>
+
+        <div class="proof-upload" id="depProofUpload" style="border:2px dashed var(--line);border-radius:var(--radius-md);padding:1.1rem;text-align:center;cursor:pointer;position:relative;margin-bottom:1rem;">
+          <input type="file" id="depProofFile" accept="image/*" style="position:absolute;inset:0;opacity:0;cursor:pointer;width:100%;height:100%;" />
+          <div style="font-size:1.4rem;margin-bottom:.4rem;">📸</div>
+          <div style="font-size:.78rem;color:var(--ink-soft);"><strong style="color:var(--green-deep);">Click to upload</strong> your transfer screenshot</div>
+        </div>
+        <div id="depProofPreviewWrap" style="display:none;text-align:center;margin-bottom:1rem;">
+          <div style="position:relative;display:inline-block;">
+            <img id="depProofPreviewImg" src="" alt="" style="max-height:110px;border-radius:var(--radius-md);border:1px solid var(--line);display:block;"/>
+            <button id="depProofRemove" style="position:absolute;top:-8px;right:-8px;width:22px;height:22px;border-radius:50%;background:var(--danger);color:#fff;border:none;font-size:12px;">✕</button>
+          </div>
+        </div>
+      </div>
+      <div id="depositSuccessView" style="display:none;text-align:center;padding:1rem 0;">
+        <div style="width:56px;height:56px;border-radius:50%;background:var(--green-pale);color:var(--green-deep);display:flex;align-items:center;justify-content:center;margin:0 auto 1.1rem;">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" style="width:26px;height:26px;"><path d="M20 6L9 17l-5-5"/></svg>
+        </div>
+        <h3 style="margin-bottom:.6rem;text-transform:none;">Submitted for Review</h3>
+        <p style="color:var(--muted);font-size:.87rem;line-height:1.6;">We've received your deposit request. We review and credit wallets regularly — your balance will update once confirmed.</p>
+      </div>
+    </div>
+    <div class="modal__footer" id="depositModalFooter">
+      <button class="btn btn-secondary" onclick="closeModal('depositModal')">Cancel</button>
+      <button class="btn btn-primary" id="submitDepositBtn" disabled>Upload Proof First</button>
+    </div>
+  </div>
 </div>
 
 <!-- Withdraw Modal — unified bank/wallet flow with live name verification -->
