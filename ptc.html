@@ -466,153 +466,125 @@ const PTC_ADS=[
   {id:'ptc_200',name:'Grindpoint',icon:'⚡',color:'rgba(245,158,11,.12)',timer:15,reward:10,desc:'Nigeria number 1 earning platform'},
 ];
 
+/* ════ ANTI-CHEAT: track tab visibility ════ */
+const DAILY_BONUS=50;
+const TODAY=new Date().toISOString().split('T')[0];
+let _user=null,_profile=null,_viewed=new Set(),_earning=0;
+let _active=null; /* {adId,departureTime,required} */
+let _hiddenSince=null,_totalHidden=0;
 
-/* ════ ANTI-CHEAT (Mobile-friendly + Warning Modal) ════ */
-const DAILY_BONUS = 50;
-const TODAY = new Date().toISOString().split('T')[0];
-
-let _user = null;
-let _profile = null;
-let _viewed = new Set();
-let _earning = 0;
-
-let _active = null;          // { adId, required, reward, startTime }
-let _hiddenSince = null;
-let _totalHidden = 0;
-let _touchCount = 0;
-let _pendingAdId = null;
-
-// Simple engagement tracker (works great on mobile)
-document.addEventListener('touchstart', () => { _touchCount++; }, { passive: true });
-document.addEventListener('click', () => { _touchCount++; });
-
-/* Visibility tracking */
-document.addEventListener('visibilitychange', () => {
-  if (document.visibilityState === 'hidden') {
-    _hiddenSince = Date.now();
+/* Track when user leaves/returns to the tab */
+document.addEventListener('visibilitychange',()=>{
+  if(document.visibilityState==='hidden'){
+    _hiddenSince=Date.now();
   } else {
-    // User returned to Grindpoint
-    if (_hiddenSince) {
-      _totalHidden += Date.now() - _hiddenSince;
-      _hiddenSince = null;
-    }
+    /* User returned to Grindpoint */
+    if(_hiddenSince){_totalHidden+=Date.now()-_hiddenSince;_hiddenSince=null;}
 
-    if (_active) {
-      const required = _active.required;
-      const spent = _totalHidden;
-
-      if (spent >= required) {
-        enableClaim(_active.adId, _active.reward);
+    if(_active){
+      const required=_active.required;
+      const spent=_totalHidden;
+      if(spent>=required){
+        /* Enough time spent — show claim */
+        enableClaim(_active.adId,_active.reward);
       } else {
-        const remaining = Math.ceil((required - spent) / 1000);
-        showToast(
-          `⏰ You came back too early! Stay on the website for ${remaining} more second${remaining === 1 ? '' : 's'}.`,
-          'warning',
-          5000
-        );
-        const prevId = _active.adId;
-        _active = null;
-        _totalHidden = 0;
+        const remaining=Math.ceil((required-spent)/1000);
+        showToast(`⏰ You came back too early! Go back to the website and stay for ${remaining} more second${remaining===1?'':'s'}.`,'warning',5000);
+        /* Cancel this ad attempt — reset active */
+        const prevId=_active.adId;
+        _active=null;
+        _totalHidden=0;
         refreshCard(prevId);
       }
     }
   }
 });
 
-document.addEventListener('DOMContentLoaded', async () => {
-  const auth = await requireAuth();
-  if (!auth) return;
-  _user = auth.user;
-  _profile = auth.profile;
-  const name = _profile?.full_name || _user.user_metadata?.full_name || 'Grinder';
-  document.getElementById('sidebarName').textContent = name;
-  document.getElementById('sidebarAvatar').textContent = name.split(' ').map(n => n[0]).join('').substring(0, 2).toUpperCase();
-  document.getElementById('navBalance').textContent = formatNaira(_profile?.balance || 0);
-  document.getElementById('statBalance').textContent = formatNaira(_profile?.balance || 0);
+document.addEventListener('DOMContentLoaded',async()=>{
+  const auth=await requireAuth();
+  if(!auth)return;
+  _user=auth.user;_profile=auth.profile;
+  const name=_profile?.full_name||_user.user_metadata?.full_name||'Grinder';
+  document.getElementById('sidebarName').textContent=name;
+  document.getElementById('sidebarAvatar').textContent=name.split(' ').map(n=>n[0]).join('').substring(0,2).toUpperCase();
+  document.getElementById('navBalance').textContent=formatNaira(_profile?.balance||0);
+  document.getElementById('statBalance').textContent=formatNaira(_profile?.balance||0);
   await loadTodayViews();
   checkDailyBonus();
   renderGrid('all');
   updateStats();
 });
 
-async function loadTodayViews() {
-  const sb = getSupabase();
-  try {
-    const { data } = await sb.from('ptc_views').select('ad_id,reward').eq('user_id', _user.id).eq('view_date', TODAY);
-    if (data) data.forEach(r => { _viewed.add(r.ad_id); _earning += r.reward; });
-  } catch (e) {
-    console.warn('[PTC] Run supabase-ptc-setup.sql first:', e.message);
-  }
+async function loadTodayViews(){
+  const sb=getSupabase();
+  try{
+    const{data}=await sb.from('ptc_views').select('ad_id,reward').eq('user_id',_user.id).eq('view_date',TODAY);
+    if(data)data.forEach(r=>{_viewed.add(r.ad_id);_earning+=r.reward;});
+  }catch(e){console.warn('[PTC] Run supabase-ptc-setup.sql first:',e.message);}
 }
 
-function checkDailyBonus() {
-  if (localStorage.getItem('gp_bonus_date') === TODAY) return;
-  const streak = parseInt(localStorage.getItem('gp_login_streak') || '0');
-  let amt = DAILY_BONUS, msg = '';
-  if (streak >= 7) { amt = 100; msg = ' 🔥 7-day streak!'; }
-  else if (streak >= 3) { amt = 75; msg = ` 🔥 ${streak}-day streak!`; }
-  document.getElementById('bonusTitle').textContent = `🎁 Daily Bonus — ${formatNaira(amt)} Waiting!`;
-  document.getElementById('bonusDesc').textContent = `Welcome back! Claim your free daily reward.${msg} Day ${streak + 1} streak.`;
-  document.getElementById('claimBonusBtn').textContent = `Claim ${formatNaira(amt)}`;
-  document.getElementById('claimBonusBtn').dataset.amount = amt;
-  document.getElementById('bonusBanner').style.display = 'flex';
+function checkDailyBonus(){
+  if(localStorage.getItem('gp_bonus_date')===TODAY){return;}
+  const streak=parseInt(localStorage.getItem('gp_login_streak')||'0');
+  let amt=DAILY_BONUS,msg='';
+  if(streak>=7){amt=100;msg=' 🔥 7-day streak!';}
+  else if(streak>=3){amt=75;msg=` 🔥 ${streak}-day streak!`;}
+  document.getElementById('bonusTitle').textContent=`🎁 Daily Bonus — ${formatNaira(amt)} Waiting!`;
+  document.getElementById('bonusDesc').textContent=`Welcome back! Claim your free daily reward.${msg} Day ${streak+1} streak.`;
+  document.getElementById('claimBonusBtn').textContent=`Claim ${formatNaira(amt)}`;
+  document.getElementById('claimBonusBtn').dataset.amount=amt;
+  document.getElementById('bonusBanner').style.display='flex';
 }
 
-document.getElementById('claimBonusBtn').addEventListener('click', async () => {
-  const btn = document.getElementById('claimBonusBtn');
-  const amt = parseInt(btn.dataset.amount || DAILY_BONUS);
-  setButtonLoading(btn, 'Claiming…');
-  const sb = getSupabase();
-  const { data: p } = await sb.from('profiles').select('balance').eq('id', _user.id).maybeSingle();
-  const newBal = (p?.balance || 0) + amt;
-  const streak = parseInt(localStorage.getItem('gp_login_streak') || '0');
-  const { error } = await sb.from('profiles').update({
-    balance: newBal,
-    last_login_date: TODAY,
-    login_streak: streak + 1,
-    updated_at: new Date().toISOString()
-  }).eq('id', _user.id);
+document.getElementById('claimBonusBtn').addEventListener('click',async()=>{
+  const btn=document.getElementById('claimBonusBtn');
+  const amt=parseInt(btn.dataset.amount||DAILY_BONUS);
+  setButtonLoading(btn,'Claiming…');
+  const sb=getSupabase();
+  const{data:p}=await sb.from('profiles').select('balance').eq('id',_user.id).maybeSingle();
+  const newBal=(p?.balance||0)+amt;
+  const streak=parseInt(localStorage.getItem('gp_login_streak')||'0');
+  const{error}=await sb.from('profiles').update({balance:newBal,last_login_date:TODAY,login_streak:streak+1,updated_at:new Date().toISOString()}).eq('id',_user.id);
   clearButtonLoading(btn);
-  if (error) { showToast('Error: ' + error.message, 'error'); return; }
-  _profile.balance = newBal;
-  localStorage.setItem('gp_bonus_date', TODAY);
-  localStorage.setItem('gp_login_streak', String(streak + 1));
-  document.getElementById('navBalance').textContent = formatNaira(newBal);
-  document.getElementById('statBalance').textContent = formatNaira(newBal);
-  document.getElementById('bonusBanner').style.display = 'none';
-  showToast(`+${formatNaira(amt)} daily bonus claimed!`, 'success');
+  if(error){showToast('Error: '+error.message,'error');return;}
+  _profile.balance=newBal;
+  localStorage.setItem('gp_bonus_date',TODAY);
+  localStorage.setItem('gp_login_streak',String(streak+1));
+  document.getElementById('bonusBanner').style.display='none';
+  document.getElementById('navBalance').textContent=formatNaira(newBal);
+  document.getElementById('statBalance').textContent=formatNaira(newBal);
+  showToast(`🎁 ${formatNaira(amt)} daily bonus credited to your wallet!`,'success',5000);
 });
 
-function currentFilter() {
-  return document.querySelector('.filter-btn.active')?.dataset.filter || 'all';
+function updateStats(){
+  document.getElementById('statToday').textContent=formatNaira(_earning);
+  document.getElementById('statViewed').textContent=`${_viewed.size} / 200`;
 }
 
-function updateStats() {
-  document.getElementById('statViewed').textContent = _viewed.size;
-  document.getElementById('statEarning').textContent = formatNaira(_earning);
-  const remaining = PTC_ADS.filter(a => !_viewed.has(a.id)).length;
-  document.getElementById('statRemaining').textContent = remaining;
-}
+function currentFilter(){return document.querySelector('.fpill.active')?.dataset?.f||'all';}
 
-function renderGrid(filter) {
-  const grid = document.getElementById('ptcGrid');
-  let list = PTC_ADS;
-  if (filter === 'available') list = PTC_ADS.filter(a => !_viewed.has(a.id));
-  if (filter === 'viewed') list = PTC_ADS.filter(a => _viewed.has(a.id));
+function renderGrid(filter){
+  const grid=document.getElementById('ptcGrid');
+  let list=PTC_ADS;
+  if(filter==='available')list=PTC_ADS.filter(a=>!_viewed.has(a.id));
+  else if(filter==='viewed')list=PTC_ADS.filter(a=>_viewed.has(a.id));
+  else if(filter==='10')list=PTC_ADS.filter(a=>a.reward===10);
+  else if(filter==='15')list=PTC_ADS.filter(a=>a.reward===15);
+  else if(filter==='20')list=PTC_ADS.filter(a=>a.reward===20);
 
-  if (list.length === 0) {
-    grid.innerHTML = `<div class="empty-state"><div class="empty-state__title">${filter === 'viewed' ? 'No ads viewed yet today' : 'All done for today!'}</div><div class="empty-state__desc">Fresh ads unlock at midnight.</div></div>`;
+  if(!list.length){
+    grid.innerHTML=`<div class="empty-state" style="grid-column:1/-1;"><div class="empty-state__icon">${filter==='viewed'?'📭':'🎉'}</div><div class="empty-state__title">${filter==='viewed'?'No ads viewed yet today':'All done for today!'}</div><div class="empty-state__desc">Fresh ads unlock at midnight.</div></div>`;
     return;
   }
 
-  grid.innerHTML = list.map(ad => buildCard(ad)).join('');
-  grid.querySelectorAll('.vbtn').forEach(b => b.addEventListener('click', () => startAd(b.dataset.id)));
+  grid.innerHTML=list.map(ad=>buildCard(ad)).join('');
+  grid.querySelectorAll('.vbtn').forEach(b=>b.addEventListener('click',()=>startAd(b.dataset.id)));
 }
 
-function buildCard(ad) {
-  const done = _viewed.has(ad.id);
-  const isAct = _active?.adId === ad.id;
-  return `<div class="ptc-card${done ? ' viewed' : ''}${isAct ? ' is-active' : ''}" id="card-${ad.id}">
+function buildCard(ad){
+  const done=_viewed.has(ad.id);
+  const isAct=_active?.adId===ad.id;
+  return `<div class="ptc-card${done?' viewed':''}${isAct?' is-active':''}" id="card-${ad.id}">
     <div class="ptc-head">
       <div class="ptc-icon" style="background:${ad.color};">${ad.icon}</div>
       <div><div class="ptc-name">${ad.name}</div><div class="ptc-desc">${ad.desc}</div></div>
@@ -620,179 +592,99 @@ function buildCard(ad) {
     <div class="ptc-body">
       <div>
         <div class="ptc-reward">+${formatNaira(ad.reward)}</div>
-        <div class="ptc-timer-info">⏱ ${ad.timer}s on website</div>
+        <div class="ptc-timer-info">⏱ ${ad.timer}s on Facebook</div>
       </div>
     </div>
     <div class="ptc-foot" id="foot-${ad.id}">
       ${done
-        ? `<div style="display:flex;align-items:center;gap:.5rem;color:var(--success);font-size:.82rem;font-weight:600;"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" style="width:16px;height:16px;"><polyline points="20 6 9 17 4 12"/></svg>Viewed today — ${formatNaira(ad.reward)} earned</div>`
-        : isAct
-        ? `<div class="waiting-overlay">⏳ Stay on the website for ${ad.timer}s then come back to claim your reward</div>`
-        : `<button class="btn btn-primary btn-block vbtn" data-id="${ad.id}"${_active ? ' disabled' : ''}><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:14px;height:14px;"><polygon points="5 3 19 12 5 21 5 3"/></svg> View Ad — Earn ${formatNaira(ad.reward)}</button>`}
+        ?`<div style="display:flex;align-items:center;gap:.5rem;color:var(--success);font-size:.82rem;font-weight:600;"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" style="width:16px;height:16px;"><polyline points="20 6 9 17 4 12"/></svg>Viewed today — ${formatNaira(ad.reward)} earned</div>`
+        :isAct
+        ?`<div class="waiting-overlay">⏳ Stay on the website for ${ad.timer}s then come back to claim your reward</div>`
+        :`<button class="btn btn-primary btn-block vbtn" data-id="${ad.id}"${_active?' disabled':''}><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:14px;height:14px;"><polygon points="5 3 19 12 5 21 5 3"/></svg> View Ad — Earn ${formatNaira(ad.reward)}</button>`}
     </div>
   </div>`;
 }
 
-function refreshCard(adId) {
-  const ad = PTC_ADS.find(a => a.id === adId);
-  if (!ad) return;
-  const card = document.getElementById(`card-${adId}`);
-  if (card) {
+function refreshCard(adId){
+  const ad=PTC_ADS.find(a=>a.id===adId);
+  if(!ad)return;
+  const card=document.getElementById(`card-${adId}`);
+  if(card){
     card.classList.remove('is-active');
-    const foot = document.getElementById(`foot-${adId}`);
-    if (foot) foot.innerHTML = `<button class="btn btn-primary btn-block vbtn" data-id="${adId}"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:14px;height:14px;"><polygon points="5 3 19 12 5 21 5 3"/></svg> View Ad — Earn ${formatNaira(ad.reward)}</button>`;
-    card.querySelector('.vbtn')?.addEventListener('click', () => startAd(adId));
-    document.querySelectorAll('.vbtn').forEach(b => { b.disabled = false; });
+    const foot=document.getElementById(`foot-${adId}`);
+    if(foot)foot.innerHTML=`<button class="btn btn-primary btn-block vbtn" data-id="${adId}"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:14px;height:14px;"><polygon points="5 3 19 12 5 21 5 3"/></svg> View Ad — Earn ${formatNaira(ad.reward)}</button>`;
+    card.querySelector('.vbtn')?.addEventListener('click',()=>startAd(adId));
+    /* Re-enable all other buttons */
+    document.querySelectorAll('.vbtn').forEach(b=>{b.disabled=false;});
   }
 }
 
-/* ========== START AD (with warning modal) ========== */
-function startAd(adId) {
-  if (_active) {
-    showToast('Finish the current ad first before starting another.', 'warning');
-    return;
-  }
-  const ad = PTC_ADS.find(a => a.id === adId);
-  if (!ad || _viewed.has(ad.id)) return;
-
-  _pendingAdId = adId;
-  document.getElementById('ptcWarningModal').style.display = 'flex';
+function enableClaim(adId,reward){
+  const foot=document.getElementById(`foot-${adId}`);
+  const card=document.getElementById(`card-${adId}`);
+  if(!foot)return;
+  foot.innerHTML=`<button class="btn btn-block" id="cb-${adId}" style="background:linear-gradient(135deg,#22c55e,#16a34a);color:#fff;font-weight:700;">✅ Claim ${formatNaira(reward)} Now!</button>`;
+  document.getElementById(`cb-${adId}`)?.addEventListener('click',()=>claimAd(adId,reward));
+  if(card)card.classList.add('is-active');
+  showToast('Timer complete! Click Claim to get your reward.','success',4000);
 }
 
-document.addEventListener('DOMContentLoaded', () => {
-  const okBtn = document.getElementById('ptcWarningOk');
-  if (okBtn) {
-    okBtn.addEventListener('click', () => {
-      document.getElementById('ptcWarningModal').style.display = 'none';
-      if (_pendingAdId) {
-        reallyStartAd(_pendingAdId);
-        _pendingAdId = null;
-      }
-    });
-  }
-});
+function startAd(adId){
+  if(_active){showToast('Finish the current ad first before starting another.','warning');return;}
+  const ad=PTC_ADS.find(a=>a.id===adId);
+  if(!ad||_viewed.has(ad.id))return;
 
-function reallyStartAd(adId) {
-  const ad = PTC_ADS.find(a => a.id === adId);
-  if (!ad) return;
+  /* Open Facebook in new tab */
+  window.open('https://omg10.com/4/11169333','_blank','noopener,noreferrer');
 
-  // Open the advertiser link
-  const win = window.open('https://omg10.com/4/11169333', '_blank', 'noopener,noreferrer');
+  /* Set active state */
+  _active={adId,required:ad.timer*1000,reward:ad.reward};
+  _totalHidden=0;
+  _hiddenSince=null;
 
-  // Mobile browsers often block window.open
-  if (!win || win.closed || typeof win.closed === 'undefined') {
-    showToast('Please allow pop-ups, or open the link manually and stay on that site.', 'warning', 7000);
-  }
+  /* Disable all other buttons */
+  document.querySelectorAll('.vbtn').forEach(b=>{b.disabled=true;});
 
-  _active = {
-    adId: adId,
-    required: ad.timer * 1000,
-    reward: ad.reward,
-    startTime: Date.now()
-  };
-  _totalHidden = 0;
-  _hiddenSince = null;
-  _touchCount = 0;
+  /* Update this card's footer to waiting state */
+  const foot=document.getElementById(`foot-${adId}`);
+  const card=document.getElementById(`card-${adId}`);
+  if(foot)foot.innerHTML=`<div class="waiting-overlay">⏳ Stay on Facebook for ${ad.timer}s then come back to claim your reward</div>`;
+  if(card)card.classList.add('is-active');
 
-  // Disable all other View buttons
-  document.querySelectorAll('.vbtn').forEach(b => b.disabled = true);
-
-  // Update this card
-  const foot = document.getElementById(`foot-${adId}`);
-  const card = document.getElementById(`card-${adId}`);
-
-  if (foot) {
-    foot.innerHTML = `
-      <div class="waiting-overlay">
-        ⏳ Stay on the website for <strong>${ad.timer}s</strong><br>
-        <small style="opacity:0.85">Do not switch back early or stay idle</small>
-      </div>`;
-  }
-  if (card) card.classList.add('is-active');
-
-  showToast(`Ad opened! Stay on that website for ${ad.timer} seconds, then come back here.`, 'success', 6000);
+  showToast(`Ad opened on Website! Stay there for ${ad.timer} seconds, then come back here.`,'success',6000);
 }
 
-/* ========== ENABLE CLAIM ========== */
-function enableClaim(adId, reward) {
-  const foot = document.getElementById(`foot-${adId}`);
-  const card = document.getElementById(`card-${adId}`);
-  if (!foot) return;
-
-  foot.innerHTML = `
-    <button class="btn btn-block" id="cb-${adId}"
-      style="background:linear-gradient(135deg,#22c55e,#16a34a);color:#fff;font-weight:700;padding:15px;border-radius:14px;">
-      ✅ Claim ${formatNaira(reward)} Now!
-    </button>
-    <p style="font-size:0.75rem;color:var(--muted);margin-top:8px;text-align:center;">
-      Only claim if you actually viewed the site
-    </p>`;
-
-  document.getElementById(`cb-${adId}`)?.addEventListener('click', () => claimAd(adId, reward));
-  if (card) card.classList.add('is-active');
-
-  showToast('Timer complete! Tap Claim to get your reward.', 'success', 4000);
-}
-
-/* ========== CLAIM REWARD ========== */
-async function claimAd(adId, reward) {
-  // Extra human check
-  if (_touchCount < 1) {
-    showToast('Please tap the page once before claiming.', 'warning');
-    return;
-  }
-
-  const sb = getSupabase();
-  const btn = document.getElementById(`cb-${adId}`);
-  if (btn) {
-    btn.disabled = true;
-    btn.textContent = 'Crediting…';
-  }
-
-  try {
-    const { error: ve } = await sb.from('ptc_views').insert({
-      user_id: _user.id,
-      ad_id: adId,
-      reward: reward,
-      view_date: TODAY,
-      viewed_at: new Date().toISOString()
-    });
-
-    if (ve && !ve.message?.includes('duplicate')) throw ve;
-
-    const { data: p } = await sb
-      .from('profiles')
-      .select('balance')
-      .eq('id', _user.id)
-      .maybeSingle();
-
-    const newBal = (p?.balance || 0) + reward;
-
-    await sb.from('profiles')
-      .update({ balance: newBal, updated_at: new Date().toISOString() })
-      .eq('id', _user.id);
-
-    _viewed.add(adId);
-    _earning += reward;
-    _profile.balance = newBal;
-    _active = null;
-    _totalHidden = 0;
-
-    document.getElementById('navBalance').textContent = formatNaira(newBal);
-    document.getElementById('statBalance').textContent = formatNaira(newBal);
+async function claimAd(adId,reward){
+  const sb=getSupabase();
+  const btn=document.getElementById(`cb-${adId}`);
+  if(btn){btn.disabled=true;btn.textContent='Crediting…';}
+  try{
+    const{error:ve}=await sb.from('ptc_views').insert({user_id:_user.id,ad_id:adId,reward,view_date:TODAY,viewed_at:new Date().toISOString()});
+    if(ve&&!ve.message?.includes('duplicate'))throw ve;
+    const{data:p}=await sb.from('profiles').select('balance').eq('id',_user.id).maybeSingle();
+    const newBal=(p?.balance||0)+reward;
+    await sb.from('profiles').update({balance:newBal,updated_at:new Date().toISOString()}).eq('id',_user.id);
+    _viewed.add(adId);_earning+=reward;_profile.balance=newBal;
+    _active=null;_totalHidden=0;
+    document.getElementById('navBalance').textContent=formatNaira(newBal);
+    document.getElementById('statBalance').textContent=formatNaira(newBal);
     updateStats();
     renderGrid(currentFilter());
-
-    showToast(`+${formatNaira(reward)} credited to your wallet!`, 'success');
-  } catch (err) {
-    console.error('[PTC Claim Error]', err);
-    showToast('Something went wrong. Please try again or contact support.', 'error');
-    if (btn) {
-      btn.disabled = false;
-      btn.textContent = `✅ Claim ${formatNaira(reward)} Now!`;
-    }
+    showToast(`✅ ${formatNaira(reward)} credited to your wallet instantly!`,'success',4000);
+  }catch(err){
+    _active=null;_totalHidden=0;
+    showToast(err.message?.includes('ptc_views')||err.message?.includes('does not exist')?'❌ Run supabase-ptc-setup.sql in Supabase SQL Editor first.':'❌ '+err.message,'error',6000);
+    renderGrid(currentFilter());
   }
 }
+
+document.querySelectorAll('.fpill').forEach(b=>b.addEventListener('click',()=>{
+  document.querySelectorAll('.fpill').forEach(x=>x.classList.remove('active'));
+  b.classList.add('active');
+  renderGrid(b.dataset.f);
+}));
+
+(function(){
   const btn=document.getElementById('sidebarToggleBtn'),sb=document.getElementById('sidebar'),ov=document.getElementById('sidebarOverlay');
   if(!btn||!sb)return;
   function open(){sb.classList.add('sidebar--open');ov&&ov.classList.add('active');document.body.style.overflow='hidden';}
@@ -820,24 +712,6 @@ if ('serviceWorker' in navigator) {
 }
 </script>
 <script src="https://pl30455769.effectivecpmnetwork.com/17/30/07/173007aec1679d8ab5054961c9d70239.js"></script>
-
-<!-- ==================== ANTI-BOT WARNING MODAL ==================== -->
-<div id="ptcWarningModal" style="display:none;position:fixed;inset:0;z-index:99999;background:rgba(14,31,23,.75);backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);align-items:center;justify-content:center;padding:20px;">
-  <div style="background:#ffffff;border-radius:20px;max-width:380px;width:100%;padding:28px 22px;text-align:center;box-shadow:0 25px 50px rgba(0,0,0,.3);">
-    <div style="font-size:44px;line-height:1;margin-bottom:14px;">⚠️</div>
-    <h3 style="font-family:var(--font-display);font-size:1.4rem;font-weight:800;margin:0 0 12px;color:#0E1F17;">Real Attention Required</h3>
-    <p style="font-size:.93rem;color:#5B6B60;line-height:1.55;margin:0 0 20px;">
-      You must <strong>actually stay on the advertiser website</strong> for the full time.<br><br>
-      • Using bots, scripts or auto-clickers<br>
-      • Leaving the page idle<br>
-      • Switching away early or minimising the tab<br><br>
-      <strong style="color:#DC2626;">= Reward cancelled + risk of permanent ban and loss of balance</strong>
-    </p>
-    <button id="ptcWarningOk" class="btn btn-primary" style="width:100%;padding:15px;font-size:1.05rem;font-weight:700;border-radius:14px;">
-      I Understand — Continue
-    </button>
-  </div>
-</div>
 
 </body>
 </html>
