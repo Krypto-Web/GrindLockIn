@@ -256,58 +256,6 @@ select.form-control{appearance:none;background-image:url("data:image/svg+xml,%3C
 .pwa-banner__text strong{font-size:.87rem;display:block;margin-bottom:1px;}
 .pwa-banner__text span{font-size:.76rem;color:var(--muted);}
 .pwa-banner__close{color:var(--muted);background:none;border:none;font-size:1.1rem;padding:.3rem;flex-shrink:0;}
-
-/* ===== Fraud notice strip ===== */
-.fraud-strip{display:flex;align-items:center;gap:.75rem;background:var(--ink);color:#fff;border-radius:var(--radius-md);padding:.7rem 1rem;margin-bottom:1.25rem;overflow:hidden;}
-.fraud-strip__tag{flex-shrink:0;background:var(--coral);color:#fff;font-family:var(--font-mono);font-size:.66rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;padding:.25rem .6rem;border-radius:20px;}
-.fraud-strip__track{flex:1;overflow:hidden;white-space:nowrap;}
-.fraud-strip__text{display:inline-block;padding-left:100%;font-size:.82rem;font-weight:600;animation:fraudScroll 26s linear infinite;}
-@keyframes fraudScroll{from{transform:translateX(0);}to{transform:translateX(-100%);}}
-@media (prefers-reduced-motion:reduce){.fraud-strip__track{white-space:normal;}.fraud-strip__text{padding-left:0;animation:none;}}
-
-/* ===== Stats grid (6) ===== */
-.stat-grid6{display:grid;grid-template-columns:repeat(3,1fr);gap:1rem;margin-bottom:1.5rem;}
-@media (max-width:640px){.stat-grid6{grid-template-columns:repeat(2,1fr);}}
-.stat6{background:var(--white);border:1px solid var(--line);border-radius:var(--radius-lg);padding:1.3rem 1.1rem;text-align:center;}
-.stat6__icon{width:38px;height:38px;border-radius:11px;margin:0 auto .7rem;display:flex;align-items:center;justify-content:center;background:var(--s-bg,var(--green-pale));color:var(--s-fg,var(--green-deep));}
-.stat6__icon svg{width:19px;height:19px;}
-.stat6__val{font-family:var(--font-mono);font-size:1.25rem;font-weight:700;color:var(--s-fg,var(--ink));}
-.stat6__label{font-size:.76rem;color:var(--muted);margin-top:.15rem;}
-
-/* ===== Quick-action tiles ===== */
-.tile-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:.9rem;margin-bottom:1.75rem;}
-@media (max-width:860px){.tile-grid{grid-template-columns:repeat(3,1fr);}}
-@media (max-width:420px){.tile-grid{gap:.6rem;}}
-.tile{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:.6rem;padding:1.15rem .5rem;border-radius:var(--radius-lg);color:#fff;text-align:center;background:linear-gradient(145deg,var(--t1),var(--t2));box-shadow:0 8px 20px -10px var(--t2);transition:transform .15s,filter .15s;border:none;font-family:var(--font-body);cursor:pointer;}
-.tile:hover{transform:translateY(-3px);filter:brightness(1.05);}
-.tile__icon{width:44px;height:44px;border-radius:13px;background:rgba(255,255,255,.2);display:flex;align-items:center;justify-content:center;}
-.tile__icon svg{width:22px;height:22px;}
-.tile__label{font-size:.78rem;font-weight:700;line-height:1.25;}
-
-/* ===== Activity + guides ===== */
-.dash-two{display:grid;grid-template-columns:1.4fr 1fr;gap:1.25rem;margin-bottom:1.75rem;}
-@media (max-width:860px){.dash-two{grid-template-columns:1fr;}}
-.panel{background:var(--white);border:1px solid var(--line);border-radius:var(--radius-lg);padding:1.4rem;}
-.panel__head{display:flex;align-items:center;justify-content:space-between;margin-bottom:1rem;}
-.panel__head h3{font-size:1rem;text-transform:none;letter-spacing:0;}
-.panel__link{font-size:.78rem;font-weight:700;color:var(--green-deep);background:var(--green-pale);padding:.35rem .8rem;border-radius:20px;}
-.act-row{display:flex;align-items:center;gap:.8rem;padding:.75rem 0;border-bottom:1px solid var(--line-soft);}
-.act-row:last-child{border-bottom:none;}
-.act-icon{width:36px;height:36px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:1rem;flex-shrink:0;background:var(--paper-dim);}
-.act-main{flex:1;min-width:0;}
-.act-title{font-size:.85rem;font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
-.act-sub{font-size:.72rem;color:var(--muted);}
-.act-amt{font-family:var(--font-mono);font-size:.82rem;font-weight:700;text-align:right;}
-.act-amt small{display:block;font-family:var(--font-body);font-size:.66rem;font-weight:700;text-transform:uppercase;letter-spacing:.04em;margin-top:2px;}
-.act-pos{color:var(--green-deep);}.act-neg{color:var(--coral-deep);}
-.st-pending{color:var(--warning);}.st-ok{color:var(--green-deep);}.st-bad{color:var(--danger);}
-.empty-act{text-align:center;padding:1.75rem .5rem;color:var(--muted);font-size:.85rem;}
-.empty-act .btn{margin-top:.9rem;}
-.guide-card{background:linear-gradient(145deg,var(--ink),var(--ink-soft));color:#fff;border:none;}
-.guide-card .eyebrow-sm{font-family:var(--font-mono);font-size:.68rem;letter-spacing:.1em;text-transform:uppercase;color:#5FD69A;margin-bottom:.5rem;}
-.guide-card h3{font-size:1.25rem;color:#fff;margin-bottom:.5rem;text-transform:none;letter-spacing:0;}
-.guide-card p{font-size:.84rem;color:rgba(255,255,255,.65);margin-bottom:1.1rem;line-height:1.6;}
-.guide-card .btns{display:flex;gap:.6rem;flex-wrap:wrap;}
 </style>
 </head>
 <body style="visibility:hidden">
@@ -370,11 +318,6 @@ select.form-control{appearance:none;background-image:url("data:image/svg+xml,%3C
 
   <main class="main">
 
-    <div class="fraud-strip">
-      <span class="fraud-strip__tag">Notice</span>
-      <div class="fraud-strip__track"><span class="fraud-strip__text">Only submit tasks you actually completed. Every submission is manually reviewed — fake proofs are rejected and repeat offenders are banned. Rejected by mistake? Use Appeals. &nbsp;&nbsp;•&nbsp;&nbsp; Only submit tasks you actually completed. Every submission is manually reviewed — fake proofs are rejected and repeat offenders are banned.</span></div>
-    </div>
-
     <!-- Balance hero -->
     <div class="balance-hero">
       <div>
@@ -392,15 +335,6 @@ select.form-control{appearance:none;background-image:url("data:image/svg+xml,%3C
     </div>
 
     <div id="announcementsWrap" style="margin-bottom:1.5rem;display:none;"></div>
-
-    <div class="stat-grid6">
-      <div class="stat6" style="--s-bg:#E3F3E9;--s-fg:#0A5C37;"><div class="stat6__icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11"/></svg></div><div class="stat6__val" id="sdTasks">0</div><div class="stat6__label">Completed Tasks</div></div>
-      <div class="stat6" style="--s-bg:#FEF3C7;--s-fg:#B45309;"><div class="stat6__icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg></div><div class="stat6__val" id="sdPending">0</div><div class="stat6__label">Pending Review</div></div>
-      <div class="stat6" style="--s-bg:#DBEAFE;--s-fg:#1D4ED8;"><div class="stat6__icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14M19 12l-7 7-7-7"/></svg></div><div class="stat6__val" id="sdDeposited">₦0</div><div class="stat6__label">Total Deposited</div></div>
-      <div class="stat6" style="--s-bg:#FFE9E1;--s-fg:#E5502C;"><div class="stat6__icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 19V5M5 12l7-7 7 7"/></svg></div><div class="stat6__val" id="sdWithdrawn">₦0</div><div class="stat6__label">Total Withdrawn</div></div>
-      <div class="stat6" style="--s-bg:#EDE4FD;--s-fg:#6D28D9;"><div class="stat6__icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 1l4 4-4 4"/><path d="M3 11V9a4 4 0 014-4h14"/><path d="M7 23l-4-4 4-4"/><path d="M21 13v2a4 4 0 01-4 4H3"/></svg></div><div class="stat6__val" id="sdTx">0</div><div class="stat6__label">Transactions</div></div>
-      <div class="stat6" style="--s-bg:#CCFBF1;--s-fg:#0F766E;"><div class="stat6__icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/></svg></div><div class="stat6__val" id="sdRefs">0</div><div class="stat6__label">Referrals</div></div>
-    </div>
 
     <div class="progress-row">
       <div class="progress-card">
@@ -443,37 +377,25 @@ select.form-control{appearance:none;background-image:url("data:image/svg+xml,%3C
       <div id="container-59966b160a10d7ff1e49abd3768d08ed"></div>
     </div>
 
-    <!-- Quick actions -->
-    <div class="section__head" style="margin-bottom:.9rem;"><h3 style="font-size:1rem;text-transform:none;letter-spacing:0;">Quick Actions</h3></div>
-    <div class="tile-grid">
-      <button type="button" class="tile" id="depositTile" style="--t1:#22C55E;--t2:#15803D;"><span class="tile__icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg></span><span class="tile__label">Deposit</span></button>
-      <button type="button" class="tile" id="withdrawTile" style="--t1:#F43F5E;--t2:#BE123C;"><span class="tile__icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 19V5M5 12l7-7 7 7"/></svg></span><span class="tile__label">Withdraw</span></button>
-      <a href="ptc" class="tile" style="--t1:#FF8A65;--t2:#E5502C;"><span class="tile__icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M13 2L4 14h6l-1 8 9-12h-6l1-8z"/></svg></span><span class="tile__label">View Ads</span></a>
-      <a href="surf" class="tile" style="--t1:#3B82F6;--t2:#1D4ED8;"><span class="tile__icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15 15 0 010 20M12 2a15 15 0 000 20"/></svg></span><span class="tile__label">Surf &amp; Earn</span></a>
-      <a href="tasks" class="tile" style="--t1:#14B8A6;--t2:#0F766E;"><span class="tile__icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11"/></svg></span><span class="tile__label">Earn Tasks</span></a>
-      <a href="network-provider" class="tile" style="--t1:#FBBF24;--t2:#D97706;"><span class="tile__icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.55a11 11 0 0114.08 0M1.42 9a16 16 0 0121.16 0M8.53 16.11a6 6 0 016.95 0M12 20h.01"/></svg></span><span class="tile__label">Network Bonus</span></a>
-      <a href="referral" class="tile" style="--t1:#A78BFA;--t2:#6D28D9;"><span class="tile__icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87M16 3.13a4 4 0 010 7.75"/></svg></span><span class="tile__label">Refer &amp; Earn</span></a>
-      <a href="leaderboard" class="tile" style="--t1:#64748B;--t2:#334155;"><span class="tile__icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg></span><span class="tile__label">Leaderboard</span></a>
-      <a href="appeals" class="tile" style="--t1:#EF4444;--t2:#B91C1C;"><span class="tile__icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v18M5 7h14M7 7l-3 8a3 3 0 006 0L7 7zm10 0l-3 8a3 3 0 006 0l-3-8z"/></svg></span><span class="tile__label">Appeals</span></a>
-      <a href="transactions" class="tile" style="--t1:#6366F1;--t2:#4338CA;"><span class="tile__icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/><line x1="3" y1="6" x2="3.01" y2="6"/><line x1="3" y1="12" x2="3.01" y2="12"/><line x1="3" y1="18" x2="3.01" y2="18"/></svg></span><span class="tile__label">Transactions</span></a>
-      <a href="proof-of-payment" class="tile" style="--t1:#34D399;--t2:#047857;"><span class="tile__icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 11-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg></span><span class="tile__label">Proof of Payment</span></a>
-      <a href="profile" class="tile" style="--t1:#94A3B8;--t2:#475569;"><span class="tile__icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></span><span class="tile__label">My Profile</span></a>
-    </div>
-
-    <!-- Activity + guides -->
-    <div class="dash-two">
-      <div class="panel">
-        <div class="panel__head"><h3>Recent Activity</h3><a href="transactions" class="panel__link">View All</a></div>
-        <div id="recentActivity"><div class="empty-act">Loading…</div></div>
-      </div>
-      <div class="panel guide-card">
-        <div class="eyebrow-sm">📚 Guides</div>
-        <h3>Learn How Grindpoint Works</h3>
-        <p>New here? Read the quick guides, see how approvals work, and avoid rejections.</p>
-        <div class="btns">
-          <a href="faq" class="btn btn-primary" style="font-size:.8rem;padding:.6rem 1.1rem;">Read FAQ</a>
-          <a href="blog" class="btn" style="background:rgba(255,255,255,.12);color:#fff;font-size:.8rem;padding:.6rem 1.1rem;">Blog Guides</a>
-        </div>
+    <!-- More ways to earn (demoted, compact) -->
+    <div class="section">
+      <div class="section__head"><h3>More Ways to Earn</h3></div>
+      <div class="earn-grid-sm">
+        <a href="surf" class="earn-card-sm">
+          <div class="earn-card-sm__icon">🌐</div>
+          <div><div class="earn-card-sm__title">Surf &amp; Earn</div><div class="earn-card-sm__sub">Up to ₦1,750/day</div></div>
+          <svg class="arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+        </a>
+        <a href="tasks" class="earn-card-sm">
+          <div class="earn-card-sm__icon">✅</div>
+          <div><div class="earn-card-sm__title">Earn Tasks</div><div class="earn-card-sm__sub">Up to ₦600/task</div></div>
+          <svg class="arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+        </a>
+        <a href="referral" class="earn-card-sm">
+          <div class="earn-card-sm__icon">🔗</div>
+          <div><div class="earn-card-sm__title">Refer Friends</div><div class="earn-card-sm__sub">₦200–₦500/friend</div></div>
+          <svg class="arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+        </a>
       </div>
     </div>
 
@@ -699,7 +621,6 @@ async function loadAnnouncements(sb) {
   document.getElementById('tierNextLabel').textContent = tierNextLabel;
 
   loadLatestBlogPost(getSupabase());
-  loadDashboardExtras(getSupabase(), user.id);
 
   /* Daily check-in gate — once per calendar day, purely for engagement (a mild
      speed bump for copy-paste bot scripts, not a real fraud control on its own).
@@ -756,47 +677,6 @@ async function loadLatestBlogPost(sb) {
   } catch (e) { /* non-critical */ }
 }
 
-
-/* ── Stats + recent activity (real data from the user's own rows; fails quietly) ── */
-async function loadDashboardExtras(client, uid) {
-  const safe = async (q) => { try { const r = await q; return r.data || []; } catch (e) { return []; } };
-  const [wds, dps, tss] = await Promise.all([
-    safe(client.from('withdrawal_requests').select('amount,status,created_at').eq('user_id', uid).order('created_at', { ascending: false }).limit(500)),
-    safe(client.from('deposit_requests').select('amount,status,created_at').eq('user_id', uid).order('created_at', { ascending: false }).limit(500)),
-    safe(client.from('task_submissions').select('task_title,reward,status,submitted_at').eq('user_id', uid).order('submitted_at', { ascending: false }).limit(500)),
-  ]);
-
-  const sum = (arr) => arr.reduce((s, r) => s + (Number(r.amount) || 0), 0);
-  const withdrawn = sum(wds.filter(w => !['pending', 'rejected', 'failed'].includes(w.status)));
-  const deposited = sum(dps.filter(d => d.status === 'approved'));
-  const set = (id, v) => { const el = document.getElementById(id); if (el) el.textContent = v; };
-  set('sdTasks', _currentProfile?.tasks_completed || 0);
-  set('sdRefs', _currentProfile?.referral_count || 0);
-  set('sdPending', tss.filter(t => t.status === 'pending').length);
-  set('sdDeposited', formatNaira(deposited));
-  set('sdWithdrawn', formatNaira(withdrawn));
-  set('sdTx', wds.length + dps.length);
-
-  const items = [
-    ...wds.map(w => ({ icon: '⬆️', title: 'Withdrawal', amt: '-' + formatNaira(w.amount), neg: true, status: w.status, date: w.created_at })),
-    ...dps.map(d => ({ icon: '⬇️', title: 'Deposit', amt: '+' + formatNaira(d.amount), neg: false, status: d.status, date: d.created_at })),
-    ...tss.map(t => ({ icon: '✅', title: t.task_title || 'Task', amt: t.status === 'approved' ? '+' + formatNaira(t.reward) : formatNaira(t.reward), neg: false, status: t.status, date: t.submitted_at })),
-  ].filter(i => i.date).sort((a, b) => new Date(b.date) - new Date(a.date)).slice(0, 6);
-
-  const wrap = document.getElementById('recentActivity');
-  if (!items.length) {
-    wrap.innerHTML = '<div class="empty-act"><div style="font-size:2rem;margin-bottom:.4rem;">📋</div>No activity yet.<br><a href="tasks" class="btn btn-primary" style="font-size:.8rem;padding:.6rem 1.2rem;">Browse &amp; Do Tasks</a></div>';
-    return;
-  }
-  const cls = (s) => s === 'pending' ? 'st-pending' : (s === 'rejected' || s === 'failed') ? 'st-bad' : 'st-ok';
-  wrap.innerHTML = items.map(i => `
-    <div class="act-row">
-      <div class="act-icon">${i.icon}</div>
-      <div class="act-main"><div class="act-title">${i.title}</div><div class="act-sub">${new Date(i.date).toLocaleDateString('en-NG', { day: 'numeric', month: 'short', year: 'numeric' })}</div></div>
-      <div class="act-amt ${i.neg ? 'act-neg' : 'act-pos'}">${i.amt}<small class="${cls(i.status)}">${i.status}</small></div>
-    </div>`).join('');
-}
-
 function dismissTelegramModal() { closeModal('telegramModal'); }
 initModalCloseOnBackdrop('telegramModal');
 
@@ -817,7 +697,7 @@ initModalCloseOnBackdrop('telegramModal');
 /* ── Deposit: manual bank transfer + screenshot, admin approves and credits ── */
 let _depProofBase64 = null;
 
-['depositBtn', 'depositBtnTop', 'depositTile'].forEach(id => {
+['depositBtn', 'depositBtnTop'].forEach(id => {
   const el = document.getElementById(id);
   if (el) el.addEventListener('click', (e) => {
     e.preventDefault();
@@ -906,7 +786,7 @@ document.getElementById('submitDepositBtn').addEventListener('click', async () =
   }
 });
 
-['withdrawBtn', 'withdrawBtnTop', 'withdrawTile'].forEach(id => {
+['withdrawBtn', 'withdrawBtnTop'].forEach(id => {
   const el = document.getElementById(id);
   if (el) el.addEventListener('click', (e) => { e.preventDefault(); openModal('withdrawModal'); });
 });
