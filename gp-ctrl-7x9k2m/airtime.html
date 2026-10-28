@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+  <title>Airtime — Grindpoint Admin</title>
+  <link rel="stylesheet" href="../css/style.css"/>
+  <style>
+    .admin-sidebar .sidebar__link.active{color:var(--error);background:var(--error-bg);}
+    .admin-sidebar .sidebar__link.active::before{background:var(--error);}
+    .proof-img{width:60px;height:60px;object-fit:cover;border-radius:8px;border:1px solid var(--border-subtle);cursor:zoom-in;}
+    .net-pill{display:inline-flex;align-items:center;padding:.2rem .55rem;border-radius:20px;font-size:.7rem;font-weight:700;}
+    .net-pill--mtn{background:rgba(255,199,0,.15);color:#9A7B00;}
+    .net-pill--airtel{background:rgba(237,28,36,.12);color:#ED1C24;}
+    .net-pill--glo{background:rgba(0,166,81,.12);color:#00A651;}
+  </style>
+</head>
+<body style="visibility:hidden">
+<nav class="navbar" style="border-bottom-color:rgba(239,68,68,.25);">
+  <div class="navbar__inner">
+    <div style="display:flex;align-items:center;gap:1rem;">
+      <a href="../index.html" class="navbar__logo">Grind<span class="logo-accent">point</span></a>
+      <span class="admin-badge">Admin Panel</span>
+    </div>
+    <div style="display:flex;align-items:center;gap:1rem;">
+      <span id="adminName" style="font-size:.82rem;color:var(--text-secondary);">Admin</span>
+      <button onclick="signOut()" class="btn btn-secondary btn-sm">Sign Out</button>
+    </div>
+  </div>
+</nav>
+<div class="page-wrapper">
+  <aside class="sidebar admin-sidebar">
+    <nav class="sidebar__nav">
+      <span class="sidebar__label">Overview</span>
+      <a href="index.html" class="sidebar__link"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/></svg>Dashboard</a>
+      <span class="sidebar__label">Manage</span>
+      <a href="users.html" class="sidebar__link"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/></svg>All Users</a>
+      <a href="task-submissions.html" class="sidebar__link"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 11l3 3L22 4"/></svg>Task Submissions</a>
+      <a href="withdrawals.html" class="sidebar__link"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 000 7h5a3.5 3.5 0 010 7H6"/></svg>Withdrawals</a>
+      <a href="airtime.html" class="sidebar__link active"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="7" y="2" width="10" height="20" rx="2"/><line x1="12" y1="18" x2="12.01" y2="18"/></svg>Airtime</a>
+      <a href="deposits.html" class="sidebar__link"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>Deposits</a>
+      <a href="appeals.html" class="sidebar__link"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 3v18M5 7h14M7 7l-3 8a3 3 0 006 0L7 7zm10 0l-3 8a3 3 0 006 0l-3-8z"/></svg>Appeals</a>
+      <a href="network-bonus.html" class="sidebar__link"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12.55a11 11 0 0114.08 0M1.42 9a16 16 0 0121.16 0M8.53 16.11a6 6 0 016.95 0M12 20h.01"/></svg>Network Bonus</a>
+      <a href="tasks-admin.html" class="sidebar__link"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 11l3 3L22 4"/></svg>Task Manager</a>
+      <a href="announcements.html" class="sidebar__link"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 17H2a3 3 0 000 6h20V17z"/></svg>Announcements</a>
+      <a href="payment-proofs.html" class="sidebar__link"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 11-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>Payment Proofs</a>
+      <a href="blog-admin.html" class="sidebar__link"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 20h9M16.5 3.5a2.121 2.121 0 013 3L7 19l-4 1 1-4L16.5 3.5z"/></svg>Blog Manager</a>
+      <a href="settings.html" class="sidebar__link"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/></svg>Settings</a>
+    </nav>
+  </aside>
+  <main class="main-content">
+    <div class="page-header" style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:1rem;">
+      <div><h1 class="page-title">Airtime Requests</h1><p class="page-subtitle" id="subSummary">Loading…</p></div>
+      <div style="display:flex;gap:.75rem;align-items:center;">
+        <select id="statusFilter" class="form-control" style="width:150px;">
+          <option value="pending" selected>Pending</option><option value="completed">Sent</option><option value="rejected">Rejected</option><option value="all">All</option>
+        </select>
+        <button class="btn btn-secondary btn-sm" onclick="load()">Refresh</button>
+      </div>
+    </div>
+    <div class="stats-grid mb-6" id="kpis" style="grid-template-columns:repeat(4,1fr);"></div>
+    <div class="table-wrapper" style="overflow-x:auto;"><table class="data-table"><thead><tr><th>User</th><th>Send to</th><th>Amount</th><th>Requested</th><th>Status</th><th style="width:190px;">Actions</th></tr></thead><tbody id="tbody"><tr><td colspan="6" style="text-align:center;padding:3rem;color:var(--text-muted);">Loading…</td></tr></tbody></table></div>
+  </main>
+</div>
+<div class="modal" id="rejectModal">
+  <div class="modal__box" style="max-width:420px;">
+    <div class="modal__header"><h3 class="modal__title" style="color:var(--error);">Reject</h3>
+      <button class="modal__close" onclick="closeModal('rejectModal')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button></div>
+    <div class="modal__body"><div class="form-group">
+      <label class="form-label">Reason <span style="color:var(--error);">*</span></label>
+      <select id="rejectReason" class="form-control" style="margin-bottom:.75rem;"><option value="">Select reason…</option><option value="Number invalid or unreachable">Number invalid or unreachable</option><option value="Network temporarily unavailable">Network temporarily unavailable</option><option value="Suspicious activity on the account">Suspicious activity on the account</option><option value="Duplicate request">Duplicate request</option></select>
+      <textarea id="rejectNote" class="form-control" rows="2" placeholder="Extra detail the user will see (optional)…" style="resize:vertical;"></textarea>
+    </div></div>
+    <div class="modal__footer"><button class="btn btn-secondary" onclick="closeModal('rejectModal')">Cancel</button><button class="btn btn-danger" id="confirmRejectBtn">Confirm Reject</button></div>
+  </div>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.min.js"></script>
+<script src="../js/supabase-config.js"></script>
+<script src="../js/main.js"></script><script>
+let _rows = [], _people = {}, _rejectId = null;
+document.addEventListener('DOMContentLoaded', async () => {
+  const auth = await requireAdmin(); if (!auth) return;
+  document.getElementById('adminName').textContent = auth.profile?.full_name || 'Admin';
+  await load();
+});
+const esc = (s) => String(s == null ? '' : s).replace(/[&<>"']/g, ch => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[ch]));
+const fmtDT = (d) => d ? new Date(d).toLocaleString('en-NG') : '—';
+const NET = { mtn: 'MTN', airtel: 'Airtel', glo: 'Glo', '9mobile': '9mobile' };
+const badgeCls = { pending: 'badge-gold', completed: 'badge-success', rejected: 'badge-error' };
+
+async function load() {
+  const sb = getSupabase();
+  const { data, error } = await sb.from('airtime_requests').select('*').order('created_at', { ascending: false });
+  if (error) { document.getElementById('tbody').innerHTML = `<tr><td colspan="6" style="padding:2rem;text-align:center;color:var(--error);">${esc(error.message)}</td></tr>`; return; }
+  _rows = data || [];
+  const ids = [...new Set(_rows.map(r => r.user_id))];
+  _people = {};
+  if (ids.length) { const p = await sb.from('profiles').select('id,full_name,email').in('id', ids); (p.data || []).forEach(x => _people[x.id] = x); }
+  refreshUI();
+}
+function refreshUI() {
+  const f = document.getElementById('statusFilter').value;
+  const sum = (a) => a.reduce((s, r) => s + (Number(r.amount) || 0), 0);
+  const pend = _rows.filter(r => r.status === 'pending'), done = _rows.filter(r => r.status === 'completed'), rej = _rows.filter(r => r.status === 'rejected');
+  // same phone number requested by more than one account = possible multi-account abuse
+  const owners = {}; _rows.forEach(r => { (owners[r.phone] = owners[r.phone] || new Set()).add(r.user_id); });
+  document.getElementById('subSummary').textContent = `${_rows.length} total · ${pend.length} waiting for you`;
+  document.getElementById('kpis').innerHTML = `
+    <div class="stat-card" style="${pend.length ? 'border-color:rgba(239,68,68,.3);' : ''}"><div class="stat-card__label">To send</div><div class="stat-card__value">${pend.length}</div><div class="stat-card__sub">${formatNaira(sum(pend))} airtime</div></div>
+    <div class="stat-card stat-card--gold"><div class="stat-card__label">Sent</div><div class="stat-card__value">${done.length}</div><div class="stat-card__sub">${formatNaira(sum(done))} total</div></div>
+    <div class="stat-card"><div class="stat-card__label">Rejected (refunded)</div><div class="stat-card__value">${rej.length}</div><div class="stat-card__sub">${formatNaira(sum(rej))} returned</div></div>
+    <div class="stat-card"><div class="stat-card__label">All requests</div><div class="stat-card__value">${_rows.length}</div><div class="stat-card__sub">Since launch</div></div>`;
+  const list = f === 'all' ? _rows : _rows.filter(r => r.status === f);
+  if (!list.length) { document.getElementById('tbody').innerHTML = '<tr><td colspan="6" style="text-align:center;padding:3rem;color:var(--text-muted);">Nothing here.</td></tr>'; return; }
+  document.getElementById('tbody').innerHTML = list.map(r => {
+    const u = _people[r.user_id] || {}, n = owners[r.phone] ? owners[r.phone].size : 1;
+    return `<tr>
+      <td><div style="font-weight:600;font-size:.875rem;">${esc(u.full_name || 'Unknown')}</div><div style="font-size:.73rem;color:var(--text-muted);">${esc(u.email || '')}</div></td>
+      <td><div style="font-weight:700;">${esc(NET[r.network] || r.network)}</div>
+          <div style="font-family:monospace;font-size:.9rem;">${esc(r.phone)} <button class="btn btn-secondary btn-sm" style="padding:.15rem .5rem;font-size:.68rem;" onclick="copyNum('${esc(r.phone)}')">Copy</button></div>
+          ${n > 1 ? `<div style="margin-top:3px;font-size:.7rem;font-weight:700;color:var(--error);">Used by ${n} different accounts</div>` : ''}</td>
+      <td><strong style="color:var(--gold-500);">${formatNaira(r.amount)}</strong></td>
+      <td style="font-size:.78rem;color:var(--text-muted);">${fmtDT(r.created_at)}</td>
+      <td><span class="badge ${badgeCls[r.status] || 'badge-muted'}">${r.status === 'completed' ? 'sent' : esc(r.status)}</span>${r.admin_note ? `<div style="font-size:.7rem;color:var(--text-muted);margin-top:3px;">${esc(r.admin_note)}</div>` : ''}</td>
+      <td>${r.status === 'pending' ? `<div style="display:flex;gap:.4rem;flex-wrap:wrap;">
+        <button class="btn btn-sm" style="background:var(--success-bg);color:var(--success);border:1px solid rgba(34,197,94,.3);" onclick="markSent('${esc(r.id)}')">Mark Sent</button>
+        <button class="btn btn-danger btn-sm" onclick="openReject('${esc(r.id)}')">Reject &amp; Refund</button></div>` : '—'}</td>
+    </tr>`;
+  }).join('');
+}
+document.getElementById('statusFilter').addEventListener('change', refreshUI);
+initModalCloseOnBackdrop('rejectModal');
+function copyNum(n) { navigator.clipboard?.writeText(n).then(() => showToast('Number copied.', 'success', 1800)); }
+
+async function markSent(id) {
+  const r = _rows.find(x => x.id === id); if (!r) return;
+  if (!confirm(`Only continue if you have ALREADY sent ${formatNaira(r.amount)} ${NET[r.network]} airtime to ${r.phone}.`)) return;
+  const { error } = await getSupabase().rpc('complete_airtime', { p_id: id });
+  if (error) { showToast(error.message, 'error', 8000); return; }
+  r.status = 'completed'; refreshUI(); showToast('Marked as sent.', 'success');
+}
+function openReject(id) { _rejectId = id; document.getElementById('rejectReason').value = ''; document.getElementById('rejectNote').value = ''; openModal('rejectModal'); }
+document.getElementById('confirmRejectBtn').addEventListener('click', async () => {
+  const reason = document.getElementById('rejectReason').value;
+  if (!reason) { showToast('Pick a reason.', 'warning'); return; }
+  const extra = document.getElementById('rejectNote').value.trim();
+  const note = reason + (extra ? ': ' + extra : '');
+  const { error } = await getSupabase().rpc('reject_airtime', { p_id: _rejectId, p_note: note });
+  if (error) { showToast(error.message, 'error', 8000); return; }
+  const r = _rows.find(x => x.id === _rejectId); if (r) { r.status = 'rejected'; r.admin_note = note; }
+  closeModal('rejectModal'); refreshUI(); showToast('Rejected. The user has been refunded.', 'info');
+});
+</script>
+</body>
+</html>
