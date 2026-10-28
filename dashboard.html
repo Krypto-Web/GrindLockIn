@@ -115,7 +115,7 @@ h1,h2,h3{font-family:var(--font-display);font-weight:800;letter-spacing:-.01em;}
 .ptc-spotlight .eyebrow .dot{width:7px;height:7px;border-radius:50%;background:var(--coral);animation:pulseDot 2s ease-in-out infinite;}
 .ptc-spotlight h2{font-size:clamp(1.6rem,3.4vw,2.3rem);text-transform:uppercase;margin-bottom:.75rem;max-width:420px;line-height:1.05;}
 .ptc-spotlight p{color:rgba(255,255,255,.72);font-size:.92rem;max-width:400px;margin-bottom:1.35rem;line-height:1.6;}
-.ptc-spotlight__stats{display:flex;gap:1.75rem;margin-bottom:1.5rem;}
+.ptc-spotlight__stats{display:flex;flex-wrap:wrap;gap:.9rem 1.5rem;margin-bottom:1.5rem;}
 .ptc-spotlight__stat-val{font-family:var(--font-mono);font-size:1.3rem;font-weight:700;color:#fff;}
 .ptc-spotlight__stat-label{font-size:.72rem;color:rgba(255,255,255,.55);}
 .ptc-spotlight .btn-primary{background:var(--coral);box-shadow:0 6px 16px rgba(255,107,71,.35);}
@@ -256,25 +256,125 @@ select.form-control{appearance:none;background-image:url("data:image/svg+xml,%3C
 .pwa-banner__text strong{font-size:.87rem;display:block;margin-bottom:1px;}
 .pwa-banner__text span{font-size:.76rem;color:var(--muted);}
 .pwa-banner__close{color:var(--muted);background:none;border:none;font-size:1.1rem;padding:.3rem;flex-shrink:0;}
+
+/* ===== Fraud notice strip ===== */
+.fraud-strip{display:flex;align-items:center;gap:.75rem;background:var(--ink);color:#fff;border-radius:var(--radius-md);padding:.7rem 1rem;margin-bottom:1.25rem;overflow:hidden;}
+.fraud-strip__tag{flex-shrink:0;background:var(--coral);color:#fff;font-family:var(--font-mono);font-size:.66rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;padding:.25rem .6rem;border-radius:20px;}
+.fraud-strip__track{flex:1;overflow:hidden;white-space:nowrap;}
+.fraud-strip__text{display:inline-block;padding-left:100%;font-size:.82rem;font-weight:600;animation:fraudScroll 26s linear infinite;}
+@keyframes fraudScroll{from{transform:translateX(0);}to{transform:translateX(-100%);}}
+@media (prefers-reduced-motion:reduce){.fraud-strip__track{white-space:normal;}.fraud-strip__text{padding-left:0;animation:none;}}
+
+/* ===== Stats grid (6) ===== */
+.stat-grid6{display:grid;grid-template-columns:repeat(3,1fr);gap:1rem;margin-bottom:1.5rem;}
+@media (max-width:640px){.stat-grid6{grid-template-columns:repeat(2,1fr);}}
+.stat6{background:var(--white);border:1px solid var(--line);border-radius:var(--radius-lg);padding:1.3rem 1.1rem;text-align:center;}
+.stat6__icon{width:38px;height:38px;border-radius:11px;margin:0 auto .7rem;display:flex;align-items:center;justify-content:center;background:var(--s-bg,var(--green-pale));color:var(--s-fg,var(--green-deep));}
+.stat6__icon svg{width:19px;height:19px;}
+.stat6__val{font-family:var(--font-mono);font-size:1.25rem;font-weight:700;color:var(--s-fg,var(--ink));}
+.stat6__label{font-size:.76rem;color:var(--muted);margin-top:.15rem;}
+
+/* ===== Quick-action tiles ===== */
+.tile-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:.75rem;margin-bottom:1.75rem;}
+@media (min-width:641px){.tile-grid{grid-template-columns:repeat(4,1fr);gap:.9rem;}}
+@media (min-width:1180px){.tile-grid{grid-template-columns:repeat(7,1fr);}}
+.tile{position:relative;}
+.tile__soon{position:absolute;top:8px;right:8px;background:rgba(0,0,0,.3);font-family:var(--font-mono);font-size:.56rem;font-weight:700;letter-spacing:.06em;text-transform:uppercase;padding:.12rem .42rem;border-radius:20px;}
+.tile{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:.6rem;padding:1.15rem .5rem;border-radius:var(--radius-lg);color:#fff;text-align:center;background:linear-gradient(145deg,var(--t1),var(--t2));box-shadow:0 8px 20px -10px var(--t2);transition:transform .15s,filter .15s;border:none;font-family:var(--font-body);cursor:pointer;}
+.tile:hover{transform:translateY(-3px);filter:brightness(1.05);}
+.tile__icon{width:44px;height:44px;border-radius:13px;background:rgba(255,255,255,.2);display:flex;align-items:center;justify-content:center;}
+.tile__icon svg{width:22px;height:22px;}
+.tile__label{font-size:.78rem;font-weight:700;line-height:1.25;}
+
+/* ===== Activity + guides ===== */
+.dash-two{display:grid;grid-template-columns:minmax(0,1.4fr) minmax(0,1fr);gap:1.25rem;margin-bottom:1.75rem;}
+.dash-two>*{min-width:0;}
+@media (max-width:860px){.dash-two{grid-template-columns:minmax(0,1fr);}}
+.panel{background:var(--white);border:1px solid var(--line);border-radius:var(--radius-lg);padding:1.4rem;}
+.panel__head{display:flex;align-items:center;justify-content:space-between;margin-bottom:1rem;}
+.panel__head h3{font-size:1rem;text-transform:none;letter-spacing:0;}
+.panel__link{font-size:.78rem;font-weight:700;color:var(--green-deep);background:var(--green-pale);padding:.35rem .8rem;border-radius:20px;}
+.act-row{display:flex;align-items:center;gap:.8rem;padding:.75rem 0;border-bottom:1px solid var(--line-soft);}
+.act-row:last-child{border-bottom:none;}
+.act-icon{width:36px;height:36px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:1rem;font-weight:700;color:var(--ink-soft);flex-shrink:0;background:var(--paper-dim);}
+.act-main{flex:1;min-width:0;}
+.act-title{font-size:.85rem;font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.act-sub{font-size:.72rem;color:var(--muted);}
+.act-amt{font-family:var(--font-mono);font-size:.82rem;font-weight:700;text-align:right;}
+.act-amt small{display:block;font-family:var(--font-body);font-size:.66rem;font-weight:700;text-transform:uppercase;letter-spacing:.04em;margin-top:2px;}
+.act-pos{color:var(--green-deep);}.act-neg{color:var(--coral-deep);}
+.st-pending{color:var(--warning);}.st-ok{color:var(--green-deep);}.st-bad{color:var(--danger);}
+.empty-act{text-align:center;padding:1.75rem .5rem;color:var(--muted);font-size:.85rem;}
+.empty-act .btn{margin-top:.9rem;}
+.guide-card{background:linear-gradient(145deg,var(--ink),var(--ink-soft));color:#fff;border:none;}
+.guide-card .eyebrow-sm{font-family:var(--font-mono);font-size:.68rem;letter-spacing:.1em;text-transform:uppercase;color:#5FD69A;margin-bottom:.5rem;}
+.guide-card h3{font-size:1.25rem;color:#fff;margin-bottom:.5rem;text-transform:none;letter-spacing:0;}
+.guide-card p{font-size:.84rem;color:rgba(255,255,255,.65);margin-bottom:1.1rem;line-height:1.6;}
+.guide-card .btns{display:flex;gap:.6rem;flex-wrap:wrap;}
+
+/* gp-mobile-hardening */
+html{-webkit-text-size-adjust:100%;}
+@media (max-width:640px){
+  input:not([type=checkbox]):not([type=radio]):not([type=file]):not([type=range]),select,textarea,.form-control{font-size:16px !important;}
+  .btn{min-height:44px;}
+  .nav__inner{padding-left:1rem;padding-right:1rem;gap:.5rem;}
+  .nav__actions{gap:.4rem;}
+  .nav__actions .btn{padding:.5rem .85rem;font-size:.76rem;min-height:40px;}
+  img,video,iframe{max-width:100%;}
+}
+@media (max-width:380px){ .nav__actions .btn-secondary{display:none;} }
+
+/* gp-mobile-hardening-2 */
+.menu-btn{width:44px;height:44px;align-items:center;justify-content:center;}
+.menu-btn svg{width:26px;height:26px;}
+@media (max-width:899px){.menu-btn{display:flex;}}
+
+/* Compact phone layout */
+@media (max-width:640px){
+  .balance-hero{padding:1.25rem;gap:1rem;}
+  .balance-hero__value{font-size:2rem;}
+  .balance-hero .btn{padding:.7rem 1.1rem;}
+  .tile-grid{grid-template-columns:repeat(3,1fr);gap:.55rem;}
+  .tile{padding:.95rem .3rem;gap:.45rem;border-radius:18px;}
+  .tile__icon{width:38px;height:38px;border-radius:11px;}
+  .tile__icon svg{width:19px;height:19px;}
+  .tile__label{font-size:.7rem;}
+  .tile__soon{top:6px;right:6px;font-size:.5rem;padding:.1rem .34rem;}
+  .stat-grid6{grid-template-columns:repeat(3,1fr);gap:.55rem;}
+  .stat6{padding:.85rem .35rem;border-radius:16px;}
+  .stat6__icon{display:none;}
+  .stat6__val{font-size:1rem;overflow-wrap:anywhere;}
+  .stat6__label{font-size:.66rem;}
+  .ptc-spotlight{padding:1.5rem 1.25rem;border-radius:22px;}
+  .ptc-spotlight h2{font-size:1.5rem;}
+  .ptc-spotlight p{font-size:.86rem;margin-bottom:1rem;}
+  .ptc-spotlight__stats{gap:.5rem 1.1rem;}
+  .ptc-spotlight__stat-val{font-size:1.02rem;}
+  .progress-row{gap:.6rem;margin-bottom:1.25rem;}
+  .progress-card{padding:1rem 1.1rem;}
+  .progress-card__val{font-size:1.2rem;}
+  .progress-card__sub{font-size:.74rem;margin-bottom:.6rem;}
+  .panel{padding:1.1rem;}
+}
 </style>
 </head>
 <body style="visibility:hidden">
 
 <div class="checkin-overlay" id="checkinOverlay" style="display:none;">
   <div class="checkin-box">
-    <div class="checkin-flame">🔥</div>
+    
     <h2>Welcome Back!</h2>
     <div class="checkin-streak" id="checkinStreakVal">1 Day</div>
     <div class="checkin-streak-label">Login Streak</div>
     <button class="checkin-btn" id="checkinBtn" onclick="doCheckIn()">Check In</button>
-    <div class="checkin-success" id="checkinSuccess">✓ Nice! Head to View Ads to keep today's streak going.</div>
+    <div class="checkin-success" id="checkinSuccess">Nice! Head to View Ads to keep today's streak going.</div>
   </div>
 </div>
 
 <nav class="topbar">
   <a href="index" class="logo">
     <svg viewBox="0 0 28 28" fill="none"><circle cx="14" cy="14" r="13" fill="#0E7C4A"/><path d="M8 14.3l4 4 8-9" stroke="white" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
-    Grind<span class="accent">point</span>
+    <span class="logo__text">Grind<span class="accent">point</span></span>
   </a>
   <div class="topbar__right">
     <div class="live-pill"><span class="dot"></span>Live</div>
@@ -298,6 +398,8 @@ select.form-control{appearance:none;background-image:url("data:image/svg+xml,%3C
       <a href="blog" class="sidebar__link"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 20h9M16.5 3.5a2.121 2.121 0 013 3L7 19l-4 1 1-4L16.5 3.5z"/></svg>Blog</a>
       <span class="sidebar__label" style="margin-top:.5rem;">Account</span>
       <a href="transactions" class="sidebar__link"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/><line x1="3" y1="6" x2="3.01" y2="6"/><line x1="3" y1="12" x2="3.01" y2="12"/><line x1="3" y1="18" x2="3.01" y2="18"/></svg>Transactions</a>
+      <a href="appeals" class="sidebar__link"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 3v18M5 7h14M7 7l-3 8a3 3 0 006 0L7 7zm10 0l-3 8a3 3 0 006 0l-3-8z"/></svg>Appeals</a>
+      <a href="#" class="sidebar__link" id="airtimeBtn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="7" y="2" width="10" height="20" rx="2"/><line x1="12" y1="18" x2="12.01" y2="18"/></svg>Buy Airtime</a>
       <a href="#" class="sidebar__link" id="depositBtn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>Deposit Funds</a>
       <a href="#" class="sidebar__link" id="withdrawBtn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 000 7h5a3.5 3.5 0 010 7H6"/></svg>Withdraw Funds</a>
       <a href="profile" class="sidebar__link"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>My Profile</a>
@@ -318,6 +420,11 @@ select.form-control{appearance:none;background-image:url("data:image/svg+xml,%3C
 
   <main class="main">
 
+    <div class="fraud-strip">
+      <span class="fraud-strip__tag">Notice</span>
+      <div class="fraud-strip__track"><span class="fraud-strip__text">Only submit tasks you actually completed. Every submission is manually reviewed — fake proofs are rejected and repeat offenders are banned. Rejected by mistake? Use Appeals. &nbsp;&nbsp;•&nbsp;&nbsp; Only submit tasks you actually completed. Every submission is manually reviewed — fake proofs are rejected and repeat offenders are banned.</span></div>
+    </div>
+
     <!-- Balance hero -->
     <div class="balance-hero">
       <div>
@@ -336,21 +443,23 @@ select.form-control{appearance:none;background-image:url("data:image/svg+xml,%3C
 
     <div id="announcementsWrap" style="margin-bottom:1.5rem;display:none;"></div>
 
-    <div class="progress-row">
-      <div class="progress-card">
-        <div class="progress-card__head"><span class="progress-card__icon">🔥</span><span class="progress-card__title">Login Streak</span></div>
-        <div class="progress-card__val" id="streakVal">0 days</div>
-        <div class="progress-card__sub" id="streakSub">Check in daily on View Ads to build your streak</div>
-        <div class="mini-bar"><div class="mini-bar__fill" id="streakBarFill" style="width:0%;"></div></div>
-        <div class="mini-bar__label"><span>Today</span><span>7-day bonus tier</span></div>
-      </div>
-      <div class="progress-card progress-card--tier">
-        <div class="progress-card__head"><span class="progress-card__icon">🎖️</span><span class="progress-card__title">Referral Tier</span></div>
-        <div class="progress-card__val" id="tierVal">Grinder</div>
-        <div class="progress-card__sub" id="tierSub">0/10 referrals to Hustler (₦300/referral)</div>
-        <div class="mini-bar"><div class="mini-bar__fill" id="tierBarFill" style="width:0%;"></div></div>
-        <div class="mini-bar__label"><span id="tierCountLabel">0 referrals</span><span id="tierNextLabel">10 = Hustler</span></div>
-      </div>
+    <!-- Quick actions -->
+    <div class="section__head" style="margin-bottom:.9rem;"><h3 style="font-size:1rem;text-transform:none;letter-spacing:0;">Quick Actions</h3></div>
+    <div class="tile-grid">
+      <button type="button" class="tile" id="depositTile" style="--t1:#22C55E;--t2:#15803D;"><span class="tile__icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg></span><span class="tile__label">Deposit</span></button>
+      <button type="button" class="tile" id="withdrawTile" style="--t1:#F43F5E;--t2:#BE123C;"><span class="tile__icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 19V5M5 12l7-7 7 7"/></svg></span><span class="tile__label">Withdraw</span></button>
+      <button type="button" class="tile" id="airtimeTile" style="--t1:#3B82F6;--t2:#1D4ED8;"><span class="tile__icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="7" y="2" width="10" height="20" rx="2"/><line x1="12" y1="18" x2="12.01" y2="18"/></svg></span><span class="tile__label">Buy Airtime</span></button>
+      <button type="button" class="tile tile--soon" data-soon="Marketplace" style="--t1:#F59E0B;--t2:#C2410C;"><span class="tile__icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l1-5h16l1 5"/><path d="M4 9v11h16V9"/><path d="M9 20v-6h6v6"/></svg></span><span class="tile__label">Marketplace</span><span class="tile__soon">Soon</span></button>
+      <button type="button" class="tile tile--soon" data-soon="Create Job" style="--t1:#6366F1;--t2:#4338CA;"><span class="tile__icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="7" width="18" height="13" rx="2"/><path d="M8 7V5a2 2 0 012-2h4a2 2 0 012 2v2"/><line x1="12" y1="11" x2="12" y2="17"/><line x1="9" y1="14" x2="15" y2="14"/></svg></span><span class="tile__label">Create Job</span><span class="tile__soon">Soon</span></button>
+      <button type="button" class="tile tile--soon" data-soon="Applied Jobs" style="--t1:#0EA5E9;--t2:#0369A1;"><span class="tile__icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2"/><rect x="9" y="3" width="6" height="4" rx="1"/><path d="M9 14l2 2 4-4"/></svg></span><span class="tile__label">Applied Jobs</span><span class="tile__soon">Soon</span></button>
+      <button type="button" class="tile tile--soon" data-soon="My Ads" style="--t1:#8B5CF6;--t2:#6D28D9;"><span class="tile__icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 11v2a1 1 0 001 1h2l5 4V6L6 10H4a1 1 0 00-1 1z"/><path d="M15.5 8.5a5 5 0 010 7"/></svg></span><span class="tile__label">My Ads</span><span class="tile__soon">Soon</span></button>
+      <a href="ptc" class="tile" style="--t1:#FF8A65;--t2:#E5502C;"><span class="tile__icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M13 2L4 14h6l-1 8 9-12h-6l1-8z"/></svg></span><span class="tile__label">View Ads</span></a>
+      <a href="tasks" class="tile" style="--t1:#14B8A6;--t2:#0F766E;"><span class="tile__icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11"/></svg></span><span class="tile__label">Earn Tasks</span></a>
+      <a href="surf" class="tile" style="--t1:#38BDF8;--t2:#0284C7;"><span class="tile__icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15 15 0 010 20M12 2a15 15 0 000 20"/></svg></span><span class="tile__label">Surf &amp; Earn</span></a>
+      <a href="referral" class="tile" style="--t1:#A78BFA;--t2:#7C3AED;"><span class="tile__icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87M16 3.13a4 4 0 010 7.75"/></svg></span><span class="tile__label">Refer &amp; Earn</span></a>
+      <a href="appeals" class="tile" style="--t1:#EF4444;--t2:#B91C1C;"><span class="tile__icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v18M5 7h14M7 7l-3 8a3 3 0 006 0L7 7zm10 0l-3 8a3 3 0 006 0l-3-8z"/></svg></span><span class="tile__label">Appeals</span></a>
+      <a href="transactions" class="tile" style="--t1:#64748B;--t2:#334155;"><span class="tile__icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/><line x1="3" y1="6" x2="3.01" y2="6"/><line x1="3" y1="12" x2="3.01" y2="12"/><line x1="3" y1="18" x2="3.01" y2="18"/></svg></span><span class="tile__label">Transactions</span></a>
+      <a href="profile" class="tile" style="--t1:#94A3B8;--t2:#475569;"><span class="tile__icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></span><span class="tile__label">My Profile</span></a>
     </div>
 
     <!-- PTC Spotlight -->
@@ -367,7 +476,33 @@ select.form-control{appearance:none;background-image:url("data:image/svg+xml,%3C
           </div>
           <a href="ptc" class="btn btn-primary"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" style="width:15px;height:15px;"><path d="M13 2L4 14h6l-1 8 9-12h-6l1-8z"/></svg>Start Watching Ads →</a>
         </div>
-        <div class="ptc-spotlight__icon">⚡</div>
+        
+      </div>
+    </div>
+
+    <div class="stat-grid6">
+      <div class="stat6" style="--s-bg:#E3F3E9;--s-fg:#0A5C37;"><div class="stat6__icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11"/></svg></div><div class="stat6__val" id="sdTasks">0</div><div class="stat6__label">Completed Tasks</div></div>
+      <div class="stat6" style="--s-bg:#FEF3C7;--s-fg:#B45309;"><div class="stat6__icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg></div><div class="stat6__val" id="sdPending">0</div><div class="stat6__label">Pending Review</div></div>
+      <div class="stat6" style="--s-bg:#DBEAFE;--s-fg:#1D4ED8;"><div class="stat6__icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14M19 12l-7 7-7-7"/></svg></div><div class="stat6__val" id="sdDeposited">₦0</div><div class="stat6__label">Total Deposited</div></div>
+      <div class="stat6" style="--s-bg:#FFE9E1;--s-fg:#E5502C;"><div class="stat6__icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 19V5M5 12l7-7 7 7"/></svg></div><div class="stat6__val" id="sdWithdrawn">₦0</div><div class="stat6__label">Total Withdrawn</div></div>
+      <div class="stat6" style="--s-bg:#EDE4FD;--s-fg:#6D28D9;"><div class="stat6__icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 1l4 4-4 4"/><path d="M3 11V9a4 4 0 014-4h14"/><path d="M7 23l-4-4 4-4"/><path d="M21 13v2a4 4 0 01-4 4H3"/></svg></div><div class="stat6__val" id="sdTx">0</div><div class="stat6__label">Transactions</div></div>
+      <div class="stat6" style="--s-bg:#CCFBF1;--s-fg:#0F766E;"><div class="stat6__icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/></svg></div><div class="stat6__val" id="sdRefs">0</div><div class="stat6__label">Referrals</div></div>
+    </div>
+
+    <div class="progress-row">
+      <div class="progress-card">
+        <div class="progress-card__head"><span class="progress-card__title">Login Streak</span></div>
+        <div class="progress-card__val" id="streakVal">0 days</div>
+        <div class="progress-card__sub" id="streakSub">Check in daily on View Ads to build your streak</div>
+        <div class="mini-bar"><div class="mini-bar__fill" id="streakBarFill" style="width:0%;"></div></div>
+        <div class="mini-bar__label"><span>Today</span><span>7-day bonus tier</span></div>
+      </div>
+      <div class="progress-card progress-card--tier">
+        <div class="progress-card__head"><span class="progress-card__title">Referral Tier</span></div>
+        <div class="progress-card__val" id="tierVal">Grinder</div>
+        <div class="progress-card__sub" id="tierSub">0/10 referrals to Hustler (₦300/referral)</div>
+        <div class="mini-bar"><div class="mini-bar__fill" id="tierBarFill" style="width:0%;"></div></div>
+        <div class="mini-bar__label"><span id="tierCountLabel">0 referrals</span><span id="tierNextLabel">10 = Hustler</span></div>
       </div>
     </div>
 
@@ -377,25 +512,20 @@ select.form-control{appearance:none;background-image:url("data:image/svg+xml,%3C
       <div id="container-59966b160a10d7ff1e49abd3768d08ed"></div>
     </div>
 
-    <!-- More ways to earn (demoted, compact) -->
-    <div class="section">
-      <div class="section__head"><h3>More Ways to Earn</h3></div>
-      <div class="earn-grid-sm">
-        <a href="surf" class="earn-card-sm">
-          <div class="earn-card-sm__icon">🌐</div>
-          <div><div class="earn-card-sm__title">Surf &amp; Earn</div><div class="earn-card-sm__sub">Up to ₦1,750/day</div></div>
-          <svg class="arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
-        </a>
-        <a href="tasks" class="earn-card-sm">
-          <div class="earn-card-sm__icon">✅</div>
-          <div><div class="earn-card-sm__title">Earn Tasks</div><div class="earn-card-sm__sub">Up to ₦600/task</div></div>
-          <svg class="arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
-        </a>
-        <a href="referral" class="earn-card-sm">
-          <div class="earn-card-sm__icon">🔗</div>
-          <div><div class="earn-card-sm__title">Refer Friends</div><div class="earn-card-sm__sub">₦200–₦500/friend</div></div>
-          <svg class="arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
-        </a>
+    <!-- Activity + guides -->
+    <div class="dash-two">
+      <div class="panel">
+        <div class="panel__head"><h3>Recent Activity</h3><a href="transactions" class="panel__link">View All</a></div>
+        <div id="recentActivity"><div class="empty-act">Loading…</div></div>
+      </div>
+      <div class="panel guide-card">
+        <div class="eyebrow-sm">Guides</div>
+        <h3>Learn How Grindpoint Works</h3>
+        <p>New here? Read the quick guides, see how approvals work, and avoid rejections.</p>
+        <div class="btns">
+          <a href="faq" class="btn btn-primary" style="font-size:.8rem;padding:.6rem 1.1rem;">Read FAQ</a>
+          <a href="blog" class="btn" style="background:rgba(255,255,255,.12);color:#fff;font-size:.8rem;padding:.6rem 1.1rem;">Blog Guides</a>
+        </div>
       </div>
     </div>
 
@@ -412,6 +542,48 @@ select.form-control{appearance:none;background-image:url("data:image/svg+xml,%3C
       </div>
     </div>
   </main>
+</div>
+
+<!-- Airtime Modal — works like a withdrawal: debited now, sent manually, refunded if rejected -->
+<div class="modal" id="airtimeModal">
+  <div class="modal__box">
+    <div class="modal__header">
+      <h3 class="modal__title">Buy Airtime</h3>
+      <button class="modal__close" onclick="closeModal('airtimeModal')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
+    </div>
+    <div class="modal__body">
+      <div class="balance-display" style="padding:.9rem;margin-bottom:1.1rem;">
+        <div class="balance-display__label">Available Balance</div>
+        <div class="balance-display__value" id="airtimeBalance" style="font-size:1.5rem;">₦0.00</div>
+      </div>
+      <div class="form-group">
+        <label class="form-label" for="airtimeNetwork">Network</label>
+        <select id="airtimeNetwork" class="form-control">
+          <option value="" disabled selected>Select network</option>
+          <option value="mtn">MTN</option><option value="airtel">Airtel</option><option value="glo">Glo</option><option value="9mobile">9mobile</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label class="form-label" for="airtimePhone">Phone Number</label>
+        <input type="tel" id="airtimePhone" class="form-control" placeholder="08012345678" maxlength="11" inputmode="numeric" />
+      </div>
+      <div class="form-group">
+        <label class="form-label" for="airtimeAmount">Amount (₦)</label>
+        <input type="number" id="airtimeAmount" class="form-control" placeholder="100 – 5,000" min="100" max="5000" step="50" />
+        <div style="display:flex;gap:.4rem;flex-wrap:wrap;margin-top:.55rem;">
+          <button type="button" class="btn btn-secondary" data-air-amt="100" style="padding:.4rem .8rem;font-size:.78rem;min-height:36px;">₦100</button>
+          <button type="button" class="btn btn-secondary" data-air-amt="200" style="padding:.4rem .8rem;font-size:.78rem;min-height:36px;">₦200</button>
+          <button type="button" class="btn btn-secondary" data-air-amt="500" style="padding:.4rem .8rem;font-size:.78rem;min-height:36px;">₦500</button>
+          <button type="button" class="btn btn-secondary" data-air-amt="1000" style="padding:.4rem .8rem;font-size:.78rem;min-height:36px;">₦1,000</button>
+        </div>
+        <span class="form-hint">Your balance is debited now. Our team sends the airtime by hand, and if we cannot send it, you are refunded automatically.</span>
+      </div>
+    </div>
+    <div class="modal__footer">
+      <button class="btn btn-secondary" onclick="closeModal('airtimeModal')">Cancel</button>
+      <button class="btn btn-primary" id="submitAirtimeBtn">Buy Airtime</button>
+    </div>
+  </div>
 </div>
 
 <!-- Deposit Modal — manual bank transfer + screenshot, admin reviews and credits -->
@@ -440,7 +612,7 @@ select.form-control{appearance:none;background-image:url("data:image/svg+xml,%3C
 
         <div class="proof-upload" id="depProofUpload" style="border:2px dashed var(--line);border-radius:var(--radius-md);padding:1.1rem;text-align:center;cursor:pointer;position:relative;margin-bottom:1rem;">
           <input type="file" id="depProofFile" accept="image/*" style="position:absolute;inset:0;opacity:0;cursor:pointer;width:100%;height:100%;" />
-          <div style="font-size:1.4rem;margin-bottom:.4rem;">📸</div>
+          
           <div style="font-size:.78rem;color:var(--ink-soft);"><strong style="color:var(--green-deep);">Click to upload</strong> your transfer screenshot</div>
         </div>
         <div id="depProofPreviewWrap" style="display:none;text-align:center;margin-bottom:1rem;">
@@ -525,8 +697,8 @@ select.form-control{appearance:none;background-image:url("data:image/svg+xml,%3C
       <h3 style="font-size:1.15rem;margin-bottom:.5rem;text-transform:none;letter-spacing:0;">Need Help or Want to Connect?</h3>
       <p style="font-size:.87rem;color:var(--muted);line-height:1.6;margin-bottom:1.5rem;">Have a problem with your account? Reach our admin directly, or join the community for tips and updates from other earners.</p>
       <div style="display:flex;flex-direction:column;gap:.65rem;">
-        <a href="https://t.me/FSDme" target="_blank" rel="noopener" class="btn btn-primary w-full" style="background:#26A5E4;box-shadow:0 6px 14px rgba(38,165,228,.3);">💬 Contact Admin on Telegram</a>
-        <a href="https://t.me/+NJLTREq5F6E4NWE0" target="_blank" rel="noopener" class="btn btn-secondary w-full">👥 Join Our Community</a>
+        <a href="https://t.me/FSDme" target="_blank" rel="noopener" class="btn btn-primary w-full" style="background:#26A5E4;box-shadow:0 6px 14px rgba(38,165,228,.3);">Contact Admin on Telegram</a>
+        <a href="https://t.me/+NJLTREq5F6E4NWE0" target="_blank" rel="noopener" class="btn btn-secondary w-full">Join Our Community</a>
       </div>
     </div>
     <div class="modal__footer" style="justify-content:center;border-top:none;padding-top:0;">
@@ -621,6 +793,7 @@ async function loadAnnouncements(sb) {
   document.getElementById('tierNextLabel').textContent = tierNextLabel;
 
   loadLatestBlogPost(getSupabase());
+  loadDashboardExtras(getSupabase(), user.id);
 
   /* Daily check-in gate — once per calendar day, purely for engagement (a mild
      speed bump for copy-paste bot scripts, not a real fraud control on its own).
@@ -662,19 +835,57 @@ async function loadLatestBlogPost(sb) {
       .limit(1)
       .maybeSingle();
     if (!data) return;
-
-    const emoji = { 'Platform Updates':'📢','Earning Tips':'💡','Payment Proofs':'💰','Safety & Security':'🔒','Success Stories':'🏆','News & Announcements':'📰' }[data.category] || '📝';
     const wrap = document.getElementById('blogCardWrap');
     wrap.style.display = 'flex';
     wrap.onclick = () => window.location.href = `blog-post.html?slug=${data.slug}`;
     wrap.style.cursor = 'pointer';
     wrap.innerHTML = `
-      ${data.featured_image
-        ? `<img src="${data.featured_image}" class="blog-card__img" alt="" onerror="this.outerHTML='<div class=blog-card__img style=background:var(--green-pale);>${emoji}</div>'"/>`
-        : `<div class="blog-card__img" style="background:var(--green-pale);">${emoji}</div>`}
       <div><div class="blog-card__eyebrow">From the Blog</div><div class="blog-card__title">${data.title}</div></div>
       <svg class="arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>`;
   } catch (e) { /* non-critical */ }
+}
+
+
+/* ── Stats + recent activity (real data from the user's own rows; fails quietly) ── */
+async function loadDashboardExtras(client, uid) {
+  const safe = async (q) => { try { const r = await q; return r.data || []; } catch (e) { return []; } };
+  const [wds, dps, tss, airs] = await Promise.all([
+    safe(client.from('withdrawal_requests').select('amount,status,created_at').eq('user_id', uid).order('created_at', { ascending: false }).limit(500)),
+    safe(client.from('deposit_requests').select('amount,status,created_at').eq('user_id', uid).order('created_at', { ascending: false }).limit(500)),
+    safe(client.from('task_submissions').select('task_title,reward,status,submitted_at').eq('user_id', uid).order('submitted_at', { ascending: false }).limit(500)),
+    safe(client.from('airtime_requests').select('network,phone,amount,status,created_at').eq('user_id', uid).order('created_at', { ascending: false }).limit(200)),
+  ]);
+
+  const sum = (arr) => arr.reduce((s, r) => s + (Number(r.amount) || 0), 0);
+  const withdrawn = sum(wds.filter(w => !['pending', 'rejected', 'failed'].includes(w.status)));
+  const deposited = sum(dps.filter(d => d.status === 'approved'));
+  const set = (id, v) => { const el = document.getElementById(id); if (el) el.textContent = v; };
+  set('sdTasks', _currentProfile?.tasks_completed || 0);
+  set('sdRefs', _currentProfile?.referral_count || 0);
+  set('sdPending', tss.filter(t => t.status === 'pending').length);
+  set('sdDeposited', formatNaira(deposited));
+  set('sdWithdrawn', formatNaira(withdrawn));
+  set('sdTx', wds.length + dps.length + airs.length);
+
+  const items = [
+    ...wds.map(w => ({ icon: '↑', title: 'Withdrawal', amt: '-' + formatNaira(w.amount), neg: true, status: w.status, date: w.created_at })),
+    ...airs.map(a => ({ icon: '₦', title: 'Airtime · ' + String(a.network || '').toUpperCase(), amt: '-' + formatNaira(a.amount), neg: true, status: a.status === 'completed' ? 'sent' : a.status, date: a.created_at })),
+    ...dps.map(d => ({ icon: '↓', title: 'Deposit', amt: '+' + formatNaira(d.amount), neg: false, status: d.status, date: d.created_at })),
+    ...tss.map(t => ({ icon: '✓', title: t.task_title || 'Task', amt: t.status === 'approved' ? '+' + formatNaira(t.reward) : formatNaira(t.reward), neg: false, status: t.status, date: t.submitted_at })),
+  ].filter(i => i.date).sort((a, b) => new Date(b.date) - new Date(a.date)).slice(0, 6);
+
+  const wrap = document.getElementById('recentActivity');
+  if (!items.length) {
+    wrap.innerHTML = '<div class="empty-act">No activity yet.<br><a href="tasks" class="btn btn-primary" style="font-size:.8rem;padding:.6rem 1.2rem;">Browse &amp; Do Tasks</a></div>';
+    return;
+  }
+  const cls = (s) => s === 'pending' ? 'st-pending' : (s === 'rejected' || s === 'failed') ? 'st-bad' : 'st-ok';
+  wrap.innerHTML = items.map(i => `
+    <div class="act-row">
+      <div class="act-icon">${i.icon}</div>
+      <div class="act-main"><div class="act-title">${i.title}</div><div class="act-sub">${new Date(i.date).toLocaleDateString('en-NG', { day: 'numeric', month: 'short', year: 'numeric' })}</div></div>
+      <div class="act-amt ${i.neg ? 'act-neg' : 'act-pos'}">${i.amt}<small class="${cls(i.status)}">${i.status}</small></div>
+    </div>`).join('');
 }
 
 function dismissTelegramModal() { closeModal('telegramModal'); }
@@ -694,10 +905,61 @@ initModalCloseOnBackdrop('telegramModal');
 })();
 
 /* ── Withdraw modal: plain manual entry, no external dependency ── */
+/* Features still being built: clear message instead of a dead link */
+document.querySelectorAll('[data-soon]').forEach(el => el.addEventListener('click', () => {
+  showToast(el.dataset.soon + ' is coming soon. We are building it now.', 'info', 4000);
+}));
+
+/* ── Buy Airtime: like a withdrawal. Debited now, sent by hand, refunded if rejected. ── */
+['airtimeBtn', 'airtimeTile'].forEach(id => {
+  const el = document.getElementById(id);
+  if (el) el.addEventListener('click', (e) => {
+    e.preventDefault();
+    document.getElementById('airtimeBalance').textContent = formatNaira(_currentProfile?.balance || 0);
+    document.getElementById('airtimeNetwork').selectedIndex = 0;
+    document.getElementById('airtimePhone').value = '';
+    document.getElementById('airtimeAmount').value = '';
+    openModal('airtimeModal');
+  });
+});
+initModalCloseOnBackdrop('airtimeModal');
+document.querySelectorAll('[data-air-amt]').forEach(b => b.addEventListener('click', () => {
+  document.getElementById('airtimeAmount').value = b.dataset.airAmt;
+}));
+
+document.getElementById('submitAirtimeBtn').addEventListener('click', async () => {
+  const network = document.getElementById('airtimeNetwork').value;
+  const phone = document.getElementById('airtimePhone').value.replace(/\s+/g, '');
+  const amount = parseFloat(document.getElementById('airtimeAmount').value);
+  const btn = document.getElementById('submitAirtimeBtn');
+  const balance = _currentProfile?.balance || 0;
+
+  if (!network) { showToast('Choose a network.', 'warning'); return; }
+  if (!/^0[789][01][0-9]{8}$/.test(phone)) { showToast('Enter a valid 11-digit Nigerian phone number.', 'warning'); return; }
+  if (!amount || amount < 100 || amount > 5000) { showToast('Airtime must be between ₦100 and ₦5,000.', 'warning'); return; }
+  if (amount > balance) { showToast('Insufficient balance. You have ' + formatNaira(balance), 'error'); return; }
+
+  setButtonLoading(btn, 'Processing…');
+  try {
+    const { data, error } = await getSupabase().rpc('request_airtime', { p_network: network, p_phone: phone, p_amount: amount });
+    if (error) throw error;
+    _currentProfile.balance = Number(data);
+    document.getElementById('walletBalance').textContent = formatNaira(_currentProfile.balance);
+    document.getElementById('modalBalance').textContent = formatNaira(_currentProfile.balance);
+    closeModal('airtimeModal');
+    showToast('Request received: ' + formatNaira(amount) + ' airtime to ' + phone + '. We will send it shortly.', 'success', 7000);
+    loadDashboardExtras(getSupabase(), _currentProfile.id);
+  } catch (e) {
+    showToast(e.message || 'Could not process that. Please try again.', 'error', 7000);
+  } finally {
+    clearButtonLoading(btn);
+  }
+});
+
 /* ── Deposit: manual bank transfer + screenshot, admin approves and credits ── */
 let _depProofBase64 = null;
 
-['depositBtn', 'depositBtnTop'].forEach(id => {
+['depositBtn', 'depositBtnTop', 'depositTile'].forEach(id => {
   const el = document.getElementById(id);
   if (el) el.addEventListener('click', (e) => {
     e.preventDefault();
@@ -786,7 +1048,7 @@ document.getElementById('submitDepositBtn').addEventListener('click', async () =
   }
 });
 
-['withdrawBtn', 'withdrawBtnTop'].forEach(id => {
+['withdrawBtn', 'withdrawBtnTop', 'withdrawTile'].forEach(id => {
   const el = document.getElementById(id);
   if (el) el.addEventListener('click', (e) => { e.preventDefault(); openModal('withdrawModal'); });
 });
@@ -861,7 +1123,7 @@ confirmBtn.addEventListener('click', async () => {
     document.getElementById('modalBalance').textContent = formatNaira(newBalance);
 
     closeModal('withdrawModal');
-    showToast(`✅ Withdrawal of ${formatNaira(amount)} submitted! Processing in 1–2 business days.`, 'success', 7000);
+    showToast(`Withdrawal of ${formatNaira(amount)} submitted! Processing in 1–2 business days.`, 'success', 7000);
 
     document.getElementById('withdrawAmount').value = '';
     accountNumberInput.value = '';
